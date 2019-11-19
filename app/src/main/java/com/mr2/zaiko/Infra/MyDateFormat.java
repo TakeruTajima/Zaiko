@@ -17,7 +17,7 @@ public class MyDateFormat {
 
     public static Date stringToDate(String date){
         if (null != date){
-            Log.d("///////////////////////", date);
+            Log.d("/////////////////////////////////", date);
         }else {
             Log.d("///", "catch NullPointerException.");
             return null;
