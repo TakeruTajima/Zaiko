@@ -1,0 +1,79 @@
+<resources>
+    <string name="app_name">zaiko</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string name="menu_items">アイテム一覧</string>
+    <string name="menu_events">イベント一覧</string>
+    <string name="menu_orders">定点発注</string>
+    <string name="menu_masters">マスタ一覧</string>
+    <string name="menu_others">その他</string>
+    <string name="menu_users">ユーザー</string>
+    <string name="menu_setting">設定</string>
+
+    <string name="dialog_company_text">会社名</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragmentHello blank fragment</string>
+    <string name="base_data_label">基本データ</string>
+    <string name="order_data_label">発注データ</string>
+    <string name="asset_data_label">入荷処理データ</string>
+    <string name="model">型式</string>
+    <string name="itemsName">品名</string>
+    <string name="makersName">製造会社名</string>
+
+
+    <string name="base_headline">基本情報</string>
+    <string name="base_maker_headline">メーカー</string>
+    <string name="order_headline">発注情報</string>
+    <string name="order_seller_headline">販売元</string>
+    <string name="order_unit_headline">発注単位</string>
+    <string name="order_price_headline">単価(参考価格)</string>
+    <string name="manage_headline_text">管理情報</string>
+    <string name="stock_headline_text">保管情報</string>
+    <!--<string name="_headline_text">基本情報</string>-->
+
+
+    <!---->
+
+    <string name="base_data_headline">部品情報</string>
+    <string name="required">必須</string>
+    <string name="optional">任意</string>
+    <string name="model_headline">型式</string>
+    <string name="model_hint">型式</string>
+    <string name="items_name_headline">品名</string>
+    <string name="items_name_hint">品名</string>
+    <string name="makers_name_headline">製造会社名</string>
+    <!--<String-array name="companys_name_spin_sample">-->
+    <!--<item>株式会社HOGE</item>-->
+    <!--<item>株式会社FUGA</item>-->
+    <!--<item>株式会社ABESHI</item>-->
+    <!--</String-array>-->
+
+    <string name="order_data_headline">発注情報</string>
+    <string name="seller_name_headline">発注先会社名</string>
+    <string name="seller_name_hint">FUGAｺｰﾎﾟﾚｰｼｮﾝ</string>
+    <string name="order_unit_name_headline">発注単位</string>
+    <string name="order_unit_name_hint">箱</string>
+    <string name="order_unit_price_headline">発注単価(参考価格)</string>
+    <string name="order_unit_price_hint">\1,000-</string>
+
+    <string name="address_headline">棚番地</string>
+    <string name="address_hint">AA010101</string>
+    <string name="dont_stocktake">このアイテムを棚卸しに含まない</string>
+    <string name="take_split">このアイテムを小分けで管理する</string>
+    <string name="stock_unit_name_headline">在庫単位と数量(内容量)</string>
+    <string name="stock_unit_quantity_hint">100</string>
+    <string name="stock_unit_name_hint">本</string>
+    <string name="split_price_headline">在庫単位毎の単価変更</string>
+    <string name="title_activity_item_data">ItemDataActivity</string>
+    <string name="edit_company_hint">Name</string>
+    <string name="edit_company_headline">headline</string>
+    <string name="_1">1</string>
+    <string name="camera">camera</string>
+    <string name="stock_data_headline">保管情報</string>
+    <string name="stock_place_hint">保管場所/棚番</string>
+    <string name="stock_unused_hint">在庫数量(新品)</string>
+    <string name="stock_used_hint">在庫数量(中古)</string>
+    <string name="order_options_hint">備考　(例/ 内容量：100個入り)</string>
+</resources>
