@@ -19,7 +19,7 @@ public class MyDateFormat {
         if (null != date){
             Log.d("///////////////////////", date);
         }else {
-            Log.d("///", "catch nullpo");
+            Log.d("///", "catch NullPointerException.");
             return null;
         }
         try {
