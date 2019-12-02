@@ -8,6 +8,8 @@ import com.mr2.zaiko.Domain.DeletedDateTime;
 import com.mr2.zaiko.Domain.Id;
 import com.mr2.zaiko.Domain.UnitType.UnitType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -19,7 +21,8 @@ public class Item {
     private final Id _id;  //システム内で使うID。登録時は-1
     private final ItemModel model;  //型式 メーカーが定める商品の型式、品番。原則、英数字のみ。
     private ItemName name;  //品名 社内で定める商品の名前。
-//    private List<Image> imageList;  //画像・写真
+    private int primaryImage_id; //主写真ID。
+    private List<ItemImage> imageList;  //画像・写真
     private final Company maker; //メーカー　登録時はCompany.getId、読み出しはIdからfindOneしてEntityとして持つ。
     private final InHouseCode inHouseCode;  //社内管理コード 新規登録時にRepository…DomainServiceで差し込む。読み込み時はコンストラクタで
     private UnitType unitType;  //管理単位　同上
@@ -28,13 +31,15 @@ public class Item {
     private CreatedDateTime createdAt;  //作成日時
     private DeletedDateTime deletedAt;  //削除日時
 //    private List<Tag> tagList;  //タグ
-//    private List<JanCode> janCodeList;  //JANコード
+//    private List<JanCode> janCodeList;  //JANコード(外部バーコード)
 //    private List<Inventory> inventoryList;  //在庫保管場所
 //    private List<Catalogue> catalogueList;  //発注先情報
 //    private List<Event> eventList;  //イベント履歴
 
     //タグ、JANコード、在庫保管場所と数量、発注先カタログ、入出庫購入履歴
 
+    //新規
+    @Deprecated
     public Item(ItemRepository repository, ItemModel model, ItemName name, Company maker) {
         this._id = Id.getDefault();
         this.model = model;
@@ -50,6 +55,7 @@ public class Item {
         //this.deletedAt = DeletedDateTime.getDefault();
     }
 
+    @Deprecated
     public Item(Id _id, ItemModel model, ItemName name, Company maker, InHouseCode inHouseCode,
                 UnitType unitType, int value, boolean takeStock, CreatedDateTime createdAt, DeletedDateTime deletedAt) {
         this._id = _id;
@@ -69,6 +75,8 @@ public class Item {
         this._id = builder._id;
         this.model = builder.model;
         this.name = builder.name;
+        this.primaryImage_id = builder.primaryImage_id;
+        this.imageList = builder.imageList;
         this.maker = builder.maker;
         this.inHouseCode = builder.inHouseCode;
         this.unitType = builder.unitType;
@@ -183,7 +191,8 @@ public class Item {
         private Id _id;  //システム内で使うID。登録時は-1
         private ItemModel model;  //型式 メーカーが定める商品の型式、品番。原則、英数字のみ。
         private ItemName name;  //品名 社内で定める商品の名前。
-        //    private List<Image> imageList;  //画像・写真
+        private int primaryImage_id = -1;
+        private List<ItemImage> imageList;  //画像・写真
         private Company maker; //メーカー　登録時はCompany.getId、読み出しはIdからfindOneしてEntityとして持つ。
         private InHouseCode inHouseCode;  //社内管理コード 新規登録時にRepository…DomainServiceで差し込む。読み込み時はコンストラクタで
         private UnitType unitType;  //管理単位　同上
@@ -207,6 +216,12 @@ public class Item {
 
         public Builder setId(Id _id){
             this._id = _id;
+            return this;
+        }
+
+        public Builder setItemImageSet(int primaryImage_id, List<ItemImage> imageList){
+            this.primaryImage_id = primaryImage_id;
+            this.imageList = imageList;
             return this;
         }
 
@@ -262,6 +277,8 @@ public class Item {
 
             if (null == _id ) //新規：Null
                 this._id = Id.getDefault();
+            if (-1 == primaryImage_id)
+                this.imageList = new ArrayList<>(); //default値
             if (null == inHouseCode) //新規：NonNull(ですが todo:DBから抽出する内容なのでsetは後にしないと割り込まれて重複しますよ？)
                 this.inHouseCode = InHouseCode.getDefault();
             if (null == createdAt) //新規：Null
