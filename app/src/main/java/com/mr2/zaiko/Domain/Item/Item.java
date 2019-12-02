@@ -24,7 +24,7 @@ public class Item {
     private final InHouseCode inHouseCode;  //社内管理コード 新規登録時にRepository…DomainServiceで差し込む。読み込み時はコンストラクタで
     private UnitType unitType;  //管理単位　同上
     private int value;  //単価 管理上の単価価値。
-    private boolean doNotStockTake;  //棚卸要否 たな卸しリストの抽出条件
+    private boolean takeStock;  //棚卸要否 たな卸しリストの抽出条件
     private CreatedDateTime createdAt;  //作成日時
     private DeletedDateTime deletedAt;  //削除日時
 //    private List<Tag> tagList;  //タグ
@@ -45,13 +45,13 @@ public class Item {
         //TODO:集約の中からRepositoryを呼ぶのはやめたほうがいいらしいけどService作る？
         //this.unitType = UnitType.getDefault();
         //this.value = -1;
-        //this.doNotStockTake = false;
+        //this.takeStock = false;
         //this.createdAt = CreatedDateTime.getDefault();
         //this.deletedAt = DeletedDateTime.getDefault();
     }
 
     public Item(Id _id, ItemModel model, ItemName name, Company maker, InHouseCode inHouseCode,
-                UnitType unitType, int value, boolean doNotStockTake, CreatedDateTime createdAt, DeletedDateTime deletedAt) {
+                UnitType unitType, int value, boolean takeStock, CreatedDateTime createdAt, DeletedDateTime deletedAt) {
         this._id = _id;
         this.model = model;
         this.name = name;
@@ -59,7 +59,7 @@ public class Item {
         this.inHouseCode = inHouseCode;
         this.unitType = unitType;
         this.value = value;
-        this.doNotStockTake = doNotStockTake;
+        this.takeStock = takeStock;
         this.createdAt = createdAt;
         this.deletedAt = deletedAt;
     }
@@ -73,7 +73,7 @@ public class Item {
         this.inHouseCode = builder.inHouseCode;
         this.unitType = builder.unitType;
         this.value = builder.value;
-        this.doNotStockTake = builder.doNotStockTake;
+        this.takeStock = builder.takeStock;
         this.createdAt = builder.createdAt;
         this.deletedAt = builder.deletedAt;
     }
@@ -95,8 +95,8 @@ public class Item {
         return this;
     }
 
-    public Item setDoNotStockTake(boolean doNotStockTake) {
-        this.doNotStockTake = doNotStockTake;
+    public Item setTakeStock(boolean takeStock) {
+        this.takeStock = takeStock;
         return this;
     }
 
@@ -129,8 +129,8 @@ public class Item {
         return value;
     }
 
-    public boolean isDoNotStockTake() {
-        return doNotStockTake;
+    public boolean isTakeStock() {
+        return takeStock;
     }
 
     public CreatedDateTime getCreatedAt() {
@@ -156,7 +156,7 @@ public class Item {
                 ", inHouseCode=" + inHouseCode +
                 ", unitType=" + unitType +
                 ", value=" + value +
-                ", doNotStockTake=" + doNotStockTake +
+                ", takeStock=" + takeStock +
                 ", createdAt=" + createdAt +
                 ", deletedAt=" + deletedAt +
                 '}';
@@ -188,7 +188,7 @@ public class Item {
         private InHouseCode inHouseCode;  //社内管理コード 新規登録時にRepository…DomainServiceで差し込む。読み込み時はコンストラクタで
         private UnitType unitType;  //管理単位　同上
         private int value = -1;  //単価 管理上の単価価値。
-        private boolean doNotStockTake = false;  //棚卸要否 たな卸しリストの抽出条件
+        private boolean takeStock = true;  //棚卸要否 たな卸しリストの抽出条件
         private CreatedDateTime createdAt;  //作成日時
         private DeletedDateTime deletedAt;  //削除日時
 //    private List<Tag> tagList;  //タグ
@@ -241,8 +241,8 @@ public class Item {
             return this;
         }
 
-        public Builder setDoNotStockTake(boolean doNotStockTake) {
-            this.doNotStockTake = doNotStockTake;
+        public Builder setTakeStock(boolean takeStock) {
+            this.takeStock = takeStock;
             return this;
         }
 
