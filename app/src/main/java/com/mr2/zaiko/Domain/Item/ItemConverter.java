@@ -2,7 +2,6 @@ package com.mr2.zaiko.Domain.Item;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.mr2.zaiko.Domain.Company.Company;
 import com.mr2.zaiko.Domain.CreatedDateTime;
@@ -19,71 +18,71 @@ public class ItemConverter {
     public static final String TAG = ItemConverter.class.getSimpleName();
 
     public static List<Item> convert(Cursor c, List<Company> makerList, List<UnitType> unitTypeList){
-        List<Item> list = new ArrayList<>();
-        if (null != c && c.moveToFirst()){
-            final int INDEX_ID = c.getColumnIndexOrThrow("_id");
-            final int INDEX_MODEL = c.getColumnIndexOrThrow("model");
-            final int INDEX_NAME = c.getColumnIndexOrThrow("name");
-            final int INDEX_COMPANY_ID = c.getColumnIndexOrThrow("company_id");
-            final int INDEX_IN_HOUSE_CODE = c.getColumnIndexOrThrow("in_house_code");
-            final int INDEX_UNIT_TYPE_ID = c.getColumnIndexOrThrow("unit_type_id");
-            final int INDEX_VALUE = c.getColumnIndexOrThrow("value");
-            final int INDEX_DO_NOT_STOCK_TAKE = c.getColumnIndexOrThrow("dont_stocktake");
-            final int INDEX_CREATED_AT = c.getColumnIndexOrThrow("created_at");
-            final int INDEX_DELETED_AT = c.getColumnIndexOrThrow("deleted_at");
+        if (!c.moveToFirst()) return new ArrayList<>(0);
 
-            do {
-                int _id = -1;
-                String model = null;
-                String name = null;
-                int maker_id = -1;
-                Company maker = null;
-                int inHouseCode = -1;
-                int unitType_id = -1;
-                UnitType unitType = null;
-                int value = -1;
-                boolean doNotStockTake = false;
-                Date createdAt = null;
-                Date deletedAt = null;
+        final int INDEX_ID = c.getColumnIndexOrThrow("_id");
+        final int INDEX_MODEL = c.getColumnIndexOrThrow("model");
+        final int INDEX_NAME = c.getColumnIndexOrThrow("name");
+        final int INDEX_PRIMARY_IMAGE_ID = c.getColumnIndexOrThrow("primary_image_id");
+        final int INDEX_COMPANY_ID = c.getColumnIndexOrThrow("company_id");
+        final int INDEX_IN_HOUSE_CODE = c.getColumnIndexOrThrow("in_house_code");
+        final int INDEX_UNIT_TYPE_ID = c.getColumnIndexOrThrow("unit_type_id");
+        final int INDEX_VALUE = c.getColumnIndexOrThrow("value");
+        final int TAKE_STOCK = c.getColumnIndexOrThrow("take_stock");
+        final int INDEX_CREATED_AT = c.getColumnIndexOrThrow("created_at");
+        final int INDEX_DELETED_AT = c.getColumnIndexOrThrow("deleted_at");
+        List<Item> list = new ArrayList<>(c.getCount());
 
-                //必須項目
-                model = c.getString(INDEX_MODEL);
-                name = c.getString(INDEX_NAME);
-                maker_id = c.getInt(INDEX_COMPANY_ID);
+        do {
+            int _id = -1;
+            String model = null;
+            String name = null;
+            int primaryImage_id = -1;
+            int maker_id = -1;
+            Company maker = null;
+            int inHouseCode = -1;
+            int unitType_id = -1;
+            UnitType unitType = null;
+            int value = -1;
+            boolean takeStock = false;
+            Date createdAt = null;
+            Date deletedAt = null;
 
-                Company dummyCompany = Company.of(Id.of(maker_id));
-                int targetCompanyIndex = makerList.indexOf(dummyCompany); //todo:ここ動くか不安 インスタンス判定かequals判定か
-                if (-1 == targetCompanyIndex)
-                    throw new IllegalArgumentException("渡されたListからオブジェクトが見つかりません。");
-                maker = makerList.get(targetCompanyIndex);
+            //必須項目
+            model = c.getString(INDEX_MODEL);
+            name = c.getString(INDEX_NAME);
 
-                unitType_id = c.getInt(INDEX_UNIT_TYPE_ID);
-                int targetUnitTypeIndex = unitTypeList.indexOf(UnitType.of(Id.of(unitType_id))); //todo:ここも不安
-                if (-1 == targetUnitTypeIndex)
-                    throw new IllegalArgumentException("渡されたListからオブジェクトが見つかりません。"); //todo:落ちる
-                unitType = unitTypeList.get(targetUnitTypeIndex);
+            maker_id = c.getInt(INDEX_COMPANY_ID);
+            int targetCompanyIndex = makerList.indexOf(Company.of(Id.of(maker_id)));
+//            if (-1 == targetCompanyIndex)
+//                throw new IllegalArgumentException("ItemConverter.convert(Cursor):渡されたCompanyListから、Cursor内のCompanyIdと一致するものが見つかりませんでした。");
+            maker = makerList.get(targetCompanyIndex);
 
-                Item.Builder builder =
-                        new Item.Builder(ItemModel.of(model), ItemName.of(name), maker, unitType);
-                //オプション
-                _id = c.getInt(INDEX_ID);
-//                if (-1 != _id)
-//                    builder.setId();
-                inHouseCode = c.getInt(INDEX_IN_HOUSE_CODE);
-                value = c.getInt(INDEX_VALUE);
-                if (1 == c.getInt(INDEX_DO_NOT_STOCK_TAKE))
-                    doNotStockTake = true;
-                createdAt = MyDateFormat.stringToDate(c.getString(INDEX_CREATED_AT));
-                if (null != createdAt)
-                    builder.setCreatedAt(CreatedDateTime.of(createdAt));
-                deletedAt = MyDateFormat.stringToDate(c.getString(INDEX_DELETED_AT));
-                if (null != deletedAt)
-                    builder.setDeletedAt(DeletedDateTime.of(deletedAt));
-                Item item = builder.setId(Id.of(_id))
-                        .setInHouseCode(InHouseCode.of(inHouseCode))
-                        .setValue(value)
-                        .setDoNotStockTake(doNotStockTake)
-                        .create();
+            unitType_id = c.getInt(INDEX_UNIT_TYPE_ID);
+            int targetUnitTypeIndex = unitTypeList.indexOf(UnitType.of(Id.of(unitType_id)));
+//            if (-1 == targetUnitTypeIndex)
+//                throw new IllegalArgumentException("ItemConverter.convert(Cursor):渡されたUnitTypeListから、Cursor内のUnitTypeIdと一致するものが見つかりませんでした。");
+            unitType = unitTypeList.get(targetUnitTypeIndex);
+
+            Item.Builder builder =
+                    new Item.Builder(ItemModel.of(model), ItemName.of(name), maker, unitType);
+            //オプション
+            _id = c.getInt(INDEX_ID);
+            inHouseCode = c.getInt(INDEX_IN_HOUSE_CODE);
+            primaryImage_id = c.getInt(INDEX_PRIMARY_IMAGE_ID);
+            value = c.getInt(INDEX_VALUE);
+            takeStock = (1 == c.getInt(TAKE_STOCK));
+            createdAt = MyDateFormat.stringToDate(c.getString(INDEX_CREATED_AT));
+                builder.setCreatedAt(CreatedDateTime.of(createdAt));
+            deletedAt = MyDateFormat.stringToDate(c.getString(INDEX_DELETED_AT));
+            if (null != deletedAt)
+                builder.setDeletedAt(DeletedDateTime.of(deletedAt));
+            Item item = builder.setId(Id.of(_id))
+                    .setPrimaryImage_id(primaryImage_id)
+                    .setInHouseCode(InHouseCode.of(inHouseCode))
+                    .setValue(value)
+                    .setTakeStock(takeStock)
+                    .create();
 
 //                Item item = new Item(
 //                        Id.of(_id),
@@ -96,10 +95,26 @@ public class ItemConverter {
 //                        doNotStockTake,
 //                        CreatedDateTime.of(createdAt),
 //                        DeletedDateTime.of(deletedAt));
-                list.add(item);
-            }while (c.moveToNext());
-        } else Log.d(TAG, "ItemConverter#convert(Cursor c): c.moveToFirst() is Failed.");
+            list.add(item);
+        }while (c.moveToNext());
         return list;
+    }
+
+    public static List<ItemImage> convertImage(Cursor c){
+        if (c.moveToFirst()){
+            List<ItemImage> list = new ArrayList<>(c.getCount());
+            final int INDEX_ID = c.getColumnIndexOrThrow("_id");
+            final int INDEX_ADDRESS = c.getColumnIndexOrThrow("address");
+            final int INDEX_CREATED_AT = c.getColumnIndexOrThrow("created_at");
+            do{
+                Id _id = Id.of(c.getInt(INDEX_ID));
+                String address = c.getString(INDEX_ADDRESS);
+                Date createdAt = MyDateFormat.stringToDate(c.getString(INDEX_CREATED_AT));
+                ItemImage image = ItemImage.of(_id, address, CreatedDateTime.of(createdAt));
+                list.add(image);
+            } while (c.moveToNext());
+            return list;
+        } else throw new IllegalArgumentException("カーソルが空です");
     }
 
     public static ContentValues convert(Item entity){
@@ -109,10 +124,11 @@ public class ItemConverter {
         ItemModel model = entity.getModel();
         ItemName name = entity.getName();
         Company maker = entity.getMaker();
+        int primaryImage_id = entity.getPrimaryImage_id();
         InHouseCode inHouseCode = entity.getInHouseCode();
         UnitType unitType = entity.getUnitType();
         int value = entity.getValue();
-        boolean doNotStockTake = entity.isDoNotStockTake();
+        boolean takeStock = entity.isTakeStock();
         CreatedDateTime createdAt = entity.getCreatedAt();
         DeletedDateTime deletedAt = entity.getDeletedAt();
 
@@ -130,13 +146,18 @@ public class ItemConverter {
             values.put("unit_type_id", unitType.get_id().value());
         if (0 != value)
             values.put("value", value);
-        if (doNotStockTake)
-            values.put("dont_stocktake", 1);
-//        if (null != createdAt)
-//            values.put("created_at", createdAt.toString());
-//        if (null != deletedAt)
-//            values.put("deleted_at", deletedAt.toString());
+        if (takeStock)
+            values.put("takeStock", 1);
 
+        return values;
+    }
+
+    public static ContentValues convertImage(ItemImage image){
+        ContentValues values = new ContentValues();
+
+        String address = image.getAddress();
+        if (null != address)
+            values.put("address", address);
         return values;
     }
 }

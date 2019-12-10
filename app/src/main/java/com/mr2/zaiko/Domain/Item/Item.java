@@ -15,26 +15,26 @@ import java.util.Objects;
 /**
  * アイテムのEntity。集約ルート。
  */
-public class Item {
+public class Item { //entity
     private static final int VALUE_MIN = 1;
-
-    private final Id _id;  //システム内で使うID。登録時は-1
-    private final ItemModel model;  //型式 メーカーが定める商品の型式、品番。原則、英数字のみ。
-    private ItemName name;  //品名 社内で定める商品の名前。
-    private int primaryImage_id; //主写真ID。
-    private List<ItemImage> imageList;  //画像・写真
-    private final Company maker; //メーカー　登録時はCompany.getId、読み出しはIdからfindOneしてEntityとして持つ。
-    private final InHouseCode inHouseCode;  //社内管理コード 新規登録時にRepository…DomainServiceで差し込む。読み込み時はコンストラクタで
-    private UnitType unitType;  //管理単位　同上
-    private int value;  //単価 管理上の単価価値。
-    private boolean takeStock;  //棚卸要否 たな卸しリストの抽出条件
-    private CreatedDateTime createdAt;  //作成日時
-    private DeletedDateTime deletedAt;  //削除日時
-//    private List<Tag> tagList;  //タグ
-//    private List<JanCode> janCodeList;  //JANコード(外部バーコード)
-//    private List<Inventory> inventoryList;  //在庫保管場所
-//    private List<Catalogue> catalogueList;  //発注先情報
-//    private List<Event> eventList;  //イベント履歴
+    //メーカーx型式でユニーク。無いと困るのは…ID、Model、Name、Maker、
+    private final Id _id;  //システム内で使うID vo 登録時は-1
+    private final ItemModel model;  //型式 vo メーカーが定める商品の型式、品番。原則、英数字のみ。
+    private ItemName name;  //品名 vo 社内で定める商品の名前。
+    private int primaryImage_id; //主写真ID vo
+    private List<ItemImage> imageList;  //画像・写真 vo
+    private final Company maker; //メーカー entity　登録時はCompany.getId、読み出しはIdからfindOneしてEntityとして持つ。
+    private final InHouseCode inHouseCode;  //社内管理コード vo 新規登録時にRepository…DomainServiceで差し込む。読み込み時はコンストラクタで
+    private UnitType unitType;  //管理単位 vo　同上
+    private int value;  //単価 vo 管理上の単価価値。
+    private boolean takeStock;  //棚卸要否 vo たな卸しリストの抽出条件
+    private CreatedDateTime createdAt;  //作成日時 vo
+    private DeletedDateTime deletedAt;  //削除日時 vo
+//    private List<Tag> tagList;  //タグ vo
+//    private List<JanCode> janCodeList;  //JANコード(外部バーコード) vo
+//    private List<Inventory> inventoryList;  //在庫保管場所 entity
+//    private List<Catalogue> catalogueList;  //発注先情報 entity
+//    private List<Event> eventList;  //イベント履歴 vo
 
     //タグ、JANコード、在庫保管場所と数量、発注先カタログ、入出庫購入履歴
 
@@ -98,6 +98,10 @@ public class Item {
         return this;
     }
 
+    public void setImageList(List<ItemImage> list){
+        this.imageList = list;
+    }
+
     public Item setUnitType(UnitType unitType) {
         this.unitType = unitType;
         return this;
@@ -123,6 +127,14 @@ public class Item {
 
     public Company getMaker() {
         return maker;
+    }
+
+    public int getPrimaryImage_id() {
+        return primaryImage_id;
+    }
+
+    public List<ItemImage> getImageList() {
+        return imageList;
     }
 
     public InHouseCode getInHouseCode() {
@@ -225,6 +237,11 @@ public class Item {
             return this;
         }
 
+        public Builder setPrimaryImage_id(int primaryImage_id) {
+            this.primaryImage_id = primaryImage_id;
+            return this;
+        }
+
 //        public Builder setModel(ItemModel model){
 //            this.model = model;
 //            return this;
@@ -279,7 +296,7 @@ public class Item {
                 this._id = Id.getDefault();
             if (-1 == primaryImage_id)
                 this.imageList = new ArrayList<>(); //default値
-            if (null == inHouseCode) //新規：NonNull(ですが todo:DBから抽出する内容なのでsetは後にしないと割り込まれて重複しますよ？)
+            if (null == inHouseCode) //新規：NonNull(　todo:DBから抽出する内容なのでsetは後にしないと割り込まれて重複します
                 this.inHouseCode = InHouseCode.getDefault();
             if (null == createdAt) //新規：Null
                 this.createdAt = CreatedDateTime.getDefault();

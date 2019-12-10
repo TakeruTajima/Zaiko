@@ -8,10 +8,10 @@ import java.util.Date;
 import java.util.Objects;
 
 public class DeletedDateTime {
-    private final long deletedMilSec;
+    private final long deletedMilliSec;
 
     private DeletedDateTime(long deletedMilSec) {
-        this.deletedMilSec = deletedMilSec;
+        this.deletedMilliSec = deletedMilSec;
     }
 
     public static DeletedDateTime of(Date deletedAt){
@@ -23,13 +23,13 @@ public class DeletedDateTime {
     }
 
     public Date toDate(){
-        return new Date(deletedMilSec);
+        return new Date(deletedMilliSec);
     }
 
     @NonNull
     @Override
     public String toString() {
-        return MyDateFormat.dateToString(new Date(deletedMilSec));
+        return MyDateFormat.dateToString(new Date(deletedMilliSec));
     }
 
     @Override
@@ -37,11 +37,11 @@ public class DeletedDateTime {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DeletedDateTime that = (DeletedDateTime) o;
-        return Objects.equals(deletedMilSec, that.deletedMilSec);
+        return Objects.equals(deletedMilliSec, that.deletedMilliSec);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(deletedMilSec);
+        return Objects.hash(deletedMilliSec);
     }
 }

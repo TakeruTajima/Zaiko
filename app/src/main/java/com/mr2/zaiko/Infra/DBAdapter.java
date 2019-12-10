@@ -85,10 +85,24 @@ public class DBAdapter {
         return c;
     }
 
+    /**
+     * 完全一致検索
+     * @param tableName テーブル名
+     * @param columnName カラム名
+     * @param value 値
+     * @return Cursor
+     */
     public Cursor findAllRecordExactMatch(String tableName, String columnName, String value){
         return db.rawQuery("SELECT * FROM " + tableName + " WHERE " + columnName + " = '" + value + "';", null);
     }
 
+    /**
+     * 部分一致検索
+     * @param tableName テーブル名
+     * @param columnName カラム名
+     * @param value 値
+     * @return Cursor
+     */
     public Cursor findAllRecordPartialMatch(String tableName, String columnName, String value){
         return db.rawQuery("SELECT * FROM " + tableName + " WHERE " + columnName + " LIKE '%" + value + "%';", null);
     }

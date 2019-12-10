@@ -1,26 +1,38 @@
 package com.mr2.zaiko.Domain.Item;
 
 import com.mr2.zaiko.Domain.CreatedDateTime;
+import com.mr2.zaiko.Domain.Id;
 
 public class ItemImage {
+    private final Id _id;
     private final String address;
-    private final CreatedDateTime onCreated;
+    private final CreatedDateTime createdAt;
 
     public ItemImage(String address) {
+        this._id = Id.getDefault();
         this.address = address;
-        this.onCreated = CreatedDateTime.getDefault();
+        this.createdAt = CreatedDateTime.getDefault();
     }
 
-    ItemImage(String address, CreatedDateTime onCreated) {
+    ItemImage(Id _id, String address, CreatedDateTime createdAt) {
+        this._id = _id;
         this.address = address;
-        this.onCreated = onCreated;
+        this.createdAt = createdAt;
+    }
+
+    public static ItemImage of(Id _id, String address, CreatedDateTime createdAt){
+        return new ItemImage(_id, address, createdAt);
+    }
+
+    public Id get_id() {
+        return _id;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public CreatedDateTime getOnCreated() {
-        return onCreated;
+    public CreatedDateTime getCreatedAt() {
+        return createdAt;
     }
 }

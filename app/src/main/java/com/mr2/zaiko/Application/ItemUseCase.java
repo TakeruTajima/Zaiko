@@ -3,7 +3,6 @@ package com.mr2.zaiko.Application;
 import androidx.annotation.Nullable;
 
 import com.mr2.zaiko.Domain.Company.Company;
-import com.mr2.zaiko.Domain.Id;
 import com.mr2.zaiko.Domain.Item.Item;
 import com.mr2.zaiko.Domain.Item.ItemModel;
 import com.mr2.zaiko.Domain.Item.ItemRepository;
@@ -52,7 +51,8 @@ public class ItemUseCase {
      * @param item 保存したいItem。
      * @return 保存したItemを再度読み込んで返します。保存出来なかった場合はNullを返します。
      */
-    public @Nullable Item saveItem(Item item){
+    public @Nullable
+    Item saveItem(Item item){
         if (null == item.get_id() || 0 >= item.get_id().value()) {
             //重複チェック
             List<Item> list = repository.findAllByMaker(item.getMaker());
