@@ -13,12 +13,12 @@ import com.mr2.zaiko.Application.ItemUseCase;
 import com.mr2.zaiko.Application.UnitTypeUseCase;
 import com.mr2.zaiko.Domain.Company.Company;
 import com.mr2.zaiko.Domain.Company.CompanyRepository;
-import com.mr2.zaiko.Domain.DomainService;
+import com.mr2.zaiko.Domain.RepositoryService;
 import com.mr2.zaiko.Domain.Item.Item;
 import com.mr2.zaiko.Domain.Item.ItemModel;
 import com.mr2.zaiko.Domain.Item.ItemName;
 import com.mr2.zaiko.Domain.Item.ItemRepository;
-import com.mr2.zaiko.Domain.UnitType.UnitType;
+import com.mr2.zaiko.Domain.UnitType.Unit;
 import com.mr2.zaiko.Domain.UnitType.UnitTypeRepository;
 import com.mr2.zaiko.Domain.ValidateResult;
 import com.mr2.zaiko.R;
@@ -38,7 +38,7 @@ public class ItemEditPresenter {
     private final ItemEditFragment fragment;
     private Item targetItem;
     private Company selectedMaker;
-    private UnitType selectedUnitType;
+    private Unit selectedUnit;
 
     public ItemEditPresenter(ItemEditFragment fragment){
         this.fragment = fragment;
@@ -88,14 +88,14 @@ public class ItemEditPresenter {
         }else Log.d(TAG, "onMakerSelectionResult() return null;");
     }
 
-    public void onUnitSelectionResult(UnitType unitType, Bundle arg){
-        if (null != unitType){
+    public void onUnitSelectionResult(Unit unit, Bundle arg){
+        if (null != unit){
             FragmentManager fm = fragment.getFragmentManager();
             if (null != fm){
                 fm.popBackStack();
-                this.selectedUnitType = unitType;
-                if (null != arg) arg.putInt(KEY_SELECTED_UNIT_TYPE_ID, selectedUnitType.get_id().value());
-                fragment.setSelectedUnitType(unitType);
+                this.selectedUnit = unit;
+                if (null != arg) arg.putInt(KEY_SELECTED_UNIT_TYPE_ID, selectedUnit.get_id().value());
+                fragment.setSelectedUnitType(unit);
             }
         }else Log.d(TAG, "onUnitTypeSelectionResult() return null;");
     }
@@ -115,7 +115,7 @@ public class ItemEditPresenter {
             String msg = "メーカー:" + selectedMaker.getName() + "\n" +
                     "型式:" + fragment.getModel() + "\n" +
                     "品名:" + fragment.getName() + "\n" +
-                    "単価:￥" + fragment.getValue() + "/" + selectedUnitType.getName() + "\n" +
+                    "単価:￥" + fragment.getValue() + "/" + selectedUnit.getName() + "\n" +
                     "以上の内容で登録します。よろしいですか？";
             String positive = "登録する";
             String negative = "キャンセル";
@@ -136,19 +136,19 @@ public class ItemEditPresenter {
         ItemName name = ItemName.of(fragment.getName());
         int value = fragment.getValue();
         Item result;
-        ItemUseCase useCase = new ItemUseCase(DomainService.getItemRepository(fragment.getContext()));
+        ItemUseCase useCase = new ItemUseCase(RepositoryService.getItemRepository(fragment.getContext()));
         if (null != targetItem){ //更新
             targetItem.setName(name);
             targetItem.setValue(value);
-            targetItem.setUnitType(selectedUnitType);
+            targetItem.setUnit(selectedUnit);
             // +たな卸し要否
 
             result = useCase.saveItem(targetItem);
-        }else if (null != selectedMaker && null != model && null != name && null != selectedUnitType){ //新規
-            ItemRepository repository = DomainService.getItemRepository(fragment.getContext());
+        }else if (null != selectedMaker && null != model && null != name && null != selectedUnit){ //新規
+            ItemRepository repository = RepositoryService.getItemRepository(fragment.getContext());
             Item item = new Item(repository, model, name, selectedMaker);
             item.setValue(value);
-            item.setUnitType(selectedUnitType);
+            item.setUnit(selectedUnit);
             result = useCase.saveItem(item);
         }else {
             fragment.showToast("項目に不足があります。");
@@ -178,9 +178,9 @@ public class ItemEditPresenter {
 
     public void onCreateView(Bundle savedInstanceState, Bundle arguments) {
         Context context = fragment.getContext();
-        CompanyRepository companyRepository = DomainService.getCompanyRepository(context);
-        UnitTypeRepository unitTypeRepository = DomainService.getUnitTypeRepository(context);
-        ItemRepository itemRepository = DomainService.getItemRepository(context);
+        CompanyRepository companyRepository = RepositoryService.getCompanyRepository(context);
+        UnitTypeRepository unitTypeRepository = RepositoryService.getUnitTypeRepository(context);
+        ItemRepository itemRepository = RepositoryService.getItemRepository(context);
         if (null != savedInstanceState) {
             int item_id = savedInstanceState.getInt(KEY_TARGET_ITEM_ID);
             int unitType_id = savedInstanceState.getInt(KEY_SELECTED_UNIT_TYPE_ID);
@@ -189,9 +189,9 @@ public class ItemEditPresenter {
                 this.targetItem = itemRepository.findOne(item_id);
             }
             if (0 < unitType_id) {
-                UnitType unitType = unitTypeRepository.findOne(unitType_id);
-                this.selectedUnitType = unitType;
-                fragment.setSelectedUnitType(unitType);
+                Unit unit = unitTypeRepository.findOne(unitType_id);
+                this.selectedUnit = unit;
+                fragment.setSelectedUnitType(unit);
             }
             if (0 < maker_id) {
                 Company maker = companyRepository.findOne(maker_id);
@@ -217,32 +217,32 @@ public class ItemEditPresenter {
                     fragment.setEditName(item.getName());
                     fragment.setEditValue(item.getValue());
                     if (0 == unitType_id) {
-                        this.selectedUnitType = item.getUnitType();
-                        fragment.setSelectedUnitType(item.getUnitType());
+                        this.selectedUnit = item.getUnit();
+                        fragment.setSelectedUnitType(item.getUnit());
                     }else {
-                        this.selectedUnitType = unitTypeRepository.findOne(unitType_id);
-                        fragment.setSelectedUnitType(selectedUnitType);
+                        this.selectedUnit = unitTypeRepository.findOne(unitType_id);
+                        fragment.setSelectedUnitType(selectedUnit);
                     }
                 }
             }else {
-                unitTypeRepository = DomainService.getUnitTypeRepository(fragment.getContext());
+                unitTypeRepository = RepositoryService.getUnitTypeRepository(fragment.getContext());
                 if (0 >= unitType_id) {
-                    List<UnitType> unitTypeList = unitTypeRepository.findAllByUnDeleted();
-                    UnitType defaultUnitType = null;
-                    if (null != unitTypeList && 1 <= unitTypeList.size())
-                        defaultUnitType = unitTypeList.get(0);
-                    if (null != defaultUnitType) {
-                        this.selectedUnitType = defaultUnitType;
-                        fragment.setSelectedUnitType(defaultUnitType);
+                    List<Unit> unitList = unitTypeRepository.findAllByUnDeleted();
+                    Unit defaultUnit = null;
+                    if (null != unitList && 1 <= unitList.size())
+                        defaultUnit = unitList.get(0);
+                    if (null != defaultUnit) {
+                        this.selectedUnit = defaultUnit;
+                        fragment.setSelectedUnitType(defaultUnit);
                     }
                 }else {
-                    UnitType unitType = unitTypeRepository.findOne(unitType_id);
-                    if (null != unitType){
-                        this.selectedUnitType = unitType;
-                        fragment.setSelectedUnitType(unitType);
+                    Unit unit = unitTypeRepository.findOne(unitType_id);
+                    if (null != unit){
+                        this.selectedUnit = unit;
+                        fragment.setSelectedUnitType(unit);
                     }
                 }
-                companyRepository = DomainService.getCompanyRepository(fragment.getContext());
+                companyRepository = RepositoryService.getCompanyRepository(fragment.getContext());
                 if (0 >= maker_id) {
                     List<Company> companyList = companyRepository.findAllMakerByUnDeleted();
                     Company defaultMaker = companyList.get(0);
@@ -265,8 +265,8 @@ public class ItemEditPresenter {
         if (null != targetItem){
             outState.getInt(KEY_TARGET_ITEM_ID, targetItem.get_id().value());
         }
-        if (null != selectedUnitType) {
-            outState.putInt("selectedUnitId", selectedUnitType.get_id().value());
+        if (null != selectedUnit) {
+            outState.putInt("selectedUnitId", selectedUnit.get_id().value());
         }
         if (null != selectedMaker){
             outState.putInt("selectedMakerId", selectedMaker.get_id().value());
@@ -277,8 +277,8 @@ public class ItemEditPresenter {
         if (null != targetItem){
             outState.getInt(KEY_TARGET_ITEM_ID, targetItem.get_id().value());
         }
-        if (null != selectedUnitType) {
-            outState.putInt("selectedUnitId", selectedUnitType.get_id().value());
+        if (null != selectedUnit) {
+            outState.putInt("selectedUnitId", selectedUnit.get_id().value());
         }
         if (null != selectedMaker){
             outState.putInt("selectedMakerId", selectedMaker.get_id().value());

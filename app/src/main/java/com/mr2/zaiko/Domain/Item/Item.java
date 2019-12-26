@@ -6,7 +6,7 @@ import com.mr2.zaiko.Domain.Company.Company;
 import com.mr2.zaiko.Domain.CreatedDateTime;
 import com.mr2.zaiko.Domain.DeletedDateTime;
 import com.mr2.zaiko.Domain.Id;
-import com.mr2.zaiko.Domain.UnitType.UnitType;
+import com.mr2.zaiko.Domain.UnitType.Unit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class Item { //entity
     private List<ItemImage> imageList;  //画像・写真 vo
     private final Company maker; //メーカー entity　登録時はCompany.getId、読み出しはIdからfindOneしてEntityとして持つ。
     private final InHouseCode inHouseCode;  //社内管理コード vo 新規登録時にRepository…DomainServiceで差し込む。読み込み時はコンストラクタで
-    private UnitType unitType;  //管理単位 vo　同上
+    private Unit unit;  //管理単位 vo　同上
     private int value;  //単価 vo 管理上の単価価値。
     private boolean takeStock;  //棚卸要否 vo たな卸しリストの抽出条件
     private CreatedDateTime createdAt;  //作成日時 vo
@@ -48,7 +48,7 @@ public class Item { //entity
         int code = repository.extractInHouseCode(maker.get_id().value());
         this.inHouseCode = InHouseCode.of(code);
         //TODO:集約の中からRepositoryを呼ぶのはやめたほうがいいらしいけどService作る？
-        //this.unitType = UnitType.getDefault();
+        //this.unit = Unit.getDefault();
         //this.value = -1;
         //this.takeStock = false;
         //this.createdAt = CreatedDateTime.getDefault();
@@ -57,13 +57,13 @@ public class Item { //entity
 
     @Deprecated
     public Item(Id _id, ItemModel model, ItemName name, Company maker, InHouseCode inHouseCode,
-                UnitType unitType, int value, boolean takeStock, CreatedDateTime createdAt, DeletedDateTime deletedAt) {
+                Unit unit, int value, boolean takeStock, CreatedDateTime createdAt, DeletedDateTime deletedAt) {
         this._id = _id;
         this.model = model;
         this.name = name;
         this.maker = maker;
         this.inHouseCode = inHouseCode;
-        this.unitType = unitType;
+        this.unit = unit;
         this.value = value;
         this.takeStock = takeStock;
         this.createdAt = createdAt;
@@ -79,7 +79,7 @@ public class Item { //entity
         this.imageList = builder.imageList;
         this.maker = builder.maker;
         this.inHouseCode = builder.inHouseCode;
-        this.unitType = builder.unitType;
+        this.unit = builder.unit;
         this.value = builder.value;
         this.takeStock = builder.takeStock;
         this.createdAt = builder.createdAt;
@@ -102,8 +102,8 @@ public class Item { //entity
         this.imageList = list;
     }
 
-    public Item setUnitType(UnitType unitType) {
-        this.unitType = unitType;
+    public Item setUnit(Unit unit) {
+        this.unit = unit;
         return this;
     }
 
@@ -141,8 +141,8 @@ public class Item { //entity
         return inHouseCode;
     }
 
-    public UnitType getUnitType() {
-        return unitType;
+    public Unit getUnit() {
+        return unit;
     }
 
     public int getValue() {
@@ -174,7 +174,7 @@ public class Item { //entity
                 ", name='" + name.value() + '\'' +
                 ", maker=" + maker +
                 ", inHouseCode=" + inHouseCode +
-                ", unitType=" + unitType +
+                ", unit=" + unit +
                 ", value=" + value +
                 ", takeStock=" + takeStock +
                 ", createdAt=" + createdAt +
@@ -207,7 +207,7 @@ public class Item { //entity
         private List<ItemImage> imageList;  //画像・写真
         private Company maker; //メーカー　登録時はCompany.getId、読み出しはIdからfindOneしてEntityとして持つ。
         private InHouseCode inHouseCode;  //社内管理コード 新規登録時にRepository…DomainServiceで差し込む。読み込み時はコンストラクタで
-        private UnitType unitType;  //管理単位　同上
+        private Unit unit;  //管理単位　同上
         private int value = -1;  //単価 管理上の単価価値。
         private boolean takeStock = true;  //棚卸要否 たな卸しリストの抽出条件
         private CreatedDateTime createdAt;  //作成日時
@@ -219,11 +219,11 @@ public class Item { //entity
 //    private List<Event> eventList;  //イベント履歴
 
 
-        public Builder(ItemModel model, ItemName name, Company maker, UnitType unitType) {
+        public Builder(ItemModel model, ItemName name, Company maker, Unit unit) {
             this.model = model;
             this.name = name;
             this.maker = maker;
-            this.unitType = unitType;
+            this.unit = unit;
         }
 
         public Builder setId(Id _id){
@@ -263,8 +263,8 @@ public class Item { //entity
             return this;
         }
 
-//        public Builder setUnitType(UnitType unitType) {
-//            this.unitType = unitType;
+//        public Builder setUnit(Unit unit) {
+//            this.unit = unit;
 //            return this;
 //        }
 
@@ -289,7 +289,7 @@ public class Item { //entity
         }
 
         public Item create(){
-            if (null == model || null == maker || null == name || null == unitType)
+            if (null == model || null == maker || null == name || null == unit)
                 throw new IllegalArgumentException("必須項目未設定");
 
             if (null == _id ) //新規：Null

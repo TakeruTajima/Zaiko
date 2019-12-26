@@ -2,8 +2,8 @@ package com.mr2.zaiko.Application;
 
 import android.util.Log;
 
+import com.mr2.zaiko.Domain.UnitType.Unit;
 import com.mr2.zaiko.Domain.UnitType.UnitTypeName;
-import com.mr2.zaiko.Domain.UnitType.UnitType;
 import com.mr2.zaiko.Domain.UnitType.UnitTypeRepository;
 
 import java.util.Date;
@@ -17,7 +17,7 @@ public class UnitTypeUseCase {
         UN_DELETED
     }
 
-    public boolean deleteUnitType(UnitType entity) {
+    public boolean deleteUnitType(Unit entity) {
         if (repository.exists(entity.get_id().value())){
             repository.delete(entity);
             return true;
@@ -33,7 +33,7 @@ public class UnitTypeUseCase {
 ////        Log.d(TAG, "repository.count():"+ repository.count());
 //        if (0 == repository.count()){
 //            Log.d(TAG, "UnitTypeにレコードがありません。新規作成します。");
-//            UnitType entity = repository.save(UnitType.of("testUnitTypeName"));
+//            Unit entity = repository.save(Unit.of("testUnitTypeName"));
 //            if(null == entity){
 //                Log.d(TAG,"作成に失敗しました。");
 //            }else {
@@ -45,8 +45,8 @@ public class UnitTypeUseCase {
 //            Log.d(TAG, "UnitTypeにレコードが"+ repository.count() +"件存在しました。");
 //            Log.d(TAG, "出力します。");
 //
-//            List<UnitType> list = repository.findAll();
-//            UnitType entity;
+//            List<Unit> list = repository.findAll();
+//            Unit entity;
 //            for (int i = 0; list.size() > i; i++){
 //                entity = list.value(i);
 //                Log.d(TAG, "id:" + entity.get_id() + " name:" + entity.getName() + " created_at:" + entity.getCreatedAt() + " deleted_at:" + entity.getDeletedAt());
@@ -57,8 +57,8 @@ public class UnitTypeUseCase {
 //        Log.d(TAG, "UseCaseテストを終了します。");
     }
 
-    public List<UnitType> getList(UnitTypeSelection selection){
-        List<UnitType> list;
+    public List<Unit> getList(UnitTypeSelection selection){
+        List<Unit> list;
         switch (selection){
             case ALL:
                 list = repository.findAll();
@@ -75,9 +75,9 @@ public class UnitTypeUseCase {
 
     public boolean saveEntity(String name){ //TODO:このあたりからローダーにできないかなーって思ってるけど実装メンドそうなので後回しー
         if (repository.existsByName(name)) return false; //重複チェック
-        UnitType entity;
+        Unit entity;
         try {
-            entity = UnitType.of(UnitTypeName.of(name));
+            entity = Unit.of(UnitTypeName.of(name));
         }catch (IllegalArgumentException e){
             e.printStackTrace();
             return false;

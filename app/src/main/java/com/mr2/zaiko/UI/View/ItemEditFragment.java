@@ -20,7 +20,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.mr2.zaiko.Domain.Company.Company;
 import com.mr2.zaiko.Domain.Item.ItemModel;
 import com.mr2.zaiko.Domain.Item.ItemName;
-import com.mr2.zaiko.Domain.UnitType.UnitType;
+import com.mr2.zaiko.Domain.UnitType.Unit;
 import com.mr2.zaiko.R;
 import com.mr2.zaiko.UI.Presentation.ItemEditPresenter;
 
@@ -181,8 +181,8 @@ public class ItemEditFragment extends Fragment implements AlertDialogFragment.Co
         presenter.onMakerSelectionResult(maker, getArguments());
     }
 
-    public void onUnitSelectionResult(UnitType unitType){
-        presenter.onUnitSelectionResult(unitType, getArguments());
+    public void onUnitSelectionResult(Unit unit){
+        presenter.onUnitSelectionResult(unit, getArguments());
     }
 
     public void setEditModel(ItemModel model){
@@ -224,7 +224,7 @@ public class ItemEditFragment extends Fragment implements AlertDialogFragment.Co
         }
     }
 
-    public void setSelectedUnitType(UnitType unit){
+    public void setSelectedUnitType(Unit unit){
         if (null != unit) {
             String str = "円/" + unit.getName().value();
             unitButton.setText(str);

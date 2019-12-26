@@ -7,42 +7,42 @@ import com.mr2.zaiko.Domain.CreatedDateTime;
 import com.mr2.zaiko.Domain.DeletedDateTime;
 import com.mr2.zaiko.Domain.Id;
 
-import java.util.Date;
 import java.util.Objects;
 
-public class UnitType {
-    private final Id _id;
+@Deprecated
+public class Unit {
+    private final Id _id;//変更を受け入れるか？
     private final UnitTypeName name;
     private final CreatedDateTime createdAt;
     private final DeletedDateTime deletedAt;
 
-    private UnitType(@NonNull Id _id){
+    private Unit(@NonNull Id _id){
         this._id = _id;
         name = null;
         createdAt = null;
         deletedAt = null;
     }
 
-    private UnitType(@NonNull UnitTypeName name) {
+    private Unit(@NonNull UnitTypeName name) {
         this._id = null;
         this.name = name;
         this.createdAt = null;
         this.deletedAt = null;
     }
 
-    UnitType(@NonNull Id _id, @NonNull UnitTypeName name, @NonNull CreatedDateTime createdAt, @Nullable DeletedDateTime deletedAt) {
+    Unit(@NonNull Id _id, @NonNull UnitTypeName name, @NonNull CreatedDateTime createdAt, @Nullable DeletedDateTime deletedAt) {
         this._id = _id;
         this.name = name;
         this.createdAt = createdAt;
         this.deletedAt = deletedAt;
     }
 
-    public static UnitType of(@NonNull UnitTypeName name){
-        return new UnitType(name);
+    public static Unit of(@NonNull UnitTypeName name){
+        return new Unit(name);
     }
 
-    public static UnitType of(@NonNull Id _id){
-        return new UnitType(_id);
+    public static Unit of(@NonNull Id _id){
+        return new Unit(_id);
     }
 
     public Id get_id() {return _id; }
@@ -57,7 +57,7 @@ public class UnitType {
 
     @Override
     public String toString() {
-        return "UnitType{" +
+        return "Unit{" +
                 "_id=" + _id +
                 ", name=" + name +
                 ", createdAt=" + createdAt +
@@ -69,8 +69,8 @@ public class UnitType {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UnitType unitType = (UnitType) o;
-        return Objects.equals(_id, unitType._id);
+        Unit unit = (Unit) o;
+        return Objects.equals(_id, unit._id);
     }
 
     @Override

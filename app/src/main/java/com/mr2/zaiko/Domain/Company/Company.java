@@ -9,7 +9,7 @@ import com.mr2.zaiko.Domain.Id;
 
 import java.util.Objects;
 
-
+@Deprecated
 public class Company {
     private Id _id;
     private CompanyName name;

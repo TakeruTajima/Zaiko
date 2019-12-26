@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Objects;
 
+@Deprecated
 public class Category {
     private final boolean isMaker;
     private final boolean isSeller;

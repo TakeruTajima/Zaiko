@@ -56,7 +56,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
         holder.mModel.setText(holder.mItem.getModel().value());
         holder.mName.setText(holder.mItem.getName().value());
         holder.mOp1.setText(holder.mItem.getMaker().getName().value());
-        String text = holder.mItem.getValue() + "/" + holder.mItem.getUnitType().getName().value();
+        String text = holder.mItem.getValue() + "/" + holder.mItem.getUnit().getName().value();
         holder.mOp2.setText(text);
         text = holder.mItem.getCreatedAt().toString();//TODO:?
         holder.mOp3.setText(text);

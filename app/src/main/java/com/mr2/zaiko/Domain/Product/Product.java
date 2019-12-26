@@ -1,9 +1,5 @@
 package com.mr2.zaiko.Domain.Product;
 
-import com.mr2.zaiko.Domain.Company.Company;
-
-import java.util.List;
-
 public interface Product {
     //* Setter *//
     void changeProductName(String newName); //NN 1-150文字
@@ -12,7 +8,7 @@ public interface Product {
     int getProductIdentity();
     String getModel();
     String getProductName();
-    String getMakerName();
+    int getMakerCode();
     String getCreatedAt();
     String getUpdateAt();
     String getDeletedAt();

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Objects;
 
+@Deprecated
 public class Id {
     private static final int MIN = 1;
     private final int _id;

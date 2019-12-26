@@ -2,12 +2,10 @@ package com.mr2.zaiko.UI.Presentation;
 
 import androidx.fragment.app.Fragment;
 
-import com.mr2.zaiko.Domain.DomainService;
+import com.mr2.zaiko.Domain.RepositoryService;
+import com.mr2.zaiko.Domain.UnitType.Unit;
 import com.mr2.zaiko.Domain.UnitType.UnitTypeName;
 import com.mr2.zaiko.Domain.ValidateResult;
-import com.mr2.zaiko.Domain.UnitType.UnitType;
-import com.mr2.zaiko.Domain.UnitType.UnitTypeRepository;
-import com.mr2.zaiko.Domain.UnitType.UnitTypeRepositoryImpl;
 import com.mr2.zaiko.UI.View.ItemEditFragment;
 import com.mr2.zaiko.UI.View.UnitTypeListFragment;
 import com.mr2.zaiko.Application.UnitTypeUseCase;
@@ -30,8 +28,8 @@ public class UnitTypeListPresenter {
         mView.hydeEmpty();
 
         //TODO:R/Wに時間がかかる想定ならPresenter辺りから別スレッドにすべき？
-        UnitTypeUseCase useCase = new UnitTypeUseCase(DomainService.getUnitTypeRepository(mView.getContext()));
-        List<UnitType> list = useCase.getList(mSelection);
+        UnitTypeUseCase useCase = new UnitTypeUseCase(RepositoryService.getUnitTypeRepository(mView.getContext()));
+        List<Unit> list = useCase.getList(mSelection);
 
         if (null != list && 1 <= list.size()){
             mView.setUnitTypeList(list);
@@ -47,7 +45,7 @@ public class UnitTypeListPresenter {
 
     public void onResultInputDialog(String name){
         ValidateResult result = UnitTypeName.validate(name);
-        UnitTypeUseCase useCase = new UnitTypeUseCase(DomainService.getUnitTypeRepository(mView.getContext()));
+        UnitTypeUseCase useCase = new UnitTypeUseCase(RepositoryService.getUnitTypeRepository(mView.getContext()));
         switch (result) {
             case NullIsNotAllowed:
                 mView.setMessageInputDialog("入力してください。");
@@ -61,14 +59,14 @@ public class UnitTypeListPresenter {
                 mView.dismissInputDialog();
                 mView.showToast("登録しました。");
                 onCreate();
-                //TODO:ここでonItemSelected(UnitType)を呼んで選択済にさせる
+                //TODO:ここでonItemSelected(Unit)を呼んで選択済にさせる
                 break;
             default:
                 throw new IllegalStateException("不明なresultです");
         }
     }
 
-    public void onItemSelected(UnitType entity) {
+    public void onItemSelected(Unit entity) {
         Fragment parent = mView.getParentFragment();
         if (null == parent){
             parent = mView.getTargetFragment();
@@ -78,8 +76,8 @@ public class UnitTypeListPresenter {
         }else mView.showToast("selected entity{" + entity.getName() + "}");
     }
 
-    public boolean onItemHold(UnitType entity) {
-        UnitTypeUseCase useCase = new UnitTypeUseCase(DomainService.getUnitTypeRepository(mView.getContext()));
+    public boolean onItemHold(Unit entity) {
+        UnitTypeUseCase useCase = new UnitTypeUseCase(RepositoryService.getUnitTypeRepository(mView.getContext()));
         if (useCase.deleteUnitType(entity)){
             mView.setUnitTypeList(useCase.getList(mSelection));
             mView.showToast("削除しました。");

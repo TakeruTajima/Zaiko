@@ -16,8 +16,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mr2.zaiko.Domain.UnitType.Unit;
 import com.mr2.zaiko.Domain.UnitType.UnitTypeName;
-import com.mr2.zaiko.Domain.UnitType.UnitType;
 import com.mr2.zaiko.R;
 import com.mr2.zaiko.UI.Presentation.UnitTypeListPresenter;
 import com.mr2.zaiko.Application.UnitTypeUseCase;
@@ -138,13 +138,13 @@ public class UnitTypeListFragment extends Fragment implements TextInputDialogFra
     }
 
     @Override
-    public void onItemSelected(UnitType entity) {
+    public void onItemSelected(Unit entity) {
         mPresenter.onItemSelected(entity);
         //TODO:アイテムを選択したとしてActivityにコールバック、部品情報編集画面とかにって「単位」を選択済にさせる？
     }
 
     @Override
-    public boolean onItemHold(UnitType entity) {
+    public boolean onItemHold(Unit entity) {
         //TODO:Presenter経由でアイテムを削除(更新)する？
         mPresenter.onItemHold(entity);
         return true;
@@ -173,7 +173,7 @@ public class UnitTypeListFragment extends Fragment implements TextInputDialogFra
         dialogFragment.dismiss();
     }
 
-    public void setUnitTypeList(List<UnitType> list){
+    public void setUnitTypeList(List<Unit> list){
         RecyclerView recyclerView = mView.findViewById(R.id.recyclerViewUnitTypeList);
         if (null != recyclerView) {
             //set layout manager.

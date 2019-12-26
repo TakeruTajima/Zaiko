@@ -1,6 +1,6 @@
 package com.mr2.zaiko.Domain.Product;
 
-import com.mr2.zaiko.Domain.Company.Company;
+import com.mr2.zaiko.Domain.Maker.Maker;
 
 class ProductServiceImpl implements ProductService {
     private ProductRepository repository;
@@ -10,7 +10,7 @@ class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean isDuplicated(Company maker, Model model) {
+    public boolean isDuplicated(Maker maker, Model model) {
         return  repository.existsModel(maker, model);
     }
 }
