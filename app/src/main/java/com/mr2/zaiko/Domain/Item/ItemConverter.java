@@ -7,7 +7,7 @@ import com.mr2.zaiko.Domain.Company.Company;
 import com.mr2.zaiko.Domain.CreatedDateTime;
 import com.mr2.zaiko.Domain.DeletedDateTime;
 import com.mr2.zaiko.Domain.Id;
-import com.mr2.zaiko.Domain.UnitType.UnitType;
+import com.mr2.zaiko.Domain.UnitType.Unit;
 import com.mr2.zaiko.Infra.MyDateFormat;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.List;
 public class ItemConverter {
     public static final String TAG = ItemConverter.class.getSimpleName();
 
-    public static List<Item> convert(Cursor c, List<Company> makerList, List<UnitType> unitTypeList){
+    public static List<Item> convert(Cursor c, List<Company> makerList, List<Unit> unitList){
         if (!c.moveToFirst()) return new ArrayList<>(0);
 
         final int INDEX_ID = c.getColumnIndexOrThrow("_id");
@@ -42,7 +42,7 @@ public class ItemConverter {
             Company maker = null;
             int inHouseCode = -1;
             int unitType_id = -1;
-            UnitType unitType = null;
+            Unit unit = null;
             int value = -1;
             boolean takeStock = false;
             Date createdAt = null;
@@ -59,13 +59,13 @@ public class ItemConverter {
             maker = makerList.get(targetCompanyIndex);
 
             unitType_id = c.getInt(INDEX_UNIT_TYPE_ID);
-            int targetUnitTypeIndex = unitTypeList.indexOf(UnitType.of(Id.of(unitType_id)));
+            int targetUnitTypeIndex = unitList.indexOf(Unit.of(Id.of(unitType_id)));
 //            if (-1 == targetUnitTypeIndex)
 //                throw new IllegalArgumentException("ItemConverter.convert(Cursor):渡されたUnitTypeListから、Cursor内のUnitTypeIdと一致するものが見つかりませんでした。");
-            unitType = unitTypeList.get(targetUnitTypeIndex);
+            unit = unitList.get(targetUnitTypeIndex);
 
             Item.Builder builder =
-                    new Item.Builder(ItemModel.of(model), ItemName.of(name), maker, unitType);
+                    new Item.Builder(ItemModel.of(model), ItemName.of(name), maker, unit);
             //オプション
             _id = c.getInt(INDEX_ID);
             inHouseCode = c.getInt(INDEX_IN_HOUSE_CODE);
@@ -90,7 +90,7 @@ public class ItemConverter {
 //                        ItemName.of(name),
 //                        maker,
 //                        InHouseCode.of(inHouseCode),
-//                        unitTypeList.get(targetUnitTypeIndex),
+//                        unitList.get(targetUnitTypeIndex),
 //                        value,
 //                        doNotStockTake,
 //                        CreatedDateTime.of(createdAt),
@@ -126,7 +126,7 @@ public class ItemConverter {
         Company maker = entity.getMaker();
         int primaryImage_id = entity.getPrimaryImage_id();
         InHouseCode inHouseCode = entity.getInHouseCode();
-        UnitType unitType = entity.getUnitType();
+        Unit unit = entity.getUnit();
         int value = entity.getValue();
         boolean takeStock = entity.isTakeStock();
         CreatedDateTime createdAt = entity.getCreatedAt();
@@ -142,8 +142,8 @@ public class ItemConverter {
             values.put("company_id", maker.get_id().value());
         if (null != inHouseCode)
             values.put("in_house_code", inHouseCode.value());
-        if (null != unitType)
-            values.put("unit_type_id", unitType.get_id().value());
+        if (null != unit)
+            values.put("unit_type_id", unit.get_id().value());
         if (0 != value)
             values.put("value", value);
         if (takeStock)

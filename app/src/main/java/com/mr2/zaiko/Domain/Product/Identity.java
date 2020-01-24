@@ -6,9 +6,17 @@ import java.util.Objects;
 public class Identity {
     private final int identity;
 
-    public Identity(int identity) {
+    private Identity() {
+        this.identity = -1;
+    }
+
+    Identity(int identity) throws IllegalArgumentException{
         if (!validate(identity)) throw new IllegalArgumentException("商品IDは1始まり");
         this.identity = identity;
+    }
+
+    Identity getDefault(){
+        return new Identity();
     }
 
     public boolean validate(int identity){

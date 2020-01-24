@@ -1,7 +1,7 @@
 package com.mr2.zaiko.Domain.Product;
 
-import com.mr2.zaiko.Domain.Company.Company;
+import com.mr2.zaiko.Domain.Maker.Maker;
 
 public interface ProductService {
-    boolean isDuplicated(Company maker, Model model);
+    boolean isDuplicated(Maker maker, Model model);
 }

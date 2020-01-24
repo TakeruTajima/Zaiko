@@ -6,7 +6,7 @@ import android.database.Cursor;
 import com.mr2.zaiko.Domain.Base.BaseCrudRepository;
 import com.mr2.zaiko.Domain.Company.Company;
 import com.mr2.zaiko.Domain.Id;
-import com.mr2.zaiko.Domain.UnitType.UnitType;
+import com.mr2.zaiko.Domain.UnitType.Unit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +14,12 @@ import java.util.List;
 public class ItemRepositoryImpl extends BaseCrudRepository implements ItemRepository {
     public static final String TAG = ItemRepositoryImpl.class.getSimpleName();
     public final List<Company> makerList;
-    public final List<UnitType> unitTypeList;
+    public final List<Unit> unitList;
 
-    public ItemRepositoryImpl(Context context, List<Company> makerList, List<UnitType> unitTypeList) {
+    public ItemRepositoryImpl(Context context, List<Company> makerList, List<Unit> unitList) {
         super(context);
         this.makerList = makerList;
-        this.unitTypeList = unitTypeList;
+        this.unitList = unitList;
         //集約から他の集約のEntityを参照するには、Idによる事後参照（非推奨）か、Repositoryに予め集約を渡しておく。らしい。
     }
 
@@ -48,7 +48,7 @@ public class ItemRepositoryImpl extends BaseCrudRepository implements ItemReposi
         Cursor c = adapter.findAllRecordsByNull("m_items", "deleted_at");
         if (null == c || !c.moveToFirst())
             return new ArrayList<>(0);
-        List<Item> itemList = ItemConverter.convert(c, makerList, unitTypeList);
+        List<Item> itemList = ItemConverter.convert(c, makerList, unitList);
 
         findImageList(itemList);
         return itemList;
@@ -65,7 +65,7 @@ public class ItemRepositoryImpl extends BaseCrudRepository implements ItemReposi
         Id id = maker.get_id();
 //        if (null == id)
         Cursor c = adapter.findAllRecordExactMatch("m_items", "company_id", String.valueOf(id.value()));
-        List<Item> itemList = ItemConverter.convert(c, makerList, unitTypeList);
+        List<Item> itemList = ItemConverter.convert(c, makerList, unitList);
         findImageList(itemList);
         return itemList;
     }
@@ -97,7 +97,7 @@ public class ItemRepositoryImpl extends BaseCrudRepository implements ItemReposi
     @Override
     public Item findOne(Integer _id) {
         Cursor c = adapter.findOneRecordById("m_items", _id);
-        List<Item> list = ItemConverter.convert(c, makerList, unitTypeList);
+        List<Item> list = ItemConverter.convert(c, makerList, unitList);
         if (null == list || 1 != list.size())
             throw new IllegalStateException("idからレコードの特定に失敗しました。");
         return findImage(list.get(0));
@@ -106,14 +106,14 @@ public class ItemRepositoryImpl extends BaseCrudRepository implements ItemReposi
     @Override
     public boolean exists(Integer _id) {
         Cursor c = adapter.findOneRecordById("m_items", _id);
-        List<Item> list = ItemConverter.convert(c, makerList, unitTypeList);
+        List<Item> list = ItemConverter.convert(c, makerList, unitList);
         return (null != list && 1 == list.size());
     }
 
     @Override
     public List<Item> findAll() {
         Cursor c = adapter.getAllRecords("m_items");
-        List<Item> itemList = ItemConverter.convert(c, makerList, unitTypeList);
+        List<Item> itemList = ItemConverter.convert(c, makerList, unitList);
         findImageList(itemList);
         return itemList;
     }

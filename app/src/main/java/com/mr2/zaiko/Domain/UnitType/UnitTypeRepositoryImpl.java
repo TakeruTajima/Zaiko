@@ -17,8 +17,8 @@ public class UnitTypeRepositoryImpl extends BaseCrudRepository implements UnitTy
     }
 
     @Override
-    public List<UnitType> findAllByUnDeleted() {
-        Log.d(TAG, "findAllByUnDeleted");
+    public List<Unit> findAllByUnDeleted() {
+        Log.d(TAG, "getList");
         Cursor c = adapter.findAllRecordsByNull("m_unit_types", "deleted_at");
         return UnitTypeConverter.convert(c);
     }
@@ -38,17 +38,17 @@ public class UnitTypeRepositoryImpl extends BaseCrudRepository implements UnitTy
     }
 
     @Override
-    public List<UnitType> partialByName(String name) {
+    public List<Unit> partialByName(String name) {
         Log.d(TAG, "partialByName");
         Cursor c = adapter.findAllRecordPartialMatch("m_unit_types", "name", name);
         return UnitTypeConverter.convert(c);
     }
 
     @Override
-    public UnitType findOne(Integer _id) {
+    public Unit findOne(Integer _id) {
         Log.d(TAG, "findOne");
         Cursor c = adapter.findOneRecordById("m_unit_types", _id);
-        List<UnitType> list = UnitTypeConverter.convert(c);
+        List<Unit> list = UnitTypeConverter.convert(c);
         if (null == list){
             return null;
         }
@@ -63,7 +63,7 @@ public class UnitTypeRepositoryImpl extends BaseCrudRepository implements UnitTy
     }
 
     @Override
-    public List<UnitType> findAll() {
+    public List<Unit> findAll() {
         Log.d(TAG, "findAll");
         Cursor c = adapter.getAllRecords("m_unit_types");
         return UnitTypeConverter.convert(c);
@@ -77,7 +77,7 @@ public class UnitTypeRepositoryImpl extends BaseCrudRepository implements UnitTy
     }
 
     @Override
-    public UnitType save(UnitType entity) {
+    public Unit save(Unit entity) {
         Log.d(TAG, "save");
         Log.d(TAG, "gat entity, " + entity.toString());
         ContentValues values = UnitTypeConverter.convert(entity);
@@ -91,11 +91,11 @@ public class UnitTypeRepositoryImpl extends BaseCrudRepository implements UnitTy
         }
         Log.d(TAG, "miss save DB.");
         adapter.rollBack();
-        throw new IllegalStateException("登録に失敗しました。UnitType{" + entity.toString() + "}");
+        throw new IllegalStateException("登録に失敗しました。Unit{" + entity.toString() + "}");
     }
 
     @Override
-    public void delete(UnitType entity) {
+    public void delete(Unit entity) {
         Log.d(TAG, "delete");
         adapter.updateRecordsByCurrentTimestamp("m_unit_types", "deleted_at", entity.get_id().value());
     }

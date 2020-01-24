@@ -6,12 +6,12 @@ import java.util.Objects;
 public class Name {
     private final String name;
 
-    public Name(String name) {
+    public Name(String name) throws IllegalArgumentException{
         if (!validate(name)) throw new IllegalArgumentException("1～150文字");
         this.name = name;
     }
 
-    public boolean validate(String name){
+    public static boolean validate(@NonNull String name){
         return 1 <= name.length() && 150 >= name.length();
     }
 

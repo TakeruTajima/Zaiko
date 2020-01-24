@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment;
 import com.mr2.zaiko.Application.CompanyUseCase;
 import com.mr2.zaiko.Domain.Company.Company;
 import com.mr2.zaiko.Domain.Company.CompanyName;
-import com.mr2.zaiko.Domain.DomainService;
+import com.mr2.zaiko.Domain.RepositoryService;
 import com.mr2.zaiko.Domain.ValidateResult;
 import com.mr2.zaiko.UI.View.CompanyListFragment;
 import com.mr2.zaiko.UI.View.ItemEditFragment;
@@ -30,7 +30,7 @@ public class CompanyListPresenter  {
         mView.showProgress();
 
         List<Company> list;
-        CompanyUseCase useCase = new CompanyUseCase(DomainService.getCompanyRepository(mView.getContext()));
+        CompanyUseCase useCase = new CompanyUseCase(RepositoryService.getCompanyRepository(mView.getContext()));
         list = useCase.getList(mSelection);
         if (null == list){
             mView.showEmpty();
@@ -50,7 +50,7 @@ public class CompanyListPresenter  {
 
     public void onResultTextDialog(String name){
         ValidateResult result = CompanyName.validate(name);
-        CompanyUseCase useCase = new CompanyUseCase(DomainService.getCompanyRepository(mView.getContext()));
+        CompanyUseCase useCase = new CompanyUseCase(RepositoryService.getCompanyRepository(mView.getContext()));
         switch (result) {
             case NullIsNotAllowed:
                 mView.setInputDialogMessage("入力してください。");
@@ -94,7 +94,7 @@ public class CompanyListPresenter  {
     }
 
     public boolean onItemHold(Company company){
-        CompanyUseCase useCase = new CompanyUseCase(DomainService.getCompanyRepository(mView.getContext()));
+        CompanyUseCase useCase = new CompanyUseCase(RepositoryService.getCompanyRepository(mView.getContext()));
         if (useCase.deleteCompany(company)){ //todo:alertDialogで確認が要るでしょ
             mView.setCompanyList(useCase.getList(mSelection));
             mView.showToast("削除しました。");

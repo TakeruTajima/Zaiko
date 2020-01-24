@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.mr2.zaiko.Domain.UnitType.UnitType;
+import com.mr2.zaiko.Domain.UnitType.Unit;
 import com.mr2.zaiko.R;
 
 import java.text.DateFormat;
@@ -21,16 +21,16 @@ import java.util.Locale;
 
 public class UnitTypeListAdapter extends RecyclerView.Adapter<UnitTypeListAdapter.ViewHolder> {
     private static final String TAG = UnitTypeListAdapter.class.getSimpleName();
-    private List<UnitType> mValues;
-    private List<UnitType> mNarrowedValues;
+    private List<Unit> mValues;
+    private List<Unit> mNarrowedValues;
     private Fragment mView;
 
     interface Listener {
-        void onItemSelected(UnitType entity);
-        boolean onItemHold(UnitType entity);
+        void onItemSelected(Unit entity);
+        boolean onItemHold(Unit entity);
     }
 
-    public UnitTypeListAdapter(@NonNull List<UnitType> list, @NonNull Fragment fragment) {
+    public UnitTypeListAdapter(@NonNull List<Unit> list, @NonNull Fragment fragment) {
         this.mValues = list;
         this.mView = fragment;
         if (!(fragment instanceof Listener)) {
@@ -51,7 +51,7 @@ public class UnitTypeListAdapter extends RecyclerView.Adapter<UnitTypeListAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder");
         String temp;
-        holder.mUnitType = mValues.get(position);
+        holder.mUnit = mValues.get(position);
         temp = "ID:" + mValues.get(position).get_id();
         holder.mIdText.setText(temp);
         holder.mNameText.setText(mValues.get(position).getName().value());
@@ -70,8 +70,8 @@ public class UnitTypeListAdapter extends RecyclerView.Adapter<UnitTypeListAdapte
         } else holder.mDeletedAtText.setText("削除:none");
         Log.d(TAG, "ID:" + holder.mIdText.getText() + " NAME:" + holder.mNameText.getText());
 
-        holder.mView.setOnClickListener(v -> ((Listener)mView).onItemSelected(holder.mUnitType));
-        holder.mView.setOnLongClickListener(v -> ((Listener)mView).onItemHold(holder.mUnitType));
+        holder.mView.setOnClickListener(v -> ((Listener)mView).onItemSelected(holder.mUnit));
+        holder.mView.setOnLongClickListener(v -> ((Listener)mView).onItemHold(holder.mUnit));
     }
 
     @Override
@@ -89,7 +89,7 @@ public class UnitTypeListAdapter extends RecyclerView.Adapter<UnitTypeListAdapte
         TextView mNameText;
         TextView mCreatedAtText;
         TextView mDeletedAtText;
-        UnitType mUnitType;
+        Unit mUnit;
 
         public ViewHolder(@NonNull View view) {
             super(view);

@@ -6,7 +6,7 @@ import com.mr2.zaiko.Infra.MyDateFormat;
 
 import java.util.Date;
 import java.util.Objects;
-
+@Deprecated
 public class DeletedDateTime {
     private final long deletedMilliSec;
 

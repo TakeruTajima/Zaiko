@@ -4,7 +4,7 @@ import android.util.Log;
 import com.mr2.zaiko.Application.CompanyUseCase;
 import com.mr2.zaiko.Application.ItemUseCase;
 import com.mr2.zaiko.Domain.Company.Company;
-import com.mr2.zaiko.Domain.DomainService;
+import com.mr2.zaiko.Domain.RepositoryService;
 import com.mr2.zaiko.Domain.Item.Item;
 import com.mr2.zaiko.UI.View.ItemListAdapter;
 import com.mr2.zaiko.UI.View.ItemListFragment;
@@ -27,7 +27,7 @@ public class ItemListPresenter implements ItemListAdapter.Listener {
         Log.d(TAG, "onCreate()");
         fragment.hideEmpty();
         fragment.showProgress();
-        ItemUseCase useCase = new ItemUseCase(DomainService.getItemRepository(fragment.getContext()));
+        ItemUseCase useCase = new ItemUseCase(RepositoryService.getItemRepository(fragment.getContext()));
         List<Item> itemList = useCase.getList(selection, selectedMaker);
         if (null == itemList || 0 >= itemList.size()){
             fragment.showEmpty();

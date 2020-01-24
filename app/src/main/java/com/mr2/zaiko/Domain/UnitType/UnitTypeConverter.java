@@ -18,7 +18,7 @@ import java.util.List;
 public class UnitTypeConverter {
     public static final String TAG = UnitTypeConverter.class.getSimpleName();
 
-    public static ContentValues convert(@NonNull UnitType entity){
+    public static ContentValues convert(@NonNull Unit entity){
         Log.d(TAG, "convert");
         ContentValues values = new ContentValues();
         Id _id = entity.get_id();
@@ -29,9 +29,9 @@ public class UnitTypeConverter {
         return values;
     }
 
-    public static List<UnitType> convert(@NonNull Cursor c){
+    public static List<Unit> convert(@NonNull Cursor c){
         Log.d(TAG, "convert");
-        List<UnitType> list = new ArrayList<>();
+        List<Unit> list = new ArrayList<>();
         if(c.moveToFirst()){
             do{
                 int _id = -1;
@@ -49,7 +49,7 @@ public class UnitTypeConverter {
                     deletedAt = MyDateFormat.stringToDate(c.getString(c.getColumnIndex("deleted_at")));
                 }
 
-                list.add(new UnitType(Id.of(_id), UnitTypeName.of(name), CreatedDateTime.of(createdAt), DeletedDateTime.of(deletedAt)));
+                list.add(new Unit(Id.of(_id), UnitTypeName.of(name), CreatedDateTime.of(createdAt), DeletedDateTime.of(deletedAt)));
             }while (c.moveToNext());
         }
         return list;
