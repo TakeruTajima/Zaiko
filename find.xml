@@ -1,7 +1,7 @@
 <application>
   <component name="FindSettings">
-    <option name="customScope" value="プロジェクト 'zaiko'" />
-    <option name="defaultScopeName" value="プロジェクト 'zaiko'" />
-    <option name="SEARCH_SCOPE" value="プロジェクト 'zaiko'" />
+    <option name="customScope" value="クラス階層" />
+    <option name="defaultScopeName" value="クラス階層" />
+    <option name="SEARCH_SCOPE" value="クラス階層" />
   </component>
 </application>
