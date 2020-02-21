@@ -3,6 +3,7 @@
     package="com.mr2.zaiko">
 
     <application
+        android:name=".zaiko2.TestApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -11,7 +12,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".UI.View.MainActivity"
+            android:name="com.mr2.zaiko.zaiko2.ui.TestActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="InnerclassSeparator">
@@ -20,6 +21,5 @@
                 <category android:name="android.intent.category.LANCHER"/>
             </intent-filter>
         </activity>
-
     </application>
 </manifest>

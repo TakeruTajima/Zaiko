@@ -57,7 +57,7 @@ public class UnitTypeRepositoryImpl extends BaseCrudRepository implements UnitTy
 
     @Override
     public boolean exists(Integer _id) {
-        Log.d(TAG, "exists");
+        Log.d(TAG, "existsData");
         Cursor c = adapter.findOneRecordById("m_unit_types", _id);
         return c.moveToFirst();
     }
