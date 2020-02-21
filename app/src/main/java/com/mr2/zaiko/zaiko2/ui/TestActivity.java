@@ -2,7 +2,6 @@ package com.mr2.zaiko.zaiko2.ui;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +22,6 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
 
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss");
     private ContractTest.Presenter presenter;
-    private Button button_1;
 
     /* ---------------------------------------------------------------------- */
     /* Listener                                                               */
