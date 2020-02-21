@@ -158,7 +158,7 @@ public class ItemRepositoryImpl extends BaseCrudRepository implements ItemReposi
             return findOne((int) result);
         }else {
             //更新 returnは更新したレコードの数
-            result = adapter.updateRecords("m_items", ItemConverter.convert(entity), _id.value());
+            result = adapter.updateRecordsById("m_items", ItemConverter.convert(entity), _id.value());
             if (0 >= result) { //更新失敗でロールバックNull
                 adapter.rollBack();
                 return null;
@@ -172,7 +172,7 @@ public class ItemRepositoryImpl extends BaseCrudRepository implements ItemReposi
                 ItemImage image = itemImageList.get(i);
                 Cursor c = adapter.findOneRecordById("m_images", image.get_id().value());
                 if (c.moveToFirst()) { //更新
-                    resultImage = adapter.updateRecords("m_images", ItemConverter.convertImage(image), image.get_id().value());
+                    resultImage = adapter.updateRecordsById("m_images", ItemConverter.convertImage(image), image.get_id().value());
                 }else { //挿入
                     resultImage = adapter.insertRecords("m_images", ItemConverter.convertImage(image));
                 }

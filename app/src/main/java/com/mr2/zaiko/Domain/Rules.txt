@@ -1,0 +1,6 @@
+コーディングルール
+Domain層
+
+1.ドメインの不変条件はEntityかVOに書き、バリデーションとしては例外を投げてApplication層に任せること。
+2.java.util.Dateは使用不可。ZonedDateTimeやLocalDateTime、DateTimeFormatterを使うこと。
+3.コレクションを返すメソッドで返す内容がなかった場合、Nullではなく件数0のコレクションを返すこと。

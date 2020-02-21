@@ -62,4 +62,6 @@ interface ProductRepository extends SimpleCrudRepository<Product, Integer> {
     long countBySeller(Seller seller);
 
     boolean existsModel(Maker maker, Model model);
+
+    Identity getIdentity(int productIdentity);
 }

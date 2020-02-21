@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements TestRecyclerViewF
 
     public void onItemSelectedByCompanyList(Company maker) {
         // if (mode == addItem){
-        //     ft.remove(mCompanyListFragment).commit();
+        //     ft.delete(mCompanyListFragment).commit();
         //     itemEditFragment.setSelectedMaker(maker);
         // }else {
         //     setBrowsCompanyFragment(maker.get_id());

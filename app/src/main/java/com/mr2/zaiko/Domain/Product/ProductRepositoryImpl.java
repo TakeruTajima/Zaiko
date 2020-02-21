@@ -12,16 +12,17 @@ import com.mr2.zaiko.Domain.DeletedAt;
 import com.mr2.zaiko.Domain.Maker.Code;
 import com.mr2.zaiko.Domain.Maker.Maker;
 import com.mr2.zaiko.Domain.MyDateTime;
+import com.mr2.zaiko.Domain.Seller.Seller;
 import com.mr2.zaiko.Domain.UpdateAt;
 import com.mr2.zaiko.Infra.DBAdapter;
 
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 class ProductRepositoryImpl implements ProductRepository {
     private final DBAdapter adapter;
@@ -68,10 +69,10 @@ class ProductRepositoryImpl implements ProductRepository {
         //nextInHouseCode更新
         ContentValues v = new ContentValues();
         v.put("next_code", inHouseCode + 1);
-        long updateRecords = adapter.updateRecords("m_in_house_code", v, code.getCompanyCode()); //** roll back point
+        long updateRecords = adapter.updateRecordsById("m_in_house_code", v, code.getCompanyCode()); //** roll back point
         if (0 == updateRecords) {
             adapter.rollBack();
-            throw new SQLException("inHouseCodeのupdateに失敗しました。(updateRecords = " + updateRecords + ")");
+            throw new SQLException("inHouseCodeのupdateに失敗しました。(updateRecordsById = " + updateRecords + ")");
         }
         //newProduct登録
         ContentValues v2 = new ContentValues();
@@ -130,7 +131,7 @@ class ProductRepositoryImpl implements ProductRepository {
         }
         adapter.beginTransaction();
         //update
-        adapter.updateRecords("m_products", values, id);
+        adapter.updateRecordsById("m_products", values, id);
         //再読出し
         Product result;
         try{
@@ -182,7 +183,61 @@ class ProductRepositoryImpl implements ProductRepository {
         return convertCursor(c);
     }
 
+    @Override
+    public long countInactive() {
+        return adapter.findAllRecordsByNotNull("m_products", "deleted_at").getCount();
+    }
 
+    /**
+     * メーカーの部品を検索
+     *
+     * @param maker 条件となるメーカー
+     * @return Product
+     */
+    @Override
+    public List<Product> findAllByMaker(@NonNull Maker maker) {
+        Cursor c = adapter.findAllRecordExactMatch("m_products", "maker_id", maker.getCode() + "");
+        return convertCursor(c);
+    }
+
+    @Override
+    public long countByMaker(@NonNull Maker maker) {
+        return adapter.findAllRecordExactMatch("m_products", "maker_id", maker.getCode() + "").getCount();
+    }
+
+    @Override
+    public List<Product> findAllBySeller(@NonNull Seller seller) {
+        Cursor c = adapter.query("SELECT DISTINCT product_id FROM m_catalogue WHERE seller_id = " + seller.getCode() + ";");
+        if (!c.moveToFirst()) return new ArrayList<>(0);
+
+        String[] ids = new String[c.getCount()];
+        for (int i = 0; i < c.getCount(); i++){
+            String productId = c.getInt(c.getColumnIndexOrThrow("product_id")) + "";
+            ids[i] = productId;
+        }
+        Cursor products = adapter.findByArray("m_products", "_id", ids);
+        return convertCursor(products);
+    }
+
+    @Override
+    public long countBySeller(Seller seller) {
+        Cursor c = adapter.query("SELECT DISTINCT product_id FROM m_catalogue WHERE seller_id = " + seller.getCode() + ";");
+        return c.getCount();
+    }
+
+    @Override
+    public boolean existsModel(Maker maker, Model model) {
+        Cursor c = adapter.query("SELECT * FROM m_products WHERE maker_id = " + maker.getCode() + " AND model = '" + model.getModel() + "';");
+        if (1 < c.getCount())throw new IllegalStateException("単一メーカーで型式の重複を検出しました。");
+        return c.moveToFirst();
+    }
+
+    @Override
+    public Identity getIdentity(int productIdentity) {
+        Cursor c = adapter.findOneRecordById("m_products", productIdentity);
+        if (!c.moveToFirst()) throw new IllegalArgumentException("ProductIdが見つかりません");
+        return new Identity(productIdentity);
+    }
 
     private Product reloadOneEntity(int identity) throws IllegalStateException, IllegalArgumentException{
 
@@ -275,7 +330,7 @@ class ProductRepositoryImpl implements ProductRepository {
                 try{
                     ZonedDateTime deleted = ZonedDateTime.parse(c.getString(INDEX_DELETED_AT), formatter);
                     deletedAt = new DeletedAt(deleted);
-                }catch (DateTimeParseException e){e.printStackTrace();};
+                }catch (DateTimeParseException e){e.printStackTrace();}
                 Product product = new ProductImpl(id,
                         model,
                         maker_id,
@@ -287,5 +342,37 @@ class ProductRepositoryImpl implements ProductRepository {
             }while (c.moveToNext());
         }
         return list;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    @Override
+    public Product findOne(Integer integer) {
+        throw new UnsupportedOperationException("未実装");
+    }
+
+    @Override
+    public boolean exists(Integer integer) {
+        throw new UnsupportedOperationException("未実装");
+    }
+
+    @Override
+    public List<Product> findAll() {
+        throw new UnsupportedOperationException("未実装");
+    }
+
+    @Override
+    public Product save(Product entity) {
+        throw new UnsupportedOperationException("未実装");
+    }
+
+    @Override
+    public void delete(Product entity) {
+        throw new UnsupportedOperationException("未実装");
+    }
+
+    private String getNewIdentity() {
+        return UUID.randomUUID().toString();
     }
 }

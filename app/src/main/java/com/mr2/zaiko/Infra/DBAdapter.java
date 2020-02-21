@@ -157,9 +157,13 @@ public class DBAdapter {
      * @return 影響を受けた行の数。（IDが見つからなかった場合は0を返す）
      * @throws IllegalArgumentException-IDが不正（IDが1未満）
      */
-    public long updateRecords(String tableName, ContentValues values, int _id) throws IllegalArgumentException{
+    public long updateRecordsById(String tableName, ContentValues values, int _id) throws IllegalArgumentException{
         if(_id <= -1) throw new IllegalArgumentException("IDが不正です。ID=" + _id);
         return db.update(tableName, values, "_id=?", new String[]{""+ _id});
+    }
+
+    public long updateRecords(String tableName, ContentValues values, String where, String[] whereArgs){
+        return db.update(tableName, values, where, whereArgs);
     }
 
     /**
@@ -188,6 +192,10 @@ public class DBAdapter {
      */
     public Cursor query(String s){
         return db.rawQuery(s, null);
+    }
+
+    public Cursor findByArray(String tableName, String columnName, String[] selectArgs){
+        return db.rawQuery("SELECT * FROM " + tableName + " WHERE " + columnName + " = '?';", selectArgs);
     }
 
     private Cursor checkCursor(Cursor c, String query){
