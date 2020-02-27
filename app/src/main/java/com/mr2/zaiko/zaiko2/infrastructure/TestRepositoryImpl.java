@@ -34,7 +34,7 @@ public class TestRepositoryImpl implements TestRepository {
     public void delete(TestData data) throws IllegalArgumentException{
         if (data.equals(persistedData) && data.updateCount() == persistedData.updateCount()) {
             persistedData = null;
-            System.out.println("delete(): data is null? -> " + (null == persistedData));
+            System.out.println("delete(): data is null");
         }else {
             throw new IllegalArgumentException("delete(): 永続化済みデータと一致しません");
         }

@@ -23,7 +23,7 @@ public class TestProductTestHolder {
         Product test3 = TestProductHolder.get("うえ", "model3");
         System.out.println(test3.model().model());
         System.out.println(test2.name().name());
-        test2.changeName(new Name("hoge"));
+        test2.changeName(new Name("startLoader"));
         System.out.println(test2.name().name() + " changed.");
         System.out.println(test3.name().name() + " do?");
         System.out.println(test3.equals(test2));

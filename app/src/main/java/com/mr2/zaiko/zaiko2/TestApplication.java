@@ -5,8 +5,9 @@ import android.content.res.Configuration;
 
 import androidx.annotation.NonNull;
 
-import com.mr2.zaiko.zaiko2.domain.test.TestData;
+import com.mr2.zaiko.zaiko2.domain.inhouse.equipment.EquipmentId;
 import com.mr2.zaiko.zaiko2.infrastructure.TestRepositoryImpl;
+import com.mr2.zaiko.zaiko2.ui.contractor.ContractImageCapture;
 import com.mr2.zaiko.zaiko2.ui.contractor.ContractTest;
 import com.mr2.zaiko.zaiko2.ui.presentation.TestPresenter;
 import com.mr2.zaiko.zaiko2.useCase.TestApplicationService;
@@ -23,12 +24,6 @@ public class TestApplication extends Application {
     }
 
     @Override
-    public void onTerminate() {
-        super.onTerminate();
-        System.out.println("////////////////TestTestApplication onTerminate()");
-    }
-
-    @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         System.out.println("////////////////TestTestApplication onConfigurationChanged()");
@@ -40,30 +35,50 @@ public class TestApplication extends Application {
         System.out.println("////////////////TestTestApplication onLowMemory()");
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        System.out.println("////////////////TestTestApplication onTerminate()");
+        testPresenter = null;
+        imageCapturePresenter = null;
+        targetEquipmentId = null;
+    }
+
     /* ---------------------------------------------------------------------- */
     /* other method                                                           */
     /* ---------------------------------------------------------------------- */
-
-    private TestData testData;
     private ContractTest.Presenter testPresenter;
+    private ContractImageCapture.Presenter imageCapturePresenter;
+    private EquipmentId targetEquipmentId;
 
-    public void test(){
-        System.out.println("////////////////TestTestApplication test()");
-        if (null == testData) testData = new TestData();
-    }
-
-    public TestData testData(){
-        return testData;
-    }
-
-    public void testDataSystemOutput(){
-        testData.systemOutput();
-    }
-
-    public ContractTest.Presenter testPresenter(ContractTest.View view){
+    public ContractTest.Presenter testPresenter(){
         if (null == testPresenter){
             testPresenter = new TestPresenter(new TestApplicationService(new TestRepositoryImpl()));
         }
         return testPresenter;
+    }
+
+    public void endTestPresenter(){
+        testPresenter = null;
+    }
+
+    public ContractImageCapture.Presenter imageCapturePresenter(){
+        if (null == targetEquipmentId)
+            throw new IllegalStateException("target equipment id is null.");
+//        if (null == imageCapturePresenter)
+//            imageCapturePresenter = new ImageCapturePresenter(new ImagePersistenceService(new EquipmentRepositoryImpl()), targetEquipmentId);
+        return imageCapturePresenter;
+    }
+
+    public void endImageCapturePresenter(){
+        imageCapturePresenter = null;
+    }
+
+    public void setTargetEquipmentId(@NonNull EquipmentId equipmentId){
+        this.targetEquipmentId = equipmentId;
+    }
+
+    public void removeTargetEquipmentId(){
+        targetEquipmentId = null;
     }
 }
