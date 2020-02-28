@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mr2.zaiko.R;
+import com.mr2.zaiko.zaiko2.TestApplication;
+import com.mr2.zaiko.zaiko2.ui.contractor.ContractImageCapture;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.PictureResult;
@@ -14,6 +16,7 @@ import com.otaliastudios.cameraview.PictureResult;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 public class ImageCaptureActivity extends AppCompatActivity {
@@ -21,7 +24,8 @@ public class ImageCaptureActivity extends AppCompatActivity {
     /* ---------------------------------------------------------------------- */
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */
-
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddhhmmss");
+    private ContractImageCapture.Presenter presenter;
 
 
     /* ---------------------------------------------------------------------- */
@@ -35,21 +39,23 @@ public class ImageCaptureActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_capture);
         Log.d(TAG, "onCreate");
+        setContentView(R.layout.activity_image_capture);
+
+        TestApplication application = (TestApplication) getApplication();
+        if (null == presenter){
+            presenter = application.imageCapturePresenter();
+        }
+
         CameraView cameraView = findViewById(R.id.image_capture_camera_view);
         cameraView.setLifecycleOwner(this);
         cameraView.addCameraListener(new CameraListener() {
-            @Override
-            public void onPictureTaken(@NonNull PictureResult result) {
-//                try {
-//                    String fileName = outputFile(result.getData());
-//                }catch (IllegalStateException e){
-//                    e.printStackTrace();
-//                }
-
-            }
-        });
+             @Override
+             public void onPictureTaken(@NonNull PictureResult result) {
+                 super.onPictureTaken(result);
+                 outputFile(result.getData());
+             }
+         });
         cameraView.takePicture();
     }
 
@@ -88,11 +94,12 @@ public class ImageCaptureActivity extends AppCompatActivity {
     /* other method                                                           */
     /* ---------------------------------------------------------------------- */
 
-    private String outputFile(byte[] outputByte){
-        String name = UUID.randomUUID().toString();
+    private void outputFile(byte[] outputByte){
+        String fileName = UUID.randomUUID().toString();
         try {
-            FileOutputStream fos = openFileOutput(name, MODE_PRIVATE);
+            FileOutputStream fos = openFileOutput(fileName, MODE_PRIVATE);
             fos.write(outputByte);
+            presenter.onCaptureResult(fileName);
         }catch (FileNotFoundException e){
             e.printStackTrace();
             throw new IllegalStateException("FileOutputStreamの取得に失敗しました。");
@@ -100,6 +107,5 @@ public class ImageCaptureActivity extends AppCompatActivity {
             e.printStackTrace();
             throw new IllegalStateException("Fileの書き込みに失敗しました。");
         }
-        return name;
     }
 }

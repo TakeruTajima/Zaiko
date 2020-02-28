@@ -43,7 +43,7 @@ public class TestApplicationService {
         return data.name();
     }
 
-    public TestData checkData(){
-        return repository.verification();
-    }
+//    public TestData checkData(){
+//        return repository.verification();
+//    }
 }

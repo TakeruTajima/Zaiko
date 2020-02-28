@@ -157,6 +157,10 @@ public class ImageViewerFragment extends Fragment {
         }
     }
 
+//    public void getFilesList(){
+//        File file = new File(context.getFilesDir());
+//    }
+
     //savePhoto
     //loadPhoto
     //camera
