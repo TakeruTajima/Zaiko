@@ -1,13 +1,11 @@
 package com.mr2.zaiko.zaiko2.ui;
 
-import android.content.Context;
-import android.content.CursorLoader;
-import android.database.Cursor;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.OperationCanceledException;
 import android.util.Log;
-import android.widget.CursorAdapter;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,16 +13,21 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.AsyncTaskLoader;
 import androidx.loader.content.Loader;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.mr2.zaiko.R;
 import com.mr2.zaiko.zaiko2.TestApplication;
+import com.mr2.zaiko.zaiko2.domain.inhouse.equipment.Photo;
 import com.mr2.zaiko.zaiko2.loader.TestEvent;
 import com.mr2.zaiko.zaiko2.loader.TestTaskLoader;
 import com.mr2.zaiko.zaiko2.ui.adapter.EventBusService;
+import com.mr2.zaiko.zaiko2.ui.adapter.ImageViewerFragmentPagerAdapter;
+import com.mr2.zaiko.zaiko2.ui.adapter.ImageViewerResource;
 import com.mr2.zaiko.zaiko2.ui.contractor.ContractTest;
 import com.otaliastudios.cameraview.BitmapCallback;
 import com.otaliastudios.cameraview.PictureResult;
@@ -37,6 +40,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestActivity extends AppCompatActivity implements ContractTest.View, LoaderManager.LoaderCallbacks<String> {
     public static final String TAG = TestActivity.class.getSimpleName() + "(4156)";
@@ -49,7 +54,6 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
     private final int LOADER_ID = 0;
     private String loaderResult;
     private final String KEY_LOADER_RESULT = "loader_result";
-//    private EventBus eventBus;
 
     /* ---------------------------------------------------------------------- */
     /* Listener                                                               */
@@ -65,28 +69,12 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
         Log.d(TAG, "onCreate");
         System.out.println("/////////////// TestActivity onCreate() ***");
 
-        setContentView(R.layout.activity_main);
-        findViewById(R.id.button1).setOnClickListener(view -> presenter.event_1());
-        findViewById(R.id.button2).setOnClickListener(view -> presenter.event_2());
-        findViewById(R.id.button3).setOnClickListener(view -> presenter.event_3(ZonedDateTime.now().format(formatter)));
-        findViewById(R.id.button4).setOnClickListener(view -> startLoader());
-        ((ProgressBar)findViewById(R.id.progressBar)).setProgress(0);
+        setViews();
+        setPresenter();
+        presenter.onCreate(this);
 
-        //Activity(親クラス)からApplicationを取得
-        TestApplication application = (TestApplication) getApplication();
-        if (null != application) {
-            presenter = application.testPresenter();
-            presenter.onCreate(this);
-        }else {
-            System.out.println("///////////////////////Applicationを取得できませんでした。");
-            throw new IllegalStateException("missing application.");
-        }
-
-        if (null != savedInstanceState) {
-            loaderResult = savedInstanceState.getString(KEY_LOADER_RESULT);
-        }
+        if (null != savedInstanceState) loaderResult = savedInstanceState.getString(KEY_LOADER_RESULT);
     }
-
 
     @Override
     protected void onStart() {
@@ -127,37 +115,94 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
         super.onDestroy();
         Log.d(TAG, "onDestroy");
         presenter.onDestroy(this);
-//        LoaderManager.getInstance(this).destroyLoader(LOADER_ID);
     }
 
+    private void setViews(){
+        setContentView(R.layout.activity_main);
+        findViewById(R.id.button1).setOnClickListener(view -> presenter.event_1());
+        findViewById(R.id.button2).setOnClickListener(view -> startNewActivity());
+        findViewById(R.id.button3).setOnClickListener(view -> setCrossViewPager());
+        findViewById(R.id.button4).setOnClickListener(view -> startLoader());
+        ((ProgressBar)findViewById(R.id.progressBar)).setProgress(0);
+        setViewPager();
+    }
 
-    /* ---------------------------------------------------------------------- */
-    /* other method                                                           */
-    /* ---------------------------------------------------------------------- */
+    private String getImageURI(){
+        return getFilesDir().getAbsolutePath() + "/20200309033935.jpg";
+    }
 
-    @Override
-    public void updateProgress(int percent) {
-        ((ProgressBar)findViewById(R.id.progressBar)).setProgress(percent);
-        //tips:三項演算子
-        // 「 条件式 ? trueReturn : falseReturn; 」
-        String text = (10000 == percent) ? ("completed!") : (percent + "/1000");
-        ((TextView)findViewById(R.id.textViewPercent)).setText(text);
+    private void setImage(){
+//        System.out.println("///image uri: " + getImageURI());
+//        ImageView imageView = findViewById(R.id.imageView2);
+//        Glide.with(this)
+//                .load(getImageURI())
+//                .into(imageView);
+    }
 
-        if (0 == percent || 10000 == percent) {
-            String dateTime = ZonedDateTime.now().format(formatter);
-            System.out.println("updateProgress: " + dateTime);
+    private ImageViewerResource getResource(){
+        List<Photo> photos = new ArrayList<>();
+        photos.add(new Photo("/20200309033935.jpg"));
+        return new ImageViewerResource(photos, getFilesDir().getAbsolutePath());
+    }
+
+    private void setViewPager(){
+        ViewPager viewPager = findViewById(R.id.viewPager);
+        ImageViewerFragmentPagerAdapter adapter =
+                new ImageViewerFragmentPagerAdapter(getSupportFragmentManager(),
+                        ImageViewerFragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+                        getResource());
+        viewPager.setAdapter(adapter);
+    }
+
+    private void setViewPager2(){
+        String KEY_IMAGE_PATH = "imagePath";
+        Bundle args = new Bundle();
+        ImageViewerResource resource = getResource();
+        for (int i = 0; resource.size() > i; i++){
+            args.putString(ImageViewerFragment.KEY_IMAGE_PATH + i, resource.abstractPath() + "/" + resource.getAddress(i));
         }
+        ImageViewerFragment fragment = new ImageViewerFragment();
+        fragment.setArguments(args);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.main_frame_layout, fragment);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
-    @Override
-    public void changeText(String message) {
-        TextView textView = findViewById(R.id.textView);
-        textView.setText(message);
+    private void setCrossViewPager(){
+        //縦作成
+        ViewPager2 viewPager2Vertical = new ViewPager2(this);
+        viewPager2Vertical.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
+        //縦中身1
+        ViewPager page1 = new ViewPager(this);
+        ImageViewerFragmentPagerAdapter adapter =
+                new ImageViewerFragmentPagerAdapter(getSupportFragmentManager(),
+                        ImageViewerFragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+                        getResource());
+        page1.setAdapter(adapter);
+        //縦中身2
+        FrameLayout page2 = findViewById(R.id.frame_layout_blank);
+        //中身入れ込み
+//        viewPager2Vertical.addView(page1);
+//        viewPager2Vertical.addView(page2);
+        //FrameLayoutにぶちこみ
+        FrameLayout frameLayout = findViewById(R.id.main_frame_layout);
+        frameLayout.addView(page1);
     }
 
-    @Override
-    public void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    private void startNewActivity(){
+        Intent intent = new Intent(getApplication(), ImageCaptureActivity.class);
+        startActivity(intent);
+    }
+
+    private void setPresenter(){
+        TestApplication application = (TestApplication) getApplication();
+        if (null != application) {
+            presenter = application.testPresenter();
+        }else {
+            System.out.println("///////////////////////Applicationを取得できませんでした。");
+            throw new IllegalStateException("missing application.");
+        }
     }
 
     public void createFile(byte[] data){
@@ -178,8 +223,6 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
             BitmapCallback bmc = new BitmapCallback() {
                 @Override
                 public void onBitmapReady(@Nullable Bitmap bitmap) {
-//                    HandlerThread ht = new HandlerThread("handler thread");
-//
 //                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                 }
             };
@@ -193,30 +236,55 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
     public void getDir(){
         File file = new File(getFilesDir().getAbsolutePath());
         File[] files = file.listFiles();
-//        showToast(getFilesDir().getAbsolutePath());
-        if (null != files) {
-            for (File f : files) {
-                showToast(f.getAbsolutePath());
-            }
-        }else {
-            showToast("files not found.");
-        }
+        String msg = (null != files ? files.length + " file(s) in a directory." : "files not found.");
+        showToast("file directory absolute path: " + file.getAbsolutePath() + "\n" + msg);
     }
 
 
+    /* ---------------------------------------------------------------------- */
+    /* other method                                                           */
+    /* ---------------------------------------------------------------------- */
 
-//////AsyncTaskLoaderのLoaderCallBacks実装
+    @Override
+    public void updateProgress(int percent) {
+        ((ProgressBar)findViewById(R.id.progressBar)).setProgress(percent);
+        //tips:三項演算子
+        // 「 条件式 ? trueReturn : falseReturn; 」
+        String text = (10000 == percent) ? ("completed!") : (percent + "/10000");
+        ((TextView)findViewById(R.id.textViewPercent)).setText(text);
+
+        if (0 == percent || 10000 == percent) {
+            String dateTime = ZonedDateTime.now().format(formatter);
+            System.out.println("updateProgress: " + dateTime);
+        }
+    }
+
+    @Override
+    public void changeText(String message) {
+        TextView textView = findViewById(R.id.textView);
+        textView.setText(message);
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+//////AsyncTaskLoaderのLoaderCallBacks実装//////////////////////////////////////////////////////////
 
     //tips:AsyncTaskLoader + Activity
     // Loaderの結果をonDestroyでoutStateに控えておく。
-    // onCreateでチェックしてLoaderが終わってなかったならinitLoaderで再開(LoaderCallBacksと再紐づけ)。
+    // LoaderのインスタンスはLoadが終わっても消えないので、
+    // onStartでチェックして
+    // Loaderが終わってなかったなら(isStarted)initLoaderで再開(LoaderCallBacksと再紐づけ)。
+    // Loaderが終わっていたら(isRunning)destroyLoaderで初期化する。
     private void checkLoader(){
         System.out.println("check loader.");
         AsyncTaskLoader loader = (AsyncTaskLoader) LoaderManager.getInstance(this).getLoader(LOADER_ID);
         if (null != loader && loader.isStarted()) {
             System.out.println("loader is started.");
             startLoader();
-        }else if (null != loader && !loader.isStarted()){
+        }else if (null != loader && !((TestTaskLoader)loader).isRunning()){
             System.out.println("destroy loader.");
             LoaderManager.getInstance(this).destroyLoader(LOADER_ID);
             return;
@@ -232,7 +300,15 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
         setLoaderCancelButton();
         Bundle arg = new Bundle();
         arg.putString("loaderArgument", "test");
-        LoaderManager.getInstance(this).initLoader(LOADER_ID, arg, this);
+        // isRunning(カスタム関数)で処理中かチェック
+        LoaderManager manager = LoaderManager.getInstance(this);
+        TestTaskLoader loader = (TestTaskLoader) manager.getLoader(LOADER_ID);
+        if (null != loader && !loader.isRunning()){
+            //キャンセル後とかに再開したいのでDestroy
+            manager.destroyLoader(LOADER_ID);
+        }
+        // ここで渡したBundleはLoaderCallBacks::onCreateLoaderでLoaderのインスタンスを作るときに使うことができる
+        manager.initLoader(LOADER_ID, arg, this);
     }
 
     private void setLoaderCancelButton(){
@@ -241,9 +317,9 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
     }
 
     //tips: AsyncTaskLoader
-    // UIスレッドからAsyncTaskLoader#cancelLoadInBackground()をコールし、
-    // overrideしたcancelLoadInBackground()内でフラグを立てて
-    // 処理中のloadInBackGround()内でチェックしてbrake
+    // UIスレッドからAsyncTaskLoader#cancelLoad()をコール
+    // 処理中のloadInBackGround()内でisLoadInBackgroundCanceled()をチェックしてbrake
+    // onCancelled()でデータの破棄
     private void cancelLoader(){
         AsyncTaskLoader loader = (AsyncTaskLoader) LoaderManager.getInstance(this).getLoader(LOADER_ID);
         if (null == loader) return;
@@ -257,15 +333,6 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
         showToast("キャンセルしました。cancelLoad() result: " + (null != cancelResult ? cancelResult : "null") );
     }
 
-    /**
-     * Instantiate and return a new Loader for the given ID.
-     *
-     * <p>This will always be called from the process's main thread.
-     *
-     * @param id   The ID whose loader is to be created.
-     * @param args Any arguments supplied by the caller.
-     * @return Return a new Loader instance that is ready to start loading.
-     */
     @NonNull
     @Override
     public Loader<String> onCreateLoader(int id, @Nullable Bundle args) {
@@ -273,100 +340,45 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
         System.out.println("onCreateLoader args id: " + id);
         String arg = "null";
         if (null != args) arg = args.getString("loaderArgument");
-        TestTaskLoader<Object> testTaskLoader = new TestTaskLoader<>(this, arg);
-//        eventBus = testTaskLoader.eventBus();
 
-        return testTaskLoader;
+        return new TestTaskLoader<>(this, arg);
     }
 
-    /**
-     * Called when a previously created loader has finished its load.  Note
-     * that normally an application is <em>not</em> allowed to commit fragment
-     * transactions while in this call, since it can happen after an
-     * activity's state is saved.  See {@link FragmentManager#beginTransaction()
-     * FragmentManager.openTransaction()} for further discussion on this.
-     *
-     * <p>This function is guaranteed to be called prior to the release of
-     * the last data that was supplied for this Loader.  At this point
-     * you should remove all use of the old data (since it will be released
-     * soon), but should not do your own release of the data since its Loader
-     * owns it and will take care of that.  The Loader will take care of
-     * management of its data so you don't have to.  In particular:
-     *
-     * <ul>
-     * <li> <p>The Loader will monitor for changes to the data, and report
-     * them to you through new calls here.  You should not monitor the
-     * data yourself.  For example, if the data is a {@link Cursor}
-     * and you place it in a {@link CursorAdapter}, use
-     * the {@link CursorAdapter#CursorAdapter(Context,
-     * Cursor, int)} constructor <em>without</em> passing
-     * in either {@link CursorAdapter#FLAG_AUTO_REQUERY}
-     * or {@link CursorAdapter#FLAG_REGISTER_CONTENT_OBSERVER}
-     * (that is, use 0 for the flags argument).  This prevents the CursorAdapter
-     * from doing its own observing of the Cursor, which is not needed since
-     * when a change happens you will get a new Cursor throw another call
-     * here.
-     * <li> The Loader will release the data once it knows the application
-     * is no longer using it.  For example, if the data is
-     * a {@link Cursor} from a {@link CursorLoader},
-     * you should not call close() on it yourself.  If the Cursor is being placed in a
-     * {@link CursorAdapter}, you should use the
-     * {@link CursorAdapter#swapCursor(Cursor)}
-     * method so that the old Cursor is not closed.
-     * </ul>
-     *
-     * <p>This will always be called from the process's main thread.
-     *
-     * @param loader The Loader that has finished.
-     * @param data   The data generated by the Loader.
-     */
     @Override
     public void onLoadFinished(@NonNull Loader<String> loader, String data) {
         showToast(data);
         loaderResult = data;
     }
 
-    /**
-     * Called when a previously created loader is being reset, and thus
-     * making its data unavailable.  The application should at this point
-     * remove any references it has to the Loader's data.
-     *
-     * <p>This will always be called from the process's main thread.
-     *
-     * @param loader The Loader that is being reset.
-     */
     @Override
     public void onLoaderReset(@NonNull Loader<String> loader) {
         //tips: loaderが保持しているデータが削除され、リセットされたときに呼ばれる。これ以降ローダーが持つデータへの参照はできない。
         System.out.println("onLoaderReset() called.");
     }
 
-//////EventBus実装
+//////EventBus実装//////////////////////////////////////////////////////////////////////////////////
 
     //tips:EventBus
     // onResumeでregisterし、onPauseでunregisterを忘れない事。
     private void registerSubscribe(){
-//        EventBus.getDefault().register(this);
         EventBusService.noSubscriberEvent().register(this);
-//        showToast("registerSubscribe.");
     }
 
     private void unregisterSubscribe(){
-//        EventBus.getDefault().unregister(this);
         EventBusService.noSubscriberEvent().unregister(this);
-//        showToast("unregisterSubscribe.");
     }
 
     //tips:EventBus
-    // Eventを受け取りたいメソッドに @Subscribe を装飾し、onStart辺りでregisterSubscribe(購読登録)。
-    // デフォルトだとonEventはpostされた(ワーカー)スレッドで実行されるので、
-    // View層でイベントを受け取る場合は (threadMode = ThreadMode.MAIN) でUIスレッドでの実行を指定すること。
-    // 時間がかかるネットワーク処理は ThreadMode.ASYNC(別のスレッド) を推奨。
+    //Eventを受け取りたいメソッドに @Subscribe を装飾し、onStart辺りでregisterSubscribe(購読登録)。
+    //デフォルトだとonEventはpostされた(ワーカー)スレッドで実行されるので、Fragment/Activityで
+    // イベントを受け取る場合は (threadMode = ThreadMode.MAIN) でUIスレッドでの実行を指定すること。
+    //時間がかかるネットワーク処理は ThreadMode.ASYNC(別のスレッド) を推奨。
     // (スレッド数には制限があるのでその場合数は考えること)
     @Subscribe (sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(TestEvent event){
         if (event.msg().equals("testEvent")) updateProgress(event.value());
     }
+
 
     //onStopLoading()
     //Subclasses must implement this to take care of stopping their loader, as per stopLoading().  This is not called by clients directly, but as a result of a call to stopLoading().
@@ -455,8 +467,15 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
     //cancelLoad（）
     //現在の読み込みタスクをキャンセルしようとしました。
     //プロセスのメインスレッドで呼び出す必要があります。
-    //ロードはバックグラウンドスレッドで実行されるため、キャンセルは即時の操作ではありません。現在進行中のロードがある場合、このメソッドはロードのキャンセルを要求し、これが事実であることに注意してください。バックグラウンドスレッドが作業を完了すると、残りの状態はクリアされます。この間に別のロードリクエストが着信すると、キャンセルされたロードが完了するまで保留されます。
-    //@return：タスクをキャンセルできなかった場合、通常は既に正常に完了したか、startLoading（）が呼び出されなかったため、「false」を返します。それ以外の場合は「true」を返します。 「true」が返された場合、タスクはまだ実行中であり、タスクが完了するとOnLoadCanceledListenerが呼び出されます。
+    //ロードはバックグラウンドスレッドで実行されるため、キャンセルは即時の操作ではありません。
+    // 現在進行中のロードがある場合、このメソッドはロードのキャンセルを要求し、
+    // これが事実であることに注意してください。バックグラウンドスレッドが作業を完了すると、
+    // 残りの状態はクリアされます。この間に別のロードリクエストが着信すると、
+    // キャンセルされたロードが完了するまで保留されます。
+    //@return：タスクをキャンセルできなかった場合、通常は既に正常に完了したか、
+    // startLoading（）が呼び出されなかったため、「false」を返します。
+    // それ以外の場合は「true」を返します。 「true」が返された場合、タスクはまだ実行中であり、
+    // タスクが完了するとOnLoadCanceledListenerが呼び出されます。
     //
     //onLoadCanceled（）
     //ロードがキャンセルされたときにローダーを作成したスレッドで呼び出されます。

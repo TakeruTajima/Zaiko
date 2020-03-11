@@ -2,6 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.mr2.zaiko">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <application
         android:name=".zaiko2.TestApplication"
         android:allowBackup="true"
@@ -21,5 +24,6 @@
                 <category android:name="android.intent.category.LANCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".zaiko2.ui.ImageCaptureActivity" />
     </application>
 </manifest>

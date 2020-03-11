@@ -1,6 +1,5 @@
 package com.mr2.zaiko.UI.View;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +8,7 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 public class AlertDialogFragment extends DialogFragment {

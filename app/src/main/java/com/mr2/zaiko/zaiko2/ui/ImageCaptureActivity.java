@@ -2,22 +2,25 @@ package com.mr2.zaiko.zaiko2.ui;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mr2.zaiko.R;
-import com.mr2.zaiko.zaiko2.TestApplication;
 import com.mr2.zaiko.zaiko2.ui.contractor.ContractImageCapture;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraView;
+import com.otaliastudios.cameraview.FileCallback;
 import com.otaliastudios.cameraview.PictureResult;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.UUID;
 
 public class ImageCaptureActivity extends AppCompatActivity {
     public static final String TAG = ImageCaptureActivity.class.getSimpleName() + "(4156)";
@@ -42,21 +45,37 @@ public class ImageCaptureActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_image_capture);
 
-        TestApplication application = (TestApplication) getApplication();
-        if (null == presenter){
-            presenter = application.imageCapturePresenter();
-        }
+//        TestApplication application = (TestApplication) getApplication();
+//        if (null == presenter){
+//            presenter = application.imageCapturePresenter();
+//        }
 
         CameraView cameraView = findViewById(R.id.image_capture_camera_view);
         cameraView.setLifecycleOwner(this);
         cameraView.addCameraListener(new CameraListener() {
-             @Override
-             public void onPictureTaken(@NonNull PictureResult result) {
-                 super.onPictureTaken(result);
-                 outputFile(result.getData());
-             }
-         });
-        cameraView.takePicture();
+            @Override
+            public void onPictureTaken(@NonNull PictureResult result) {
+                super.onPictureTaken(result);
+                System.out.println("///ImageCaptureActivity::onPictureTaken()");
+                System.out.println("///pictureResult\n///getSize() = " + result.getSize());
+                System.out.println("///getFormat() = " + result.getFormat());
+                //outputFile(result.getData());
+
+                //Repositoryで?UUIDから新規ファイル名を作って
+                String fileName = ZonedDateTime.now().format(formatter) + ".jpg";
+                //非同期でjpgに圧縮？して
+                //ファイル名と一緒にFOSに渡してinternalStorageに保存
+                outputFileUseFOS(result, fileName);
+                //ファイル名をRepositoryまで渡して永続化
+                System.out.println("///onPictureTaken is end.");
+            }
+        });
+        Button fab = findViewById(R.id.button);
+        fab.setOnClickListener(view -> {
+            System.out.println("///ImageCaptureActivity::onClick()");
+            cameraView.takePicture();
+        });
+
     }
 
     @Override
@@ -94,18 +113,44 @@ public class ImageCaptureActivity extends AppCompatActivity {
     /* other method                                                           */
     /* ---------------------------------------------------------------------- */
 
-    private void outputFile(byte[] outputByte){
-        String fileName = UUID.randomUUID().toString();
+    private void outputFileUseFOS(@NonNull PictureResult result, String fileName){
+//        String fileName = ZonedDateTime.now().format(formatter) + ".jpg";
+        FileOutputStream fos;
         try {
-            FileOutputStream fos = openFileOutput(fileName, MODE_PRIVATE);
-            fos.write(outputByte);
-            presenter.onCaptureResult(fileName);
+            fos = openFileOutput(fileName, MODE_PRIVATE);
         }catch (FileNotFoundException e){
             e.printStackTrace();
             throw new IllegalStateException("FileOutputStreamの取得に失敗しました。");
-        }catch (IOException e){
+        }
+        try {
+            fos.write(result.getData());
+            fos.close();
+        } catch (IOException e) {
             e.printStackTrace();
             throw new IllegalStateException("Fileの書き込みに失敗しました。");
         }
+        System.out.println("outputFileName: " + fileName);
+    }
+
+    private void outputFile(@NonNull PictureResult result, String fileName){
+        File file = new File(fileName);
+        boolean createNewFileResult;
+        try {
+            createNewFileResult = file.createNewFile();
+            if (!createNewFileResult) return;
+            System.out.println("outputFileName: " + fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        result.toFile(file, new FileCallback() {
+            @Override
+            public void onFileReady(@Nullable File file) {
+                if (null != file) {
+                    System.out.println("///outputFileName: " + file.getAbsolutePath());
+                }else {
+                    System.out.println("///return file is null.");
+                }
+            }
+        });
     }
 }

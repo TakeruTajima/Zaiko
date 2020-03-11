@@ -6,34 +6,39 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
 import com.mr2.zaiko.R;
 
 
-public class ImageViewerFragment extends Fragment {
+public class ImageViewerPagerContentFragment extends Fragment {
     /* ---------------------------------------------------------------------- */
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */
-    public static final String TAG = ImageViewerFragment.class.getSimpleName() + "(4156)";
-    public static final String KEY_IMAGE_PATH = "imagePath";
-    public static final String KEY_CAN_BE_ADDED = "canBeAdded";
-    public static final String KEY_COMMODITY_ID = "commodityId";
+    public static final String TAG = ImageViewerPagerContentFragment.class.getSimpleName() + "(4156)";
+    private static final String KEY_IMAGE_URI = "imageUri";
     private View view = null;
     private Context context;
-    private ViewPager2 viewPager2Vertical;
-    private ViewPager2 viewPager2Horizontal;
-
     /*リスナーを使う時はこのコメントを外す*/
-//    private ImageViewerFragmentListener listener = null;
+//    private ImageViewerPagerContentListener listener = null;
 
+
+    public static ImageViewerPagerContentFragment newInstance(String imageAbsolutePath){
+        Bundle arg = new Bundle();
+        arg.putString(KEY_IMAGE_URI, imageAbsolutePath);
+        ImageViewerPagerContentFragment imageViewerPagerContentFragment = new ImageViewerPagerContentFragment();
+        imageViewerPagerContentFragment.setArguments(arg);
+        return imageViewerPagerContentFragment;
+    }
     /* ---------------------------------------------------------------------- */
     /* Listener                                                               */
     /* ---------------------------------------------------------------------- */
     /*リスナーを使う時はこのコメントを外す*/
-//    public interface ImageViewerFragmentListener {
+//    public interface ImageViewerPagerContentListener {
 //        void onHogeEvent();
 //    }
 
@@ -41,7 +46,7 @@ public class ImageViewerFragment extends Fragment {
     /* Lifecycle                                                              */
     /* ---------------------------------------------------------------------- */
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach");
         this.context = context;
@@ -55,8 +60,6 @@ public class ImageViewerFragment extends Fragment {
 //        }
 //        this.activity = (Activity) context;
 
-
-
     }
 
     @Override
@@ -66,19 +69,23 @@ public class ImageViewerFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        view = inflater.inflate(R.layout.fragment_image_viewer, container, false);
-//        viewPager2Vertical = view.findViewById(R.id.image_viewer_view_pager2_vertical);
-//        ImageViewerFragmentStateAdapter adapter = new ImageViewerFragmentStateAdapter(this, new ImageViewerResource());
-//        viewPager2Vertical.setAdapter(adapter);
-//        viewPager2Vertical.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
-        //スクロールしたときにFragmentを終わらせるリスナーを登録してええええ
+//        view = inflater.inflate(R.layout./*このフラグメントで使用するレイアウトのID*/, container, false);
+        view = inflater.inflate(R.layout.fragment_image_viewer_content, container, false);
+        ImageView imageView = view.findViewById(R.id.imageView3);
+        Bundle arg = getArguments();
+        if (null != arg) {
+            System.out.println(arg.get(KEY_IMAGE_URI));
+            Glide.with(this)
+                    .load(arg.get(KEY_IMAGE_URI))
+                    .into(imageView);
+        }
         return view;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated");
     }

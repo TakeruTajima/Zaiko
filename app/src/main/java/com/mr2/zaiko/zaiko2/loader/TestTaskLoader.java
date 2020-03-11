@@ -9,72 +9,16 @@ import androidx.loader.content.Loader;
 
 import com.mr2.zaiko.zaiko2.ui.adapter.EventBusService;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-
-
-
 //tips:AsyncTaskLoader
 // 呼び出す側でLoaderManager.LoaderCallbacksを実装する必要がある
 //
 public class TestTaskLoader<D> extends BaseTaskLoader<String> {
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss.SSS");
-    private boolean isCancelCalled = false;
+    private static final String progressEventMsg = "testEvent";
+    private boolean isRunning = false;
 
     public TestTaskLoader(@NonNull Context context, String extraArgs) {
         super(context);
         System.out.println("///TestAsyncTaskLoaderコンストラクタ　extraArgs: " + extraArgs);
-    }
-
-    public EventBus eventBus(){
-//        if (null == eventBus)
-//            eventBus = EventBusService.noSubscriberEvent();
-        return EventBusService.noSubscriberEvent();
-    }
-
-    private String loadTest(){
-        isCancelCalled = false;
-        String dateTime = ZonedDateTime.now().format(formatter);
-        System.out.println("///loadInBackground start: " + dateTime);
-
-        //非同期処理の内容
-        for (int i = 0; 10000 >= i; i++){
-            if (isCancelCalled) {
-                System.out.println("///load test: キャンセルされました");
-                break;
-            }
-            try{ Thread.sleep(1); }catch (InterruptedException e){ e.printStackTrace(); }
-            TestEvent testEvent = new TestEvent("testEvent", i);
-//            if (null != eventBus) eventBus.postSticky(testEvent);
-//                else EventBus.getDefault().postSticky(testEvent);
-            EventBusService.noSubscriberEvent().postSticky(testEvent);
-            if (i % 1000 == 0) { System.out.println("///loadInBackground progress: " + (i) + "/10000"); }
-        }
-
-        dateTime = ZonedDateTime.now().format(formatter);
-        System.out.println("///loadInBackground end: " + dateTime);
-        return isCancelCalled ? "canceled" : "loadInBackground is finished.";
-    }
-
-    /**
-     * Called on the main thread to abort a load in progress.
-     * <p>
-     * Override this method to abort the current invocation of {@link #loadInBackground}
-     * that is running in the background on a worker thread.
-     * <p>
-     * This method should do nothing if {@link #loadInBackground} has not started
-     * running or if it has already finished.
-     *
-     * @see #loadInBackground
-     */
-    @Override
-    public void cancelLoadInBackground() {
-        super.cancelLoadInBackground();
-        System.out.println("///cancelLoadInBackground() called.");
-        //tips:
-        isCancelCalled = true;
     }
 
     /**
@@ -124,12 +68,46 @@ public class TestTaskLoader<D> extends BaseTaskLoader<String> {
     @Nullable
     @Override
     public String loadInBackground() {
-        return loadTest();
+        isRunning = true; //処理の最初と最後にisRunningを更新
+        //非同期処理の内容
+        for (int i = 0; 10000 >= i; i++){
+            if (isLoadInBackgroundCanceled()) {
+                System.out.println("///load test: キャンセルされました");
+                break;
+            }
+            try{ Thread.sleep(10); } catch (InterruptedException e){ e.printStackTrace(); }
+            postProgressEvent(i);
+        }
+        isRunning = false;
+        return "loadInBackground is finished.";
+    }
+
+    /**
+     * Called on the main thread to abort a load in progress.
+     * <p>
+     * Override this method to abort the current invocation of {@link #loadInBackground}
+     * that is running in the background on a worker thread.
+     * <p>
+     * This method should do nothing if {@link #loadInBackground} has not started
+     * running or if it has already finished.
+     * 進行中のロードを中止するためにメインスレッドで呼び出されます。
+     * このメソッドをオーバーライドして、ワーカースレッドのバックグラウンドで実行されている
+     * loadInBackgroundの現在の呼び出しを中止します。
+     * loadInBackgroundの実行が開始されていない場合、またはすでに終了している場合、
+     * このメソッドは何もしません。
+     *
+     * @see #loadInBackground
+     */
+    @Override
+    public void cancelLoadInBackground() {
+        super.cancelLoadInBackground();
     }
 
     /**
      * Called if the task was canceled before it was completed.  Gives the class a chance
      * to clean up post-cancellation and to properly dispose of the result.
+     * タスクが完了する前にキャンセルされた場合に呼び出されます。
+     * クラスにキャンセル後をクリーンアップし、結果を適切に破棄する機会を与えます。
      *
      * @param data The value that was returned by {@link #loadInBackground}, or null
      *             if the task threw {@link OperationCanceledException}.
@@ -137,6 +115,19 @@ public class TestTaskLoader<D> extends BaseTaskLoader<String> {
     @Override
     public void onCanceled(@Nullable String data) {
         super.onCanceled(data);
-        System.out.println("///AsyncTaskLoader is canceled.");
+    }
+
+    /**
+     * タスクが処理中ならtrueを返します。
+     * タスクの完了後、キャンセル後等に再スタートするかの判断に使います。
+     * @return タスクが進行中ならtrue
+     */
+    public boolean isRunning(){
+        return isRunning;
+    }
+
+    private void postProgressEvent(int progress){
+        TestEvent testEvent = new TestEvent(progressEventMsg, progress);
+        EventBusService.noSubscriberEvent().postSticky(testEvent);
     }
 }

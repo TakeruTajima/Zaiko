@@ -13,6 +13,7 @@ public abstract class BaseTaskLoader<D> extends AsyncTaskLoader<D> {
     private D result;
     private boolean isStarted = false;
 
+
     public BaseTaskLoader(@NonNull Context context) {
         super(context);
     }

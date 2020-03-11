@@ -1,4 +1,4 @@
-package com.mr2.zaiko.zaiko2.ui;
+package com.mr2.zaiko.zaiko2.ui.presentation;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,32 +8,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.mr2.zaiko.R;
 
 
-public class ImageViewerFragment extends Fragment {
+public class ImageViewerBlankFragment extends Fragment {
     /* ---------------------------------------------------------------------- */
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */
-    public static final String TAG = ImageViewerFragment.class.getSimpleName() + "(4156)";
-    public static final String KEY_IMAGE_PATH = "imagePath";
-    public static final String KEY_CAN_BE_ADDED = "canBeAdded";
-    public static final String KEY_COMMODITY_ID = "commodityId";
+    public static final String TAG = ImageViewerBlankFragment.class.getSimpleName() + "(4156)";
+
     private View view = null;
     private Context context;
-    private ViewPager2 viewPager2Vertical;
-    private ViewPager2 viewPager2Horizontal;
-
     /*リスナーを使う時はこのコメントを外す*/
-//    private ImageViewerFragmentListener listener = null;
+//    private ImageViewerBlankFragmentListener listener = null;
 
     /* ---------------------------------------------------------------------- */
     /* Listener                                                               */
     /* ---------------------------------------------------------------------- */
     /*リスナーを使う時はこのコメントを外す*/
-//    public interface ImageViewerFragmentListener {
+//    public interface ImageViewerBlankFragmentListener {
 //        void onHogeEvent();
 //    }
 
@@ -55,8 +49,6 @@ public class ImageViewerFragment extends Fragment {
 //        }
 //        this.activity = (Activity) context;
 
-
-
     }
 
     @Override
@@ -68,12 +60,7 @@ public class ImageViewerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        view = inflater.inflate(R.layout.fragment_image_viewer, container, false);
-//        viewPager2Vertical = view.findViewById(R.id.image_viewer_view_pager2_vertical);
-//        ImageViewerFragmentStateAdapter adapter = new ImageViewerFragmentStateAdapter(this, new ImageViewerResource());
-//        viewPager2Vertical.setAdapter(adapter);
-//        viewPager2Vertical.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
-        //スクロールしたときにFragmentを終わらせるリスナーを登録してええええ
+        view = inflater.inflate(R.layout.layout_blank, container, false);
         return view;
     }
 
