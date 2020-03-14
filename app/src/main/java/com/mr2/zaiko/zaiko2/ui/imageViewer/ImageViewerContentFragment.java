@@ -1,4 +1,4 @@
-package com.mr2.zaiko.zaiko2.ui;
+package com.mr2.zaiko.zaiko2.ui.imageViewer;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,27 +12,30 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.mr2.zaiko.R;
 
 
-public class ImageViewerPagerContentFragment extends Fragment {
+public class ImageViewerContentFragment extends Fragment {
     /* ---------------------------------------------------------------------- */
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */
-    public static final String TAG = ImageViewerPagerContentFragment.class.getSimpleName() + "(4156)";
+    public static final String TAG = ImageViewerContentFragment.class.getSimpleName() + "(4156)";
     private static final String KEY_IMAGE_URI = "imageUri";
     private View view = null;
     private Context context;
+    private ImageView imageView;
+    private String imagePath;
     /*リスナーを使う時はこのコメントを外す*/
 //    private ImageViewerPagerContentListener listener = null;
 
 
-    public static ImageViewerPagerContentFragment newInstance(String imageAbsolutePath){
+    public static ImageViewerContentFragment newInstance(String imageAbsolutePath){
         Bundle arg = new Bundle();
         arg.putString(KEY_IMAGE_URI, imageAbsolutePath);
-        ImageViewerPagerContentFragment imageViewerPagerContentFragment = new ImageViewerPagerContentFragment();
-        imageViewerPagerContentFragment.setArguments(arg);
-        return imageViewerPagerContentFragment;
+        ImageViewerContentFragment imageViewerContentFragment = new ImageViewerContentFragment();
+        imageViewerContentFragment.setArguments(arg);
+        return imageViewerContentFragment;
     }
     /* ---------------------------------------------------------------------- */
     /* Listener                                                               */
@@ -73,14 +76,7 @@ public class ImageViewerPagerContentFragment extends Fragment {
         Log.d(TAG, "onCreateView");
 //        view = inflater.inflate(R.layout./*このフラグメントで使用するレイアウトのID*/, container, false);
         view = inflater.inflate(R.layout.fragment_image_viewer_content, container, false);
-        ImageView imageView = view.findViewById(R.id.imageView3);
-        Bundle arg = getArguments();
-        if (null != arg) {
-            System.out.println(arg.get(KEY_IMAGE_URI));
-            Glide.with(this)
-                    .load(arg.get(KEY_IMAGE_URI))
-                    .into(imageView);
-        }
+        imageView = view.findViewById(R.id.imageView3);
         return view;
     }
 
@@ -88,6 +84,16 @@ public class ImageViewerPagerContentFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated");
+        if (null != savedInstanceState) {
+            imagePath = savedInstanceState.getString(KEY_IMAGE_URI);
+        }else {
+            Bundle arg = getArguments();
+            assert arg != null;
+            imagePath = arg.getString(KEY_IMAGE_URI);
+        }
+        System.out.println("ImagePath: " + imagePath);
+        imageView.setOnClickListener(v -> System.out.println("imageView: onClick"));
+        setImage();
     }
 
     @Override
@@ -112,6 +118,13 @@ public class ImageViewerPagerContentFragment extends Fragment {
     public void onStop() {
         super.onStop();
         Log.d(TAG, "onStop");
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d(TAG, "onSaveInstanceState");
+        outState.putString(KEY_IMAGE_URI, imagePath);
     }
 
     @Override
@@ -142,5 +155,17 @@ public class ImageViewerPagerContentFragment extends Fragment {
     /* other method                                                           */
     /* ---------------------------------------------------------------------- */
 
+    private void setImage(){
+//        int h = 2000;
+//        int w = 1080;
+//        RequestOptions ro = new RequestOptions().override(w<h?w:h); //TODO ImageViewが画面いっぱいに拡大されて余白をClickできない
+        RequestOptions requestOptions = new RequestOptions().centerCrop();
+        Glide.with(this)
+                .asBitmap()
+                .load(imagePath)
+                .apply(requestOptions)
+                .into(imageView);
+        Log.d(TAG, "imageView size: height=" + imageView.getHeight() + ", width=" + imageView.getWidth());
+    }
 }
 

@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.OperationCanceledException;
 import android.util.Log;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,8 +16,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.AsyncTaskLoader;
 import androidx.loader.content.Loader;
-import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.mr2.zaiko.R;
 import com.mr2.zaiko.zaiko2.TestApplication;
@@ -26,9 +23,9 @@ import com.mr2.zaiko.zaiko2.domain.inhouse.equipment.Photo;
 import com.mr2.zaiko.zaiko2.loader.TestEvent;
 import com.mr2.zaiko.zaiko2.loader.TestTaskLoader;
 import com.mr2.zaiko.zaiko2.ui.adapter.EventBusService;
-import com.mr2.zaiko.zaiko2.ui.adapter.ImageViewerFragmentPagerAdapter;
-import com.mr2.zaiko.zaiko2.ui.adapter.ImageViewerResource;
 import com.mr2.zaiko.zaiko2.ui.contractor.ContractTest;
+import com.mr2.zaiko.zaiko2.ui.imageViewer.ImageViewerFragment;
+import com.mr2.zaiko.zaiko2.ui.imageViewer.ImageViewerResource;
 import com.otaliastudios.cameraview.BitmapCallback;
 import com.otaliastudios.cameraview.PictureResult;
 
@@ -121,73 +118,27 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
         setContentView(R.layout.activity_main);
         findViewById(R.id.button1).setOnClickListener(view -> presenter.event_1());
         findViewById(R.id.button2).setOnClickListener(view -> startNewActivity());
-        findViewById(R.id.button3).setOnClickListener(view -> setCrossViewPager());
+        findViewById(R.id.button3).setOnClickListener(view -> startImageViewerFragment());
         findViewById(R.id.button4).setOnClickListener(view -> startLoader());
         ((ProgressBar)findViewById(R.id.progressBar)).setProgress(0);
-        setViewPager();
     }
 
-    private String getImageURI(){
-        return getFilesDir().getAbsolutePath() + "/20200309033935.jpg";
-    }
-
-    private void setImage(){
-//        System.out.println("///image uri: " + getImageURI());
-//        ImageView imageView = findViewById(R.id.imageView2);
-//        Glide.with(this)
-//                .load(getImageURI())
-//                .into(imageView);
-    }
-
-    private ImageViewerResource getResource(){
-        List<Photo> photos = new ArrayList<>();
-        photos.add(new Photo("/20200309033935.jpg"));
-        return new ImageViewerResource(photos, getFilesDir().getAbsolutePath());
-    }
-
-    private void setViewPager(){
-        ViewPager viewPager = findViewById(R.id.viewPager);
-        ImageViewerFragmentPagerAdapter adapter =
-                new ImageViewerFragmentPagerAdapter(getSupportFragmentManager(),
-                        ImageViewerFragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
-                        getResource());
-        viewPager.setAdapter(adapter);
-    }
-
-    private void setViewPager2(){
-        String KEY_IMAGE_PATH = "imagePath";
-        Bundle args = new Bundle();
-        ImageViewerResource resource = getResource();
-        for (int i = 0; resource.size() > i; i++){
-            args.putString(ImageViewerFragment.KEY_IMAGE_PATH + i, resource.abstractPath() + "/" + resource.getAddress(i));
-        }
+    public void startImageViewerFragment(){
         ImageViewerFragment fragment = new ImageViewerFragment();
-        fragment.setArguments(args);
+        fragment.setArguments(getResource().toArguments());
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.main_frame_layout, fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.addToBackStack(null);
         ft.commit();
     }
 
-    private void setCrossViewPager(){
-        //縦作成
-        ViewPager2 viewPager2Vertical = new ViewPager2(this);
-        viewPager2Vertical.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
-        //縦中身1
-        ViewPager page1 = new ViewPager(this);
-        ImageViewerFragmentPagerAdapter adapter =
-                new ImageViewerFragmentPagerAdapter(getSupportFragmentManager(),
-                        ImageViewerFragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
-                        getResource());
-        page1.setAdapter(adapter);
-        //縦中身2
-        FrameLayout page2 = findViewById(R.id.frame_layout_blank);
-        //中身入れ込み
-//        viewPager2Vertical.addView(page1);
-//        viewPager2Vertical.addView(page2);
-        //FrameLayoutにぶちこみ
-        FrameLayout frameLayout = findViewById(R.id.main_frame_layout);
-        frameLayout.addView(page1);
+    private ImageViewerResource getResource(){
+        List<Photo> photos = new ArrayList<>();
+        for (int i = 0; 3 > i; i++)
+            photos.add(new Photo("20200309033935.jpg"));
+        return new ImageViewerResource(photos, getFilesDir().getAbsolutePath());
     }
 
     private void startNewActivity(){

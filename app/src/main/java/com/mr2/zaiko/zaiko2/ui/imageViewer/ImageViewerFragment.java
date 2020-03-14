@@ -1,4 +1,4 @@
-package com.mr2.zaiko.zaiko2.ui;
+package com.mr2.zaiko.zaiko2.ui.imageViewer;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,39 +9,35 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.mr2.zaiko.R;
-import com.mr2.zaiko.zaiko2.ui.adapter.ImageViewerFragmentPagerAdapter;
-import com.mr2.zaiko.zaiko2.ui.adapter.ImageViewerResource;
 
 
-public class ImageViewerPagerFragment extends Fragment {
+public class ImageViewerFragment extends Fragment {
     /* ---------------------------------------------------------------------- */
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */
-    public static final String TAG = ImageViewerPagerFragment.class.getSimpleName() + "(4156)";
-    private static final String KEY_IMAGE_PATH = "imagePath";
-
+    public static final String TAG = ImageViewerFragment.class.getSimpleName() + "(4156)";
     private View view = null;
     private Context context;
-    private ViewPager viewPager;
-    /*リスナーを使う時はこのコメントを外す*/
-//    private ImageViewerPagerFragmentListener listener = null;
+    private ViewPager2 verticalPager;
+    private View view8;
 
-    public static ImageViewerPagerFragment newInstance(@NonNull ImageViewerResource resource){
-        Bundle args = new Bundle();
-        for (int i = 0; resource.size() > i; i++)
-            args.putString(KEY_IMAGE_PATH + "1", resource.abstractPath() + "/" + resource.getAddress(i));
-        ImageViewerPagerFragment fragment = new ImageViewerPagerFragment();
-        fragment.setArguments(args);
+    /*リスナーを使う時はこのコメントを外す*/
+//    private ImageViewerFragmentListener listener = null;
+
+    public static ImageViewerFragment newInstance(@NonNull ImageViewerResource resource){
+        ImageViewerFragment fragment = new ImageViewerFragment();
+        fragment.setArguments(resource.toArguments());
         return fragment;
     }
+
     /* ---------------------------------------------------------------------- */
     /* Listener                                                               */
     /* ---------------------------------------------------------------------- */
     /*リスナーを使う時はこのコメントを外す*/
-//    public interface ImageViewerPagerFragmentListener {
+//    public interface ImageViewerFragmentListener {
 //        void onHogeEvent();
 //    }
 
@@ -53,16 +49,6 @@ public class ImageViewerPagerFragment extends Fragment {
         super.onAttach(context);
         Log.d(TAG, "onAttach");
         this.context = context;
-
-        /*リスナーを使う時はこのコメントを外す*/
-//        if (!(context instanceof ItemDataActivityFragmentListener)) {
-//            throw new UnsupportedOperationException(
-//                    TAG + ":" + "Listener is not Implementation.");
-//        } else {
-//            listener = (ItemDataActivityFragmentListener) context;
-//        }
-//        this.activity = (Activity) context;
-
     }
 
     @Override
@@ -72,25 +58,19 @@ public class ImageViewerPagerFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-//        view = inflater.inflate(R.layout./*このフラグメントで使用するレイアウトのID*/, container, false);
-        view = inflater.inflate(R.layout.fragment_image_viewer_view_pager_horizontal, container, false);
-        viewPager = container.findViewById(R.id.image_viewer_pager);
-        assert getFragmentManager() != null;
-        ImageViewerFragmentPagerAdapter adapter =
-                new ImageViewerFragmentPagerAdapter(getFragmentManager(),
-                ImageViewerFragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
-                null);
-        viewPager.setAdapter(adapter);
+        view = inflater.inflate(R.layout.fragment_image_viewer, container, false);
+        verticalPager = view.findViewById(R.id.image_viewer_view_pager2_vertical);
+        view8 = view.findViewById(R.id.view8);
+        setVerticalPager();
         return view;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated");
-
     }
 
     @Override
@@ -103,6 +83,7 @@ public class ImageViewerPagerFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Log.d(TAG, "onStart");
+        setListener();
     }
 
     @Override
@@ -121,6 +102,11 @@ public class ImageViewerPagerFragment extends Fragment {
     public void onPause() {
         super.onPause();
         Log.d(TAG, "onPause");
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -145,5 +131,40 @@ public class ImageViewerPagerFragment extends Fragment {
     /* other method                                                           */
     /* ---------------------------------------------------------------------- */
 
+
+    private void setVerticalPager(){
+        assert getArguments() != null;
+        ImageViewerResource resource = ImageViewerResource.compileFromArgs(getArguments());
+        VerticalPagerFragmentStateAdapter adapter = new VerticalPagerFragmentStateAdapter(this, resource);
+        verticalPager.setAdapter(adapter);
+        verticalPager.setCurrentItem(1);
+    }
+
+    private void setListener(){
+        //スクロールしたときにFragmentを終わらせるリスナーを登録してええええ
+        verticalPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+                if (0 == state && 1 != verticalPager.getCurrentItem()){
+                    hydeThis();
+                }
+            }
+        });
+
+        view8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("///view8 onClick");
+                hydeThis();
+            }
+        });
+    }
+
+    private void hydeThis(){
+        System.out.println("///hyde");
+        assert getFragmentManager() != null;
+        getFragmentManager().popBackStack();
+    }
 }
 
