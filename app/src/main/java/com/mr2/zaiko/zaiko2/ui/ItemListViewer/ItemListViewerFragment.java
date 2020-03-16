@@ -1,4 +1,4 @@
-package com.mr2.zaiko.zaiko2.ui.imageViewer;
+package com.mr2.zaiko.zaiko2.ui.ItemListViewer;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,54 +6,49 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mr2.zaiko.R;
+import com.mr2.zaiko.zaiko2.ui.ImageViewer.ImageViewerFragment;
+import com.mr2.zaiko.zaiko2.ui.ImageViewer.ImageViewerResource;
 
 
-public class ImageViewerHorizontalFragment extends Fragment {
+public class ItemListViewerFragment extends Fragment implements ContractItemListViewer.View{
     /* ---------------------------------------------------------------------- */
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */
-    public static final String TAG = ImageViewerHorizontalFragment.class.getSimpleName() + "(4156)";
+    public static final String TAG = ItemListViewerFragment.class.getSimpleName() + "(4156)";
 
     private View view = null;
     private Context context;
-    private ViewPager2 horizontalPager;
-    private RecyclerView recyclerView;
-    /*リスナーを使う時はこのコメントを外す*/
-//    private ImageViewerViewPager2FragmentListener listener = null;
+    //@Inject
+    private ContractItemListViewer.Presenter presenter;
+
+    private FloatingActionButton fab;
+    private ProgressBar progressBar;
+    private ImageView emptyImage;
+    private RecyclerView itemList;
+    private ItemListViewerResource resource;
 
     /* ---------------------------------------------------------------------- */
     /* Listener                                                               */
     /* ---------------------------------------------------------------------- */
-    /*リスナーを使う時はこのコメントを外す*/
-//    public interface ImageViewerViewPager2FragmentListener {
-//        void onHogeEvent();
-//    }
 
     /* ---------------------------------------------------------------------- */
     /* Lifecycle                                                              */
     /* ---------------------------------------------------------------------- */
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach");
         this.context = context;
-
-        /*リスナーを使う時はこのコメントを外す*/
-//        if (!(context instanceof ItemDataActivityFragmentListener)) {
-//            throw new UnsupportedOperationException(
-//                    TAG + ":" + "Listener is not Implementation.");
-//        } else {
-//            listener = (ItemDataActivityFragmentListener) context;
-//        }
-//        this.activity = (Activity) context;
-
     }
 
     @Override
@@ -63,19 +58,19 @@ public class ImageViewerHorizontalFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
 //        view = inflater.inflate(R.layout./*このフラグメントで使用するレイアウトのID*/, container, false);
-        view = inflater.inflate(R.layout.fragment_image_viewer_horizontal, container, false);
-        horizontalPager = view.findViewById(R.id.imageViewerViewPager2Horizontal);
-        recyclerView = view.findViewById(R.id.imageViewerRecycler);
-        setViewPager2();
-//        setThumbnailList(); //TODO サムネリスト作ろうと思ったけどうまくいかんかった主にImageViewの拡大問題関係で
+        view = inflater.inflate(R.layout.fragment_list_viewer, container, false);
+        fab = view.findViewById(R.id.listViewerFAB);
+        progressBar = view.findViewById(R.id.listViewerProgress);
+        emptyImage = view.findViewById(R.id.listViewerItemNotFound);
+        itemList = view.findViewById(R.id.listViewerRecyclerView);
         return view;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated");
     }
@@ -132,30 +127,61 @@ public class ImageViewerHorizontalFragment extends Fragment {
     /* other method                                                           */
     /* ---------------------------------------------------------------------- */
 
-    private void setViewPager2(){
-        assert getArguments() != null;
-        ImageViewerResource resource = ImageViewerResource.compileFromArgs(getArguments());
-        HorizontalPagerFragmentStateAdapter adapter = new HorizontalPagerFragmentStateAdapter(this, resource);
-        horizontalPager.setAdapter(adapter);
+    @Override
+    public void setResource(@NonNull ItemListViewerResource resource) {
+        this.resource = resource;
+        itemList.setAdapter(null); //TODO
     }
 
-    private void setThumbnailList(){
-//        assert getArguments() != null;
-//        ImageViewerResource resource = ImageViewerResource.compileFromArgs(getArguments());
-//        ImageViewerThumbnailRecyclerAdapter adapter = new ImageViewerThumbnailRecyclerAdapter(this, resource);
-//        recyclerView.setAdapter(adapter); //TODO まだ出ない…
-        assert getArguments() != null;
-        ImageViewerResource resource = ImageViewerResource.compileFromArgs(getArguments());
-        ImageViewerThumbnailListFragment fragment = ImageViewerThumbnailListFragment.newInstance(resource);
-        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        ft.replace(R.id.imageViewerThumbnailListContainer, fragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+    @Override
+    public void setAddItemFAB() {
+        fab.setVisibility(View.VISIBLE);
+        //
+    }
+
+    @Override
+    public void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hydeProgress() {
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showEmpty() {
+        emptyImage.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hydeEmpty() {
+        emptyImage.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showImageViewer(@NonNull ImageViewerResource resource) {
+        ImageViewerFragment fragment = new ImageViewerFragment();
+        fragment.setArguments(resource.toArguments());
+        assert getFragmentManager() != null;
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.listViewerMainContainer, fragment);
+        ft.addToBackStack(null);
         ft.commit();
     }
 
-    private void showThumbnailList(){}
+    @Override
+    public void hydeImageViewer() {
+        //ImageViewerのほうに実装してある？
+    }
 
-    private void hydeThumbnailList(){
+    @Override
+    public void transitionInformationBrowser(int itemId) {
+
+    }
+
+    @Override
+    public void transitionInformationEditor(int itemId) {
 
     }
 }

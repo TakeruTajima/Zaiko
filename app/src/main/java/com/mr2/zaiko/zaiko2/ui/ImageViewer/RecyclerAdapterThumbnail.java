@@ -1,4 +1,4 @@
-package com.mr2.zaiko.zaiko2.ui.imageViewer;
+package com.mr2.zaiko.zaiko2.ui.ImageViewer;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.mr2.zaiko.R;
 
-public class ImageViewerThumbnailRecyclerAdapter extends RecyclerView.Adapter<ImageViewerThumbnailRecyclerAdapter.ImageViewerThumbnailViewHolder> {
+public class RecyclerAdapterThumbnail extends RecyclerView.Adapter<RecyclerAdapterThumbnail.ImageViewerThumbnailViewHolder> {
     private ImageViewerResource resource;
     private Fragment fragment;
     private LayoutInflater inflater;
 
-    public ImageViewerThumbnailRecyclerAdapter(Fragment fragment, ImageViewerResource resource) {
+    public RecyclerAdapterThumbnail(Fragment fragment, ImageViewerResource resource) {
         this.resource = resource;
         this.fragment = fragment;
         this.inflater = fragment.getLayoutInflater();

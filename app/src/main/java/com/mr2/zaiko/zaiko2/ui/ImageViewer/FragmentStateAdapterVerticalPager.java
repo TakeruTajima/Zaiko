@@ -1,13 +1,13 @@
-package com.mr2.zaiko.zaiko2.ui.imageViewer;
+package com.mr2.zaiko.zaiko2.ui.ImageViewer;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-public class VerticalPagerFragmentStateAdapter extends FragmentStateAdapter {
+public class FragmentStateAdapterVerticalPager extends FragmentStateAdapter {
     private ImageViewerResource resource;
 
-    public VerticalPagerFragmentStateAdapter(@NonNull Fragment fragment, @NonNull ImageViewerResource resource) {
+    public FragmentStateAdapterVerticalPager(@NonNull Fragment fragment, @NonNull ImageViewerResource resource) {
         super(fragment);
         this.resource = resource;
     }
@@ -16,11 +16,11 @@ public class VerticalPagerFragmentStateAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         if (1 == position) {
-            ImageViewerHorizontalFragment fragment = new ImageViewerHorizontalFragment();
+            HorizontalFragment fragment = new HorizontalFragment();
             fragment.setArguments(resource.toArguments());
             return fragment;
         }
-        return new ImageViewerBlankFragment();
+        return new BlankFragment();
     }
 
     @Override

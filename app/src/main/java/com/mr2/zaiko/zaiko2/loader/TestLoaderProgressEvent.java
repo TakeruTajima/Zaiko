@@ -1,10 +1,10 @@
 package com.mr2.zaiko.zaiko2.loader;
 
-public class TestEvent {
+public class TestLoaderProgressEvent {
     private final String msg;
     private final int value;
 
-    public TestEvent(String msg, int value) {
+    public TestLoaderProgressEvent(String msg, int value) {
         this.msg = msg;
         this.value = value;
     }

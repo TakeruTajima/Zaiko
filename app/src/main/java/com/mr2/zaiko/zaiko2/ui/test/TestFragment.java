@@ -1,4 +1,4 @@
-package com.mr2.zaiko.zaiko2.ui;
+package com.mr2.zaiko.zaiko2.ui.test;
 
 import android.content.Context;
 import android.os.Bundle;

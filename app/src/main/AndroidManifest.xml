@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name="com.mr2.zaiko.zaiko2.ui.TestActivity"
+            android:name="com.mr2.zaiko.zaiko2.ui.test.TestActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="InnerclassSeparator">
@@ -24,6 +24,7 @@
                 <category android:name="android.intent.category.LANCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".zaiko2.ui.ImageCaptureActivity" />
+        <activity android:name=".zaiko2.ui.ImageCapture.ImageCaptureActivity" />
+        <activity android:name=".zaiko2.ui.ItemListViewer.ItemListViewerActivity" />
     </application>
 </manifest>

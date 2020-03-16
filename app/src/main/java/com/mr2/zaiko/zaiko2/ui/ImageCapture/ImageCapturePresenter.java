@@ -1,9 +1,8 @@
-package com.mr2.zaiko.zaiko2.ui.presentation;
+package com.mr2.zaiko.zaiko2.ui.ImageCapture;
 
 import androidx.annotation.NonNull;
 
 import com.mr2.zaiko.zaiko2.domain.inhouse.equipment.EquipmentId;
-import com.mr2.zaiko.zaiko2.ui.contractor.ContractImageCapture;
 import com.mr2.zaiko.zaiko2.useCase.ImagePersistenceService;
 
 public class ImageCapturePresenter implements ContractImageCapture.Presenter {

@@ -1,4 +1,4 @@
-package com.mr2.zaiko.zaiko2.ui.contractor;
+package com.mr2.zaiko.zaiko2.ui.test;
 
 public interface ContractTest {
     interface Presenter{

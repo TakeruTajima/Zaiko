@@ -7,9 +7,9 @@ import androidx.annotation.NonNull;
 
 import com.mr2.zaiko.zaiko2.domain.inhouse.equipment.EquipmentId;
 import com.mr2.zaiko.zaiko2.infrastructure.TestRepositoryImpl;
-import com.mr2.zaiko.zaiko2.ui.contractor.ContractImageCapture;
-import com.mr2.zaiko.zaiko2.ui.contractor.ContractTest;
-import com.mr2.zaiko.zaiko2.ui.presentation.TestPresenter;
+import com.mr2.zaiko.zaiko2.ui.ImageCapture.ContractImageCapture;
+import com.mr2.zaiko.zaiko2.ui.test.ContractTest;
+import com.mr2.zaiko.zaiko2.ui.test.TestPresenter;
 import com.mr2.zaiko.zaiko2.useCase.TestApplicationService;
 
 public class TestApplication extends Application {

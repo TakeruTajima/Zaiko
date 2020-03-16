@@ -74,10 +74,10 @@ public class CompanyListFragment extends Fragment implements CompanyListAdapter.
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (null == mView) mView = inflater.inflate(R.layout.fragment_company_list, container, false);
-        if (null == mImageView) mImageView = mView.findViewById(R.id.imageCompanyListNotFound);
-        mView.findViewById(R.id.fabCompanyListAdd).setOnClickListener(l -> mPresenter.onClickFAB());
-        if (null == mProgressBar) mProgressBar = mView.findViewById(R.id.progressCompanyList);
+        if (null == mView) mView = inflater.inflate(R.layout.fragment_list_viewer, container, false);
+        if (null == mImageView) mImageView = mView.findViewById(R.id.listViewerItemNotFound);
+        mView.findViewById(R.id.listViewerFAB).setOnClickListener(l -> mPresenter.onClickFAB());
+        if (null == mProgressBar) mProgressBar = mView.findViewById(R.id.listViewerProgress);
 
         mPresenter.onCreate();
         return mView;
@@ -134,7 +134,7 @@ public class CompanyListFragment extends Fragment implements CompanyListAdapter.
     }
 
     public void setCompanyList(List<Company> list){
-        RecyclerView recyclerView = mView.findViewById(R.id.recyclerViewCompanyList);
+        RecyclerView recyclerView = mView.findViewById(R.id.listViewerRecyclerView);
         if (null != recyclerView) {
             //set layout manager.
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

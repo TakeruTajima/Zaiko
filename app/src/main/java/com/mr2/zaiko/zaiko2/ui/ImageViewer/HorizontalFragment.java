@@ -1,4 +1,4 @@
-package com.mr2.zaiko.zaiko2.ui.imageViewer;
+package com.mr2.zaiko.zaiko2.ui.ImageViewer;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,42 +6,33 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.mr2.zaiko.R;
 
 
-public class ImageViewerContentFragment extends Fragment {
+public class HorizontalFragment extends Fragment {
     /* ---------------------------------------------------------------------- */
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */
-    public static final String TAG = ImageViewerContentFragment.class.getSimpleName() + "(4156)";
-    private static final String KEY_IMAGE_URI = "imageUri";
+    public static final String TAG = HorizontalFragment.class.getSimpleName() + "(4156)";
+
     private View view = null;
     private Context context;
-    private ImageView imageView;
-    private String imagePath;
+    private ViewPager2 horizontalPager;
+    private RecyclerView recyclerView;
     /*リスナーを使う時はこのコメントを外す*/
-//    private ImageViewerPagerContentListener listener = null;
+//    private ImageViewerViewPager2FragmentListener listener = null;
 
-
-    public static ImageViewerContentFragment newInstance(String imageAbsolutePath){
-        Bundle arg = new Bundle();
-        arg.putString(KEY_IMAGE_URI, imageAbsolutePath);
-        ImageViewerContentFragment imageViewerContentFragment = new ImageViewerContentFragment();
-        imageViewerContentFragment.setArguments(arg);
-        return imageViewerContentFragment;
-    }
     /* ---------------------------------------------------------------------- */
     /* Listener                                                               */
     /* ---------------------------------------------------------------------- */
     /*リスナーを使う時はこのコメントを外す*/
-//    public interface ImageViewerPagerContentListener {
+//    public interface ImageViewerViewPager2FragmentListener {
 //        void onHogeEvent();
 //    }
 
@@ -49,7 +40,7 @@ public class ImageViewerContentFragment extends Fragment {
     /* Lifecycle                                                              */
     /* ---------------------------------------------------------------------- */
     @Override
-    public void onAttach(@NonNull Context context) {
+    public void onAttach(Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach");
         this.context = context;
@@ -72,28 +63,21 @@ public class ImageViewerContentFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
 //        view = inflater.inflate(R.layout./*このフラグメントで使用するレイアウトのID*/, container, false);
-        view = inflater.inflate(R.layout.fragment_image_viewer_content, container, false);
-        imageView = view.findViewById(R.id.imageView3);
+        view = inflater.inflate(R.layout.fragment_image_viewer_horizontal, container, false);
+        horizontalPager = view.findViewById(R.id.imageViewerViewPager2Horizontal);
+        recyclerView = view.findViewById(R.id.imageViewerRecycler);
+        setViewPager2();
+//        setThumbnailList(); //TODO サムネリスト作ろうと思ったけどうまくいかんかった主にImageViewの拡大問題関係で
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated");
-        if (null != savedInstanceState) {
-            imagePath = savedInstanceState.getString(KEY_IMAGE_URI);
-        }else {
-            Bundle arg = getArguments();
-            assert arg != null;
-            imagePath = arg.getString(KEY_IMAGE_URI);
-        }
-        System.out.println("ImagePath: " + imagePath);
-        imageView.setOnClickListener(v -> System.out.println("imageView: onClick"));
-        setImage();
     }
 
     @Override
@@ -118,13 +102,6 @@ public class ImageViewerContentFragment extends Fragment {
     public void onStop() {
         super.onStop();
         Log.d(TAG, "onStop");
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.d(TAG, "onSaveInstanceState");
-        outState.putString(KEY_IMAGE_URI, imagePath);
     }
 
     @Override
@@ -155,17 +132,31 @@ public class ImageViewerContentFragment extends Fragment {
     /* other method                                                           */
     /* ---------------------------------------------------------------------- */
 
-    private void setImage(){
-//        int h = 2000;
-//        int w = 1080;
-//        RequestOptions ro = new RequestOptions().override(w<h?w:h); //TODO ImageViewが画面いっぱいに拡大されて余白をClickできない
-        RequestOptions requestOptions = new RequestOptions().centerCrop();
-        Glide.with(this)
-                .asBitmap()
-                .load(imagePath)
-                .apply(requestOptions)
-                .into(imageView);
-        Log.d(TAG, "imageView size: height=" + imageView.getHeight() + ", width=" + imageView.getWidth());
+    private void setViewPager2(){
+        assert getArguments() != null;
+        ImageViewerResource resource = ImageViewerResource.compileFromArgs(getArguments());
+        FragmentStateAdapterHorizontalPager adapter = new FragmentStateAdapterHorizontalPager(this, resource);
+        horizontalPager.setAdapter(adapter);
+    }
+
+    private void setThumbnailList(){
+//        assert getArguments() != null;
+//        ImageViewerResource resource = ImageViewerResource.compileFromArgs(getArguments());
+//        RecyclerAdapterThumbnail adapter = new RecyclerAdapterThumbnail(this, resource);
+//        recyclerView.setAdapter(adapter); //TODO まだ出ない…
+        assert getArguments() != null;
+        ImageViewerResource resource = ImageViewerResource.compileFromArgs(getArguments());
+        ThumbnailListFragment fragment = ThumbnailListFragment.newInstance(resource);
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        ft.replace(R.id.imageViewerThumbnailListContainer, fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        ft.commit();
+    }
+
+    private void showThumbnailList(){}
+
+    private void hydeThumbnailList(){
+
     }
 }
 

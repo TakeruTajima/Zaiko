@@ -1,4 +1,4 @@
-package com.mr2.zaiko.zaiko2.ui.imageViewer;
+package com.mr2.zaiko.zaiko2.ui.ImageViewer;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,27 +7,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mr2.zaiko.R;
 
 
-public class ImageViewerBlankFragment extends Fragment {
+public class ThumbnailListFragment extends Fragment {
     /* ---------------------------------------------------------------------- */
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */
-    public static final String TAG = ImageViewerBlankFragment.class.getSimpleName() + "(4156)";
+    public static final String TAG = ThumbnailListFragment.class.getSimpleName() + "(4156)";
 
     private View view = null;
     private Context context;
+    private ImageViewerResource resource;
+    private RecyclerView recyclerView;
+
     /*リスナーを使う時はこのコメントを外す*/
-//    private ImageViewerBlankFragmentListener listener = null;
+//    private ImageViewerThumbnailFragmentListener listener = null;
+
+    public static ThumbnailListFragment newInstance(@NonNull ImageViewerResource resource){
+        ThumbnailListFragment fragment = new ThumbnailListFragment();
+        fragment.setArguments(resource.toArguments());
+        return fragment;
+    }
 
     /* ---------------------------------------------------------------------- */
     /* Listener                                                               */
     /* ---------------------------------------------------------------------- */
     /*リスナーを使う時はこのコメントを外す*/
-//    public interface ImageViewerBlankFragmentListener {
+//    public interface ImageViewerThumbnailFragmentListener {
 //        void onHogeEvent();
 //    }
 
@@ -55,12 +67,16 @@ public class ImageViewerBlankFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
+        assert getArguments() != null;
+        resource = ImageViewerResource.compileFromArgs(getArguments());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        view = inflater.inflate(R.layout.layout_blank, container, false);
+//        view = inflater.inflate(R.layout./*このフラグメントで使用するレイアウトのID*/, container, false);
+        view = inflater.inflate(R.layout.fragment_image_viewer_thumbnail_list, container, false);
+        recyclerView = view.findViewById(R.id.imageViewerRecycler);
         return view;
     }
 
@@ -68,6 +84,10 @@ public class ImageViewerBlankFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated");
+        RecyclerAdapterThumbnail adapter = new RecyclerAdapterThumbnail(this, resource);
+        LinearLayoutManager manager = new LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

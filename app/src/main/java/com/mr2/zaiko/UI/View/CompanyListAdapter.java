@@ -35,7 +35,7 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_company_row, parent, false);
+                .inflate(R.layout.layout_company_list_row, parent, false);
         return new ViewHolder(view);
     }
 
@@ -68,9 +68,9 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
         public ViewHolder(@NonNull View view) {
             super(view);
             this.mView = view;
-            this.mName = (TextView) view.findViewById(R.id.textCompanyRowName);
-            this.mMaker = (TextView) view.findViewById(R.id.textCompanyIsMaker);
-            this.mSeller = (TextView) view.findViewById(R.id.textCompanyIsSeller);
+            this.mName = view.findViewById(R.id.textCompanyRowName);
+            this.mMaker = view.findViewById(R.id.textCompanyIsMaker);
+            this.mSeller = view.findViewById(R.id.textCompanyIsSeller);
         }
     }
 }

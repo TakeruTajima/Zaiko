@@ -1,4 +1,4 @@
-package com.mr2.zaiko.zaiko2.ui.imageViewer;
+package com.mr2.zaiko.zaiko2.ui.ImageViewer;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,37 +7,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.mr2.zaiko.R;
 
 
-public class ImageViewerFragment extends Fragment {
+public class BlankFragment extends Fragment {
     /* ---------------------------------------------------------------------- */
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */
-    public static final String TAG = ImageViewerFragment.class.getSimpleName() + "(4156)";
+    public static final String TAG = BlankFragment.class.getSimpleName() + "(4156)";
+
     private View view = null;
     private Context context;
-    private ViewPager2 verticalPager;
-    private View view8;
-
     /*リスナーを使う時はこのコメントを外す*/
-//    private ImageViewerFragmentListener listener = null;
-
-    public static ImageViewerFragment newInstance(@NonNull ImageViewerResource resource){
-        ImageViewerFragment fragment = new ImageViewerFragment();
-        fragment.setArguments(resource.toArguments());
-        return fragment;
-    }
+//    private ImageViewerBlankFragmentListener listener = null;
 
     /* ---------------------------------------------------------------------- */
     /* Listener                                                               */
     /* ---------------------------------------------------------------------- */
     /*リスナーを使う時はこのコメントを外す*/
-//    public interface ImageViewerFragmentListener {
+//    public interface ImageViewerBlankFragmentListener {
 //        void onHogeEvent();
 //    }
 
@@ -49,6 +39,16 @@ public class ImageViewerFragment extends Fragment {
         super.onAttach(context);
         Log.d(TAG, "onAttach");
         this.context = context;
+
+        /*リスナーを使う時はこのコメントを外す*/
+//        if (!(context instanceof ItemDataActivityFragmentListener)) {
+//            throw new UnsupportedOperationException(
+//                    TAG + ":" + "Listener is not Implementation.");
+//        } else {
+//            listener = (ItemDataActivityFragmentListener) context;
+//        }
+//        this.activity = (Activity) context;
+
     }
 
     @Override
@@ -58,17 +58,14 @@ public class ImageViewerFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        view = inflater.inflate(R.layout.fragment_image_viewer, container, false);
-        verticalPager = view.findViewById(R.id.image_viewer_view_pager2_vertical);
-        view8 = view.findViewById(R.id.view8);
-        setVerticalPager();
+        view = inflater.inflate(R.layout.layout_blank, container, false);
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated");
     }
@@ -83,7 +80,6 @@ public class ImageViewerFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Log.d(TAG, "onStart");
-        setListener();
     }
 
     @Override
@@ -102,11 +98,6 @@ public class ImageViewerFragment extends Fragment {
     public void onPause() {
         super.onPause();
         Log.d(TAG, "onPause");
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -131,40 +122,5 @@ public class ImageViewerFragment extends Fragment {
     /* other method                                                           */
     /* ---------------------------------------------------------------------- */
 
-
-    private void setVerticalPager(){
-        assert getArguments() != null;
-        ImageViewerResource resource = ImageViewerResource.compileFromArgs(getArguments());
-        VerticalPagerFragmentStateAdapter adapter = new VerticalPagerFragmentStateAdapter(this, resource);
-        verticalPager.setAdapter(adapter);
-        verticalPager.setCurrentItem(1);
-    }
-
-    private void setListener(){
-        //スクロールしたときにFragmentを終わらせるリスナーを登録してええええ
-        verticalPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                super.onPageScrollStateChanged(state);
-                if (0 == state && 1 != verticalPager.getCurrentItem()){
-                    hydeThis();
-                }
-            }
-        });
-
-        view8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("///view8 onClick");
-                hydeThis();
-            }
-        });
-    }
-
-    private void hydeThis(){
-        System.out.println("///hyde");
-        assert getFragmentManager() != null;
-        getFragmentManager().popBackStack();
-    }
 }
 

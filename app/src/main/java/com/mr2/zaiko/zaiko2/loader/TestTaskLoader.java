@@ -127,7 +127,7 @@ public class TestTaskLoader<D> extends BaseTaskLoader<String> {
     }
 
     private void postProgressEvent(int progress){
-        TestEvent testEvent = new TestEvent(progressEventMsg, progress);
-        EventBusService.noSubscriberEvent().postSticky(testEvent);
+        TestLoaderProgressEvent testLoaderProgressEvent = new TestLoaderProgressEvent(progressEventMsg, progress);
+        EventBusService.noSubscriberEvent().postSticky(testLoaderProgressEvent);
     }
 }

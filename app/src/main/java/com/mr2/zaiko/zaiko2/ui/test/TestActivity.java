@@ -1,4 +1,4 @@
-package com.mr2.zaiko.zaiko2.ui;
+package com.mr2.zaiko.zaiko2.ui.test;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,12 +20,12 @@ import androidx.loader.content.Loader;
 import com.mr2.zaiko.R;
 import com.mr2.zaiko.zaiko2.TestApplication;
 import com.mr2.zaiko.zaiko2.domain.inhouse.equipment.Photo;
-import com.mr2.zaiko.zaiko2.loader.TestEvent;
+import com.mr2.zaiko.zaiko2.loader.TestLoaderProgressEvent;
 import com.mr2.zaiko.zaiko2.loader.TestTaskLoader;
+import com.mr2.zaiko.zaiko2.ui.ImageCapture.ImageCaptureActivity;
+import com.mr2.zaiko.zaiko2.ui.ImageViewer.ImageViewerFragment;
+import com.mr2.zaiko.zaiko2.ui.ImageViewer.ImageViewerResource;
 import com.mr2.zaiko.zaiko2.ui.adapter.EventBusService;
-import com.mr2.zaiko.zaiko2.ui.contractor.ContractTest;
-import com.mr2.zaiko.zaiko2.ui.imageViewer.ImageViewerFragment;
-import com.mr2.zaiko.zaiko2.ui.imageViewer.ImageViewerResource;
 import com.otaliastudios.cameraview.BitmapCallback;
 import com.otaliastudios.cameraview.PictureResult;
 
@@ -326,7 +326,7 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
     //時間がかかるネットワーク処理は ThreadMode.ASYNC(別のスレッド) を推奨。
     // (スレッド数には制限があるのでその場合数は考えること)
     @Subscribe (sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEvent(TestEvent event){
+    public void onEvent(TestLoaderProgressEvent event){
         if (event.msg().equals("testEvent")) updateProgress(event.value());
     }
 

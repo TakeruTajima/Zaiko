@@ -1,6 +1,5 @@
-package com.mr2.zaiko.zaiko2.ui.presentation;
+package com.mr2.zaiko.zaiko2.ui.test;
 
-import com.mr2.zaiko.zaiko2.ui.contractor.ContractTest;
 import com.mr2.zaiko.zaiko2.useCase.TestApplicationService;
 
 public class TestPresenter implements ContractTest.Presenter {
