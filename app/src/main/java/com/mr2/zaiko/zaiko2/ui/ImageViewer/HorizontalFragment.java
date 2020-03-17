@@ -20,21 +20,16 @@ public class HorizontalFragment extends Fragment {
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */
     public static final String TAG = HorizontalFragment.class.getSimpleName() + "(4156)";
+    public static final String KEY_IMAGE_CROP = "ImageCrop";
 
     private View view = null;
     private Context context;
     private ViewPager2 horizontalPager;
     private RecyclerView recyclerView;
-    /*リスナーを使う時はこのコメントを外す*/
-//    private ImageViewerViewPager2FragmentListener listener = null;
 
     /* ---------------------------------------------------------------------- */
     /* Listener                                                               */
     /* ---------------------------------------------------------------------- */
-    /*リスナーを使う時はこのコメントを外す*/
-//    public interface ImageViewerViewPager2FragmentListener {
-//        void onHogeEvent();
-//    }
 
     /* ---------------------------------------------------------------------- */
     /* Lifecycle                                                              */
@@ -44,16 +39,6 @@ public class HorizontalFragment extends Fragment {
         super.onAttach(context);
         Log.d(TAG, "onAttach");
         this.context = context;
-
-        /*リスナーを使う時はこのコメントを外す*/
-//        if (!(context instanceof ItemDataActivityFragmentListener)) {
-//            throw new UnsupportedOperationException(
-//                    TAG + ":" + "Listener is not Implementation.");
-//        } else {
-//            listener = (ItemDataActivityFragmentListener) context;
-//        }
-//        this.activity = (Activity) context;
-
     }
 
     @Override
@@ -136,6 +121,7 @@ public class HorizontalFragment extends Fragment {
         assert getArguments() != null;
         ImageViewerResource resource = ImageViewerResource.compileFromArgs(getArguments());
         FragmentStateAdapterHorizontalPager adapter = new FragmentStateAdapterHorizontalPager(this, resource);
+        if (getArguments().getBoolean(KEY_IMAGE_CROP)) adapter.setImageCrop(true);
         horizontalPager.setAdapter(adapter);
     }
 

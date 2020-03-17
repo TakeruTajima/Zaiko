@@ -12,6 +12,9 @@ import com.mr2.zaiko.zaiko2.ui.test.ContractTest;
 import com.mr2.zaiko.zaiko2.ui.test.TestPresenter;
 import com.mr2.zaiko.zaiko2.useCase.TestApplicationService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class TestApplication extends Application {
 
     /* ---------------------------------------------------------------------- */
@@ -21,6 +24,7 @@ public class TestApplication extends Application {
     public void onCreate() {
         super.onCreate();
         System.out.println("////////////////TestTestApplication onCreate()");
+        presenters = new HashMap<>();
     }
 
     @Override
@@ -42,6 +46,7 @@ public class TestApplication extends Application {
         testPresenter = null;
         imageCapturePresenter = null;
         targetEquipmentId = null;
+        presenters = null;
     }
 
     /* ---------------------------------------------------------------------- */
@@ -50,6 +55,7 @@ public class TestApplication extends Application {
     private ContractTest.Presenter testPresenter;
     private ContractImageCapture.Presenter imageCapturePresenter;
     private EquipmentId targetEquipmentId;
+    private Map<String, Object> presenters;
 
     public ContractTest.Presenter testPresenter(){
         if (null == testPresenter){
@@ -80,5 +86,13 @@ public class TestApplication extends Application {
 
     public void removeTargetEquipmentId(){
         targetEquipmentId = null;
+    }
+
+    public void registerPresenter(String key, Object presenter){
+        presenters.put(key, presenter);
+    }
+
+    public void clearPresenters(){
+        presenters = null;
     }
 }

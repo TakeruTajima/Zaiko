@@ -1,5 +1,6 @@
 package com.mr2.zaiko.zaiko2.ui.ItemListViewer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mr2.zaiko.R;
+import com.mr2.zaiko.zaiko2.TestApplication;
 import com.mr2.zaiko.zaiko2.ui.ImageViewer.ImageViewerFragment;
 import com.mr2.zaiko.zaiko2.ui.ImageViewer.ImageViewerResource;
 
@@ -25,9 +27,10 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */
     public static final String TAG = ItemListViewerFragment.class.getSimpleName() + "(4156)";
+    private static final String KEY_PRESENTER_NAME = ContractItemListViewer.Presenter.class.getName();
 
     private View view = null;
-    private Context context;
+    private Listener listener;
     //@Inject
     private ContractItemListViewer.Presenter presenter;
 
@@ -41,6 +44,12 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
     /* Listener                                                               */
     /* ---------------------------------------------------------------------- */
 
+    interface Listener{
+        void transitionItemDetailBrowser(int itemId);
+        void transitionItemDetailEditor(int itemId);
+        void transitionItemRegister();
+    }
+
     /* ---------------------------------------------------------------------- */
     /* Lifecycle                                                              */
     /* ---------------------------------------------------------------------- */
@@ -48,7 +57,12 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach");
-        this.context = context;
+        if (!(context instanceof Listener)) throw new UnsupportedOperationException("未実装です");
+        this.listener = (Listener) context;
+        this.presenter = ItemListViewerPresenter.getInstance(this); //ダサい
+        if (!(context instanceof ItemListViewerActivity))
+            throw new IllegalStateException("コレジャナイ");
+        ((TestApplication)((Activity)context).getApplication()).registerPresenter(KEY_PRESENTER_NAME, presenter);
     }
 
     @Override
@@ -73,6 +87,7 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated");
+        presenter.onViewCreated();
     }
 
     @Override
@@ -130,13 +145,13 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
     @Override
     public void setResource(@NonNull ItemListViewerResource resource) {
         this.resource = resource;
-        itemList.setAdapter(null); //TODO
+        itemList.setAdapter(new ItemListViewerRecyclerAdapter((Context) this.listener, this.resource));
     }
 
     @Override
     public void setAddItemFAB() {
         fab.setVisibility(View.VISIBLE);
-        //
+        fab.setOnClickListener(view -> presenter.onClickAddItem());
     }
 
     @Override
@@ -161,7 +176,7 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
 
     @Override
     public void showImageViewer(@NonNull ImageViewerResource resource) {
-        ImageViewerFragment fragment = new ImageViewerFragment();
+        ImageViewerFragment fragment = ImageViewerFragment.newInstance(resource);
         fragment.setArguments(resource.toArguments());
         assert getFragmentManager() != null;
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -176,13 +191,34 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
     }
 
     @Override
-    public void transitionInformationBrowser(int itemId) {
-
+    public void transitionItemDetailBrowser(int itemId) {
+        listener.transitionItemDetailBrowser(itemId);
     }
 
     @Override
-    public void transitionInformationEditor(int itemId) {
+    public void transitionItemDetailEditor(int itemId) {
+        listener.transitionItemDetailEditor(itemId);
+    }
 
+    @NonNull
+    @Override
+    public String getFileAbsolutePath() {
+        return ((Context) listener).getFilesDir().getAbsolutePath();
+    }
+
+    @Override
+    public void transitionItemRegister() {
+        listener.transitionItemRegister();
+    }
+
+    @Override
+    public void showBarcodeReader() {
+        //未実装
+    }
+
+    @Override
+    public void hydeBarcodeReader() {
+        //未実装
     }
 }
 

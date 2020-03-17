@@ -1,6 +1,6 @@
-package com.mr2.zaiko.zaiko2.ui.InformationEditor;
+package com.mr2.zaiko.zaiko2.ui.ItemDetailEditor;
 
-public interface ContractInformationEditor {
+public interface ContractItemDetailEditor {
     //Instructions from the presenter
     interface View {
         //Setting/operations a View

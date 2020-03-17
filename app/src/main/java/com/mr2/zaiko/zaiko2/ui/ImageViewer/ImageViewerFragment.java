@@ -19,13 +19,11 @@ public class ImageViewerFragment extends Fragment {
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */
     public static final String TAG = ImageViewerFragment.class.getSimpleName() + "(4156)";
+    private static final String KEY_IMAGE_CROP_OPTION = "ImageCropOption";
     private View view = null;
     private Context context;
     private ViewPager2 verticalPager;
     private View view8;
-
-    /*リスナーを使う時はこのコメントを外す*/
-//    private ImageViewerFragmentListener listener = null;
 
     public static ImageViewerFragment newInstance(@NonNull ImageViewerResource resource){
         ImageViewerFragment fragment = new ImageViewerFragment();
@@ -33,19 +31,23 @@ public class ImageViewerFragment extends Fragment {
         return fragment;
     }
 
+    public static ImageViewerFragment newInstance(@NonNull ImageViewerResource resource, boolean imageCrop){
+        ImageViewerFragment fragment = new ImageViewerFragment();
+        Bundle args = resource.toArguments();
+        args.putBoolean(KEY_IMAGE_CROP_OPTION, imageCrop);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     /* ---------------------------------------------------------------------- */
     /* Listener                                                               */
     /* ---------------------------------------------------------------------- */
-    /*リスナーを使う時はこのコメントを外す*/
-//    public interface ImageViewerFragmentListener {
-//        void onHogeEvent();
-//    }
 
     /* ---------------------------------------------------------------------- */
     /* Lifecycle                                                              */
     /* ---------------------------------------------------------------------- */
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach");
         this.context = context;
@@ -134,14 +136,15 @@ public class ImageViewerFragment extends Fragment {
 
     private void setVerticalPager(){
         assert getArguments() != null;
+        // itemIdでPresenterかUseCaseから取ってくるのが正解では？ -> ImageViewerの仕事は「画像ビューア」だから画像を調達するのは責務にないでしょ
         ImageViewerResource resource = ImageViewerResource.compileFromArgs(getArguments());
         FragmentStateAdapterVerticalPager adapter = new FragmentStateAdapterVerticalPager(this, resource);
+        if (getArguments().getBoolean(KEY_IMAGE_CROP_OPTION)) adapter.setImageCrop(true);
         verticalPager.setAdapter(adapter);
         verticalPager.setCurrentItem(1);
     }
 
     private void setListener(){
-        //スクロールしたときにFragmentを終わらせるリスナーを登録してええええ
         verticalPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrollStateChanged(int state) {

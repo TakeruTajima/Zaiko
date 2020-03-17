@@ -22,17 +22,18 @@ public class ContentFragment extends Fragment {
     /* ---------------------------------------------------------------------- */
     public static final String TAG = ContentFragment.class.getSimpleName() + "(4156)";
     private static final String KEY_IMAGE_URI = "imageUri";
+    private static final String KEY_IMAGE_CROP = "imageCrop";
+
     private View view = null;
     private Context context;
     private ImageView imageView;
     private String imagePath;
-    /*リスナーを使う時はこのコメントを外す*/
-//    private ImageViewerPagerContentListener listener = null;
+    private boolean imageCrop;
 
-
-    public static ContentFragment newInstance(String imageAbsolutePath){
+    public static ContentFragment newInstance(String imageAbsolutePath, boolean imageCrop){
         Bundle arg = new Bundle();
         arg.putString(KEY_IMAGE_URI, imageAbsolutePath);
+        arg.putBoolean(KEY_IMAGE_CROP, imageCrop);
         ContentFragment contentFragment = new ContentFragment();
         contentFragment.setArguments(arg);
         return contentFragment;
@@ -40,10 +41,6 @@ public class ContentFragment extends Fragment {
     /* ---------------------------------------------------------------------- */
     /* Listener                                                               */
     /* ---------------------------------------------------------------------- */
-    /*リスナーを使う時はこのコメントを外す*/
-//    public interface ImageViewerPagerContentListener {
-//        void onHogeEvent();
-//    }
 
     /* ---------------------------------------------------------------------- */
     /* Lifecycle                                                              */
@@ -53,16 +50,6 @@ public class ContentFragment extends Fragment {
         super.onAttach(context);
         Log.d(TAG, "onAttach");
         this.context = context;
-
-        /*リスナーを使う時はこのコメントを外す*/
-//        if (!(context instanceof ItemDataActivityFragmentListener)) {
-//            throw new UnsupportedOperationException(
-//                    TAG + ":" + "Listener is not Implementation.");
-//        } else {
-//            listener = (ItemDataActivityFragmentListener) context;
-//        }
-//        this.activity = (Activity) context;
-
     }
 
     @Override
@@ -90,10 +77,12 @@ public class ContentFragment extends Fragment {
             Bundle arg = getArguments();
             assert arg != null;
             imagePath = arg.getString(KEY_IMAGE_URI);
+            imageCrop = arg.getBoolean(KEY_IMAGE_CROP);
         }
         System.out.println("ImagePath: " + imagePath);
         imageView.setOnClickListener(v -> System.out.println("imageView: onClick"));
-        setImage();
+        if (imageCrop)setCroppedImage();
+            else setImage();
     }
 
     @Override
@@ -155,7 +144,7 @@ public class ContentFragment extends Fragment {
     /* other method                                                           */
     /* ---------------------------------------------------------------------- */
 
-    private void setImage(){
+    private void setCroppedImage(){
 //        int h = 2000;
 //        int w = 1080;
 //        RequestOptions ro = new RequestOptions().override(w<h?w:h); //TODO ImageViewが画面いっぱいに拡大されて余白をClickできない
@@ -166,6 +155,13 @@ public class ContentFragment extends Fragment {
                 .apply(requestOptions)
                 .into(imageView);
         Log.d(TAG, "imageView size: height=" + imageView.getHeight() + ", width=" + imageView.getWidth());
+    }
+
+    private void setImage(){
+        Glide.with(this)
+            .asBitmap()
+            .load(imagePath)
+            .into(imageView);
     }
 }
 

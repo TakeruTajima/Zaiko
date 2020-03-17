@@ -1,6 +1,6 @@
-package com.mr2.zaiko.zaiko2.ui.InformationBrowser;
+package com.mr2.zaiko.zaiko2.ui.ItemDetailBrowser;
 
-public interface ContractInformationBrowser {
+public interface ContractItemDetailBrowser {
     interface View{
         void transitionImageCapture();
         void transitionInformationEditor();

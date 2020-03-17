@@ -21,15 +21,20 @@ public interface ContractItemListViewer {
         void hydeEmpty();
         void showImageViewer(ImageViewerResource resource);
         void hydeImageViewer();
+        void showBarcodeReader();
+        void hydeBarcodeReader();
 
         // Screen transition
-        void transitionInformationBrowser(int itemId);
-        void transitionInformationEditor(int itemId);
+        void transitionItemDetailBrowser(int itemId);
+        void transitionItemDetailEditor(int itemId);
+        String getFileAbsolutePath();
+        void transitionItemRegister();
     }
 
     // Notification from Views
     interface Presenter {
-        void onCreate(); // Set resource
+        void onViewCreated(); // Set resource
+        void onDestroy();
         void onItemSelect(int itemId); // Call InformationBrowser
         void onItemHold(int itemId); // Show menu?
         void onClickImage(int position); // Call ImageViewer(FullScreen)

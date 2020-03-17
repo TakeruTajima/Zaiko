@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.mr2.zaiko.R;
 
@@ -13,9 +14,6 @@ public class ItemListViewerActivity extends AppCompatActivity {
     /* ---------------------------------------------------------------------- */
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */
-
-    private ContractItemListViewer.Presenter presenter;
-    private ItemListViewerResource resource;
 
     /* ---------------------------------------------------------------------- */
     /* Listener                                                               */
@@ -30,6 +28,7 @@ public class ItemListViewerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout./*このActivityで使用するレイアウトのID*/);
         setContentView(R.layout.activity_frame_base);
+        setFragment();
         Log.d(TAG, "onCreate");
     }
 
@@ -74,4 +73,10 @@ public class ItemListViewerActivity extends AppCompatActivity {
     /* other method                                                           */
     /* ---------------------------------------------------------------------- */
 
+    private void setFragment(){
+        ItemListViewerFragment fragment = new ItemListViewerFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.frameLayoutContainer, fragment);
+        ft.commit();
+    }
 }
