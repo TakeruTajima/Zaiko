@@ -10,7 +10,7 @@ public class ItemListViewerResource {
     }
 
     private ItemListViewerResource(){
-        for (int i = 0; 10 > i; i++){
+        for (int i = 0; 10 > i; i++){ //ここミス
             items.add(new Item(i + "th HeadlineHeadlineHeadlineHeadlineHeadlineHeadlineHeadline",
                     i + "th OutlineOutlineOutlineOutlineOutlineOutlineOutlineOutlineOutline"));
         }

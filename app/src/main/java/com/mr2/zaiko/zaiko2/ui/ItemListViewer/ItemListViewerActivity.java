@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.mr2.zaiko.R;
 
-public class ItemListViewerActivity extends AppCompatActivity {
+public class ItemListViewerActivity extends AppCompatActivity implements ItemListViewerFragment.Listener{
     public static final String TAG = ItemListViewerActivity.class.getSimpleName() + "(4156)";
     /* ---------------------------------------------------------------------- */
     /* Field                                                                  */
@@ -78,5 +78,20 @@ public class ItemListViewerActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.frameLayoutContainer, fragment);
         ft.commit();
+    }
+
+    @Override
+    public void transitionItemDetailBrowser(int itemId) {
+
+    }
+
+    @Override
+    public void transitionItemDetailEditor(int itemId) {
+
+    }
+
+    @Override
+    public void transitionItemRegister() {
+
     }
 }
