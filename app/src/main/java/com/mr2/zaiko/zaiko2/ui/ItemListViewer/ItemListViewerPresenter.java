@@ -1,5 +1,6 @@
 package com.mr2.zaiko.zaiko2.ui.ItemListViewer;
 
+import com.mr2.zaiko.zaiko2.domain.common.Identity;
 import com.mr2.zaiko.zaiko2.domain.inhouse.equipment.Photo;
 import com.mr2.zaiko.zaiko2.ui.ImageViewer.ImageViewerResource;
 
@@ -9,28 +10,44 @@ import java.util.List;
 class ItemListViewerPresenter implements ContractItemListViewer.Presenter {
     static private ItemListViewerPresenter instance;
     private ContractItemListViewer.View view;
+    private Selection selection;
+    enum Selection{
+        LIST_EQUIPMENT,
+        LIST_PRODUCT,
+        LIST_COMMODITY
+    }
 
     private ItemListViewerPresenter(ContractItemListViewer.View view) {
-        this.view = view;
+        onAttachView(view);
     }
 
     static ItemListViewerPresenter getInstance(ContractItemListViewer.View view){
         if (null == instance) instance = new ItemListViewerPresenter(view);
+            else instance.onAttachView(view);
         return instance;
+    }
+
+    public void onAttachView(ContractItemListViewer.View view){
+        this.view = view;
     }
 
     @Override
     public void onViewCreated() {
         view.setAddItemFAB();
-        view.setResource(ItemListViewerResource.getTestResource());
-
+        view.showProgress();
+        // selection分岐で取得するResourceと叩くViewAPIの選択
+        // TODO: useCase.loadItemListResource() loaderCallbackでsetRecyclerView
+        view.setEquipmentList(EquipmentListViewerResource.getTestResource());
+//        view.hydeProgress();
     }
 
     @Override
-    public void onDestroy(){}
+    public void onDestroy(){
+        view = null;
+    }
 
     @Override
-    public void onItemSelect(int itemId) {
+    public void onItemSelect(Identity itemId) {
         view.transitionItemDetailBrowser(itemId);
     }
 
@@ -40,7 +57,9 @@ class ItemListViewerPresenter implements ContractItemListViewer.Presenter {
     }
 
     @Override
-    public void onClickImage(int position) {
+    public void onClickImage(Identity itemId) {
+        System.out.println("onClickImage item id: " + itemId);
+        // useCaseからResource取得してshowImageViewer
         List<Photo> photos = new ArrayList<>();
         for (int i = 0; 9 > i; i++)
             photos.add(new Photo("20200309033935.jpg"));

@@ -329,6 +329,7 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
     public void onEvent(TestLoaderProgressEvent event) {
         if (event.msg().equals("testEvent")) updateProgress(event.value());
     }
+
 //////Activity遷移テスト
     private void transitionItemListViewer(){
         Intent intent = new Intent(getApplication(), ItemListViewerActivity.class);

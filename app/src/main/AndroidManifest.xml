@@ -25,6 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".zaiko2.ui.ImageCapture.ImageCaptureActivity" />
-        <activity android:name=".zaiko2.ui.ItemListViewer.ItemListViewerActivity" />
+        <activity android:name=".zaiko2.ui.ItemListViewer.ItemListViewerActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 </manifest>
