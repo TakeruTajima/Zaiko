@@ -71,6 +71,7 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        assert getArguments() != null;
         fragmentId = getArguments().getString(KEY_FRAGMENT_ID);
         Log.d(TAG + fragmentId, "onAttach");
         if (!(context instanceof Listener)) throw new UnsupportedOperationException("未実装です");
@@ -198,18 +199,18 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
 
     @Override
     public void showImageViewer(@NonNull ImageViewerResource resource) {
-        ImageViewerFragment fragment = ImageViewerFragment.newInstance(resource);
-        fragment.setArguments(resource.toArguments());
+        ImageViewerFragment fragment = ImageViewerFragment.getFullSize(resource, 3);
         assert getFragmentManager() != null;
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.listViewerMainContainer, fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.addToBackStack(null);
         ft.commit();
     }
 
     @Override
     public void hydeImageViewer() {
-        //ImageViewerのほうに実装してある？
+        //ImageViewerのほうに実装してある
     }
 
     @Override

@@ -11,12 +11,4 @@
 
     </androidx.viewpager2.widget.ViewPager2>
 
-    <FrameLayout
-        android:id="@+id/imageViewerThumbnailListContainer"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_gravity="bottom">
-
-    </FrameLayout>
-
 </FrameLayout>

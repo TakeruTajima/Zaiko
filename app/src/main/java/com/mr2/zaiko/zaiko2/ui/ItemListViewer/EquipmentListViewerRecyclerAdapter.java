@@ -50,7 +50,7 @@ class EquipmentListViewerRecyclerAdapter extends RecyclerView.Adapter<EquipmentL
 
     @Override
     public void onBindViewHolder(@NonNull ItemListViewerViewHolder holder, int position) {
-        //暫定ぃ選択複数
+        //暫定ぃ
         holder.view.setOnClickListener(v -> {
             System.out.println("ItemListViewer row onClicked.");
             listener.onClicked(resource.itemId(position));

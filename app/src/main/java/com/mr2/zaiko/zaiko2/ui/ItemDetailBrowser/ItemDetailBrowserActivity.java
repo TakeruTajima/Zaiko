@@ -6,8 +6,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ItemDetailBrowerActivity extends AppCompatActivity {
-    public static final String TAG = ItemDetailBrowerActivity.class.getSimpleName() + "(4156)";
+public class ItemDetailBrowserActivity extends AppCompatActivity {
+    public static final String TAG = ItemDetailBrowserActivity.class.getSimpleName() + "(4156)";
     /* ---------------------------------------------------------------------- */
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */

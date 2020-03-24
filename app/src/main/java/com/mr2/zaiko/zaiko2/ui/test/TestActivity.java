@@ -70,7 +70,7 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
         setViews();
         setPresenter();
         presenter.onCreate(this);
-
+        if (null == savedInstanceState) setThumbnail();
         if (null != savedInstanceState) loaderResult = savedInstanceState.getString(KEY_LOADER_RESULT);
     }
 
@@ -115,6 +115,13 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
         presenter.onDestroy(this);
     }
 
+    private void setThumbnail(){
+        ImageViewerFragment fragment = ImageViewerFragment.getThumbnail(getResource());
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.mainThumbnail, fragment);
+        ft.commit();
+    }
+
     private void setViews(){
         setContentView(R.layout.activity_main);
         findViewById(R.id.button1).setOnClickListener(view -> presenter.event_1());
@@ -125,18 +132,18 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
     }
 
     public void startImageViewerFragment(){
-        ImageViewerFragment fragment = ImageViewerFragment.newInstance(getResource());
-
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.main_frame_layout, fragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.addToBackStack(null);
-        ft.commit();
+//        ImageViewerFragment fragment = ImageViewerFragment.newInstance(getResource(), ImageViewerFragment.Crop.FULL_SIZE);
+//
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        ft.replace(R.id.main_frame_layout, fragment);
+//        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//        ft.addToBackStack(null);
+//        ft.commit();
     }
 
     private ImageViewerResource getResource(){
         List<Photo> photos = new ArrayList<>();
-        for (int i = 0; 3 > i; i++)
+        for (int i = 0; 10 > i; i++)
             photos.add(new Photo("20200309033935.jpg"));
         return new ImageViewerResource(photos, getFilesDir().getAbsolutePath());
     }

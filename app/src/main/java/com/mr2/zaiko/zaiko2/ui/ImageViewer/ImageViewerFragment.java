@@ -6,9 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.mr2.zaiko.R;
@@ -19,22 +23,32 @@ public class ImageViewerFragment extends Fragment {
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */
     public static final String TAG = ImageViewerFragment.class.getSimpleName() + "(4156)";
-    private static final String KEY_IMAGE_CROP_OPTION = "ImageCropOption";
-    private View view = null;
-    private Context context;
-    private ViewPager2 verticalPager;
-    private View view8;
+    private static final String KEY_CROP_OPTION = "cropOption";
+    private static final String KEY_POSITION = "position";
+    public enum Crop { FULL_SIZE, THUMBNAIL}
 
-    public static ImageViewerFragment newInstance(@NonNull ImageViewerResource resource){
+    private Context context;
+    private ViewPager2 pager;
+    private RadioGroup radioGroup;
+    private int position;
+
+
+    //初期位置
+    public static ImageViewerFragment getFullSize(ImageViewerResource resource, int defaultPosition){
+        Bundle args = new Bundle();
+        args.putAll(resource.toArguments());
+        args.putString(KEY_CROP_OPTION, Crop.FULL_SIZE.name());
+        args.putInt(KEY_POSITION, defaultPosition);
         ImageViewerFragment fragment = new ImageViewerFragment();
-        fragment.setArguments(resource.toArguments());
+        fragment.setArguments(args);
         return fragment;
     }
 
-    public static ImageViewerFragment newInstance(@NonNull ImageViewerResource resource, boolean imageCrop){
+    public static ImageViewerFragment getThumbnail(ImageViewerResource resource){
+        Bundle args = new Bundle();
+        args.putAll(resource.toArguments());
+        args.putString(KEY_CROP_OPTION, Crop.THUMBNAIL.name());
         ImageViewerFragment fragment = new ImageViewerFragment();
-        Bundle args = resource.toArguments();
-        args.putBoolean(KEY_IMAGE_CROP_OPTION, imageCrop);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,21 +65,36 @@ public class ImageViewerFragment extends Fragment {
         super.onAttach(context);
         Log.d(TAG, "onAttach");
         this.context = context;
+        assert getArguments() != null;
+        radioGroup = new RadioGroup(context);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
+        if (null != savedInstanceState){
+            position = savedInstanceState.getInt(KEY_POSITION);
+        } else if (null != getArguments()){
+            position = getArguments().getInt(KEY_POSITION);
+        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        view = inflater.inflate(R.layout.fragment_image_viewer, container, false);
-        verticalPager = view.findViewById(R.id.image_viewer_view_pager2_vertical);
-        view8 = view.findViewById(R.id.view8);
-        setVerticalPager();
+        assert getArguments() != null;
+        View view = inflater.inflate(R.layout.fragment_image_viewer, container, false);
+        pager = view.findViewById(R.id.imageViewerViewPager2Vertical);
+        radioGroup = view.findViewById(R.id.imageViewerRadioGroup);
+
+        setRadioGroup(ImageViewerResource.compileFromArgs(getArguments()).size());
+        switch (Crop.valueOf(getArguments().getString(KEY_CROP_OPTION))) {
+            case FULL_SIZE:
+                setRemovablePager(); break;
+            case THUMBNAIL:
+                setThumbnailPager();
+        }
         return view;
     }
 
@@ -85,7 +114,6 @@ public class ImageViewerFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Log.d(TAG, "onStart");
-        setListener();
     }
 
     @Override
@@ -101,14 +129,15 @@ public class ImageViewerFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause");
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_POSITION, position);
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
     }
 
     @Override
@@ -133,41 +162,75 @@ public class ImageViewerFragment extends Fragment {
     /* other method                                                           */
     /* ---------------------------------------------------------------------- */
 
-
-    private void setVerticalPager(){
+    private void setRemovablePager(int position){
+        pager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
         assert getArguments() != null;
-        // itemIdでPresenterかUseCaseから取ってくるのが正解では？ -> ImageViewerの仕事は「画像ビューア」だから画像を調達するのは責務にないでしょ
         ImageViewerResource resource = ImageViewerResource.compileFromArgs(getArguments());
-        FragmentStateAdapterVerticalPager adapter = new FragmentStateAdapterVerticalPager(this, resource);
-        if (getArguments().getBoolean(KEY_IMAGE_CROP_OPTION)) adapter.setImageCrop(true);
-        verticalPager.setAdapter(adapter);
-        verticalPager.setCurrentItem(1);
-    }
-
-    private void setListener(){
-        verticalPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        RecyclerAdapterImageViewerV adapter = new RecyclerAdapterImageViewerV(this.context, resource, Crop.valueOf(getArguments().getString(KEY_CROP_OPTION)), position);
+        pager.setAdapter(adapter);
+        pager.setCurrentItem(1, false);
+        pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrollStateChanged(int state) {
                 super.onPageScrollStateChanged(state);
-                if (0 == state && 1 != verticalPager.getCurrentItem()){
-                    hydeThis();
+                if (0 == state && 1 != pager.getCurrentItem()){
+                    assert getFragmentManager() != null;
+                    getFragmentManager().popBackStack();
                 }
             }
         });
+        adapter.setOnClickListener((v, position1) -> System.out.println("RemovablePager onClick position:" + position1));
+        adapter.setOnPageChangedListener(this::checkRadioButton);
+        checkRadioButton(position);
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> adapter.setCurrentItem(checkedId));
+    }
 
-        view8.setOnClickListener(new View.OnClickListener() {
+    private void setRemovablePager(){
+        setRemovablePager(position);
+    }
+
+    private void setThumbnailPager(){
+        pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        assert getArguments() != null;
+        ImageViewerResource resource = ImageViewerResource.compileFromArgs(getArguments());
+        RecyclerAdapterImageViewerH adapter = new RecyclerAdapterImageViewerH(this.context, resource, Crop.valueOf(getArguments().getString(KEY_CROP_OPTION)));
+        // To full screen
+        adapter.setOnClickListener((view, position) -> toFullSize(position) );
+        pager.setAdapter(adapter);
+        pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
-            public void onClick(View v) {
-                System.out.println("///view8 onClick");
-                hydeThis();
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+                if (0 == state) {
+                    checkRadioButton(pager.getCurrentItem());
+                }
             }
         });
+        checkRadioButton(pager.getCurrentItem());
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> pager.setCurrentItem(checkedId));
     }
 
-    private void hydeThis(){
-        System.out.println("///hyde");
-        assert getFragmentManager() != null;
-        getFragmentManager().popBackStack();
+    private void setRadioGroup(int itemCount){
+        radioGroup.setOrientation(LinearLayout.HORIZONTAL);
+        for (int i = 0; itemCount > i; i++) {
+            RadioButton radioButton = new RadioButton(context);
+            radioButton.setId(i);
+            radioGroup.addView(radioButton);
+        }
     }
+
+    private void checkRadioButton(int currentItemIndex){
+        radioGroup.check(currentItemIndex);
+        position = currentItemIndex;
+    }
+
+    private void toFullSize(int position){
+        assert getFragmentManager() != null;
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        assert getArguments() != null;
+        ft.replace(R.id.main_frame_layout, ImageViewerFragment.getFullSize(ImageViewerResource.compileFromArgs(getArguments()), position));
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.addToBackStack(null);
+        ft.commit();}
 }
 
