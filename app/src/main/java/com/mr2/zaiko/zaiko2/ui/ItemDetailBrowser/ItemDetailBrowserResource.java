@@ -25,6 +25,8 @@ public class ItemDetailBrowserResource {
     private final Company seller;
     @NonNull
     private final String filesAbstractPath;
+    @NonNull
+    private final String message;
     // ImageViewer呼び出し時に読み出す？？
     // ->ImageViewerの責務は「渡されたResourceを画像として表示する」だから読出しはやめといたほうが
     // ->TODO: 呼び出し側(ItemDetailBrowserPresenter <- ItemBrowsingApplicationService(UseCase?) <- 各Repository)
@@ -38,7 +40,8 @@ public class ItemDetailBrowserResource {
                                      @NonNull Equipment equipment,
                                      @NonNull Commodity commodity,
                                      @NonNull Company seller,
-                                     @NonNull String filesAbstractPath) {
+                                     @NonNull String filesAbstractPath,
+                                     @NonNull String message) {
         if(!product.equals(equipment)) throw new IllegalArgumentException("製品と備品のIDが一致しません。");
         if (!product.companyId().equals(maker.id())) throw new IllegalArgumentException("製品と製造会社のIDが一致しません");
         if (!commodity.companyId().equals(seller.id())) throw new IllegalArgumentException("商品と販売会社のIDが一致しません");
@@ -49,6 +52,7 @@ public class ItemDetailBrowserResource {
         this.commodity = commodity;
         this.seller = seller;
         this.filesAbstractPath = filesAbstractPath;
+        this.message = message;
     }
 
 
@@ -78,6 +82,9 @@ public class ItemDetailBrowserResource {
     public String getCommodityPrice(){ return commodity.price().price(); }
     //代表販売単位
     public String getCommodityUnit(){ return commodity.unit().unit(); }
+    //メッセージ
+    @NonNull
+    public String getMessage(){ return message; }
     //タグ
     public List<String> getKeywordList(){
         List<String> keywordList = new ArrayList<>();
