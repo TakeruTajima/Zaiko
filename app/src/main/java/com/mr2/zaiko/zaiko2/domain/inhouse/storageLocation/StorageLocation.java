@@ -32,14 +32,14 @@ public class StorageLocation extends Entity{
         inventoryFluctuations = new ArrayList<>();
     }
 
-    StorageLocation(int unmutatedVersion, @NonNull StorageLocationId id, @NonNull EquipmentId equipmentId, @NonNull String name, @NonNull Condition condition, int quantity) {
+    StorageLocation(int unmutatedVersion, @NonNull StorageLocationId id, @NonNull EquipmentId equipmentId, @NonNull String name, @NonNull Condition condition, int quantity, @NonNull List<InventoryFluctuations> inventoryFluctuations) {
         super(unmutatedVersion);
         this.id = id;
         this.equipmentId = equipmentId;
         this.name = name;
         this.condition = condition;
         this.quantity = quantity;
-        inventoryFluctuations = new ArrayList<>();
+        this.inventoryFluctuations = inventoryFluctuations;
     }
 
     @NonNull
@@ -64,6 +64,35 @@ public class StorageLocation extends Entity{
 
     public int quantity() {
         return quantity;
+    }
+
+    public List<InventoryFluctuations> inventoryFluctuations(){ return inventoryFluctuations; }
+
+    @NonNull
+    public List<Warehousing> warehousingList(){
+        List<Warehousing> list = new ArrayList<>();
+        for (InventoryFluctuations i: inventoryFluctuations){
+            if (i instanceof Warehousing) list.add((Warehousing)i);
+        }
+        return list;
+    }
+
+    @NonNull
+    public List<PickOut> pickOutList(){
+        List<PickOut> list = new ArrayList<>();
+        for (InventoryFluctuations i: inventoryFluctuations){
+            if (i instanceof PickOut) list.add((PickOut)i);
+        }
+        return list;
+    }
+
+    @NonNull
+    public List<InventoryCorrection> inventoryCorrectionList(){
+        List<InventoryCorrection> list = new ArrayList<>();
+        for (InventoryFluctuations i: inventoryFluctuations){
+            if (i instanceof InventoryCorrection) list.add((InventoryCorrection)i);
+        }
+        return list;
     }
 
     //入庫する
