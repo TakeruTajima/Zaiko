@@ -10,6 +10,7 @@ import com.mr2.zaiko.zaiko2.domain.outside.company.Company;
 import com.mr2.zaiko.zaiko2.domain.outside.product.Product;
 import com.mr2.zaiko.zaiko2.ui.ImageViewer.ImageViewerResource;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ItemDetailBrowserResource {
@@ -86,7 +87,7 @@ public class ItemDetailBrowserResource {
 
     @NonNull
     public List<OrderSlip> getOrderSlipList() {
-        return orderSlipList;
+        return Collections.unmodifiableList(orderSlipList);
     }
 
     @NonNull
