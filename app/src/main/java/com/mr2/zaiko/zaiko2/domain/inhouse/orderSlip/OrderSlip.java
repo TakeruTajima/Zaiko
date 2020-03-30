@@ -196,12 +196,12 @@ public class OrderSlip extends Entity {
     }
 
     public boolean isClosed(){
-        return null !=completedAt;
+        return null != completedAt;
     }
 
     //入荷完了判定
     public boolean checkArrivalQuantity(Order order){
-        assertStateTrue(ordered, "発注されていません。");
+        assertStateTrue(ordered, "発注されていません。"); //TODO: 発注なしで納入することあるよ
         CommodityId id = order.commodityId();
         int arrivalQuantity = 0;
         for (Arrival a : arrivals){

@@ -34,7 +34,7 @@ public class ItemDetailEditorResource {
     private List<Company> allCompanyList;
 
     //キーワード　->閲覧画面で編集する？
-    // 半角区切りで入力+登録数順のキーワード一覧から選択　
+    // スペース区切りで入力+登録数順のキーワード一覧から選択　
     // Fragmentとか別画面かな　独自レイアウトのDialogとかでもいいかも
     private List<Keyword> keywordList;
 
