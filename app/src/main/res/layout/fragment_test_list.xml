@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".UI.View.test.TestRecyclerViewFragment"
+    tools:context=".xOld.UI.View.test.TestRecyclerViewFragment"
     tools:listitem="@layout/fragment_test_row" >
 
     <FrameLayout
