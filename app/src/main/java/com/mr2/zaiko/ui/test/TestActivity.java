@@ -25,6 +25,7 @@ import com.mr2.zaiko.loader.TestTaskLoader;
 import com.mr2.zaiko.ui.ImageCapture.ImageCaptureActivity;
 import com.mr2.zaiko.ui.ImageViewer.ImageViewerFragment;
 import com.mr2.zaiko.ui.ImageViewer.ImageViewerResource;
+import com.mr2.zaiko.ui.ItemDetailBrowser.ItemDetailBrowserActivity;
 import com.mr2.zaiko.ui.ItemListViewer.ItemListViewerActivity;
 import com.mr2.zaiko.ui.adapter.EventBusService;
 import com.otaliastudios.cameraview.BitmapCallback;
@@ -117,6 +118,7 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
 
     private void setThumbnail(){
         ImageViewerFragment fragment = ImageViewerFragment.getThumbnail(getResource());
+        fragment.setOnImageClickListener(this::setImageViewerFragment);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.mainThumbnail, fragment);
         ft.commit();
@@ -125,20 +127,23 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
     private void setViews(){
         setContentView(R.layout.activity_main);
         findViewById(R.id.button1).setOnClickListener(view -> presenter.event_1());
-        findViewById(R.id.button2).setOnClickListener(view -> startNewActivity());
-        findViewById(R.id.button3).setOnClickListener(view -> startImageViewerFragment());
+        findViewById(R.id.button2).setOnClickListener(view -> startImageCapture());
+        findViewById(R.id.button3).setOnClickListener(view -> startItemDetailBrowser());
         findViewById(R.id.button4).setOnClickListener(view -> transitionItemListViewer());
         ((ProgressBar)findViewById(R.id.progressBar)).setProgress(0);
     }
 
-    public void startImageViewerFragment(){
-//        ImageViewerFragment fragment = ImageViewerFragment.newInstance(getResource(), ImageViewerFragment.Crop.FULL_SIZE);
-//
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        ft.replace(R.id.main_frame_layout, fragment);
-//        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//        ft.addToBackStack(null);
-//        ft.commit();
+    public void startItemDetailBrowser(){
+        Intent intent = new Intent(getApplication(), ItemDetailBrowserActivity.class);
+        startActivity(intent);
+    }
+
+    public void setImageViewerFragment(ImageViewerResource resource, int position){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.main_frame_layout, ImageViewerFragment.getFullSize(resource, position));
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
     private ImageViewerResource getResource(){
@@ -148,7 +153,7 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
         return new ImageViewerResource(photos, getFilesDir().getAbsolutePath());
     }
 
-    private void startNewActivity(){
+    private void startImageCapture(){
         Intent intent = new Intent(getApplication(), ImageCaptureActivity.class);
         startActivity(intent);
     }

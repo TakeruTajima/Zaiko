@@ -24,8 +24,11 @@
                 <category android:name="android.intent.category.LANCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.ImageCapture.ImageCaptureActivity" />
+        <activity android:name=".ui.ImageCapture.ImageCaptureActivity"
+            android:theme="@style/AppTheme.NoActionBar"  />
         <activity android:name=".ui.ItemListViewer.ItemListViewerActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.ItemDetailBrowser.ItemDetailBrowserActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 </manifest>

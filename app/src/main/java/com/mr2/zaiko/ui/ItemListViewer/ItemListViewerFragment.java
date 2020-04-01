@@ -199,7 +199,7 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
 
     @Override
     public void showImageViewer(@NonNull ImageViewerResource resource) {
-        ImageViewerFragment fragment = ImageViewerFragment.getFullSize(resource, 3);
+        ImageViewerFragment fragment = ImageViewerFragment.getFullSize(resource, 0);
         assert getFragmentManager() != null;
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.listViewerMainContainer, fragment);

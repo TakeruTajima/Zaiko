@@ -1,5 +1,6 @@
 package com.mr2.zaiko.ui.ItemListViewer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -9,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.mr2.zaiko.R;
 import com.mr2.zaiko.domain.common.Identity;
+import com.mr2.zaiko.ui.ItemDetailBrowser.ItemDetailBrowserActivity;
 
 public class ItemListViewerActivity extends AppCompatActivity implements ItemListViewerFragment.Listener{
     public static final String TAG = ItemListViewerActivity.class.getSimpleName() + "(4156)";
@@ -84,9 +86,9 @@ public class ItemListViewerActivity extends AppCompatActivity implements ItemLis
     @Override
     public void transitionItemDetailBrowser(Identity itemId) {
         System.out.println("transitionItemDetailBrowser item id:" + itemId.id());
-//        Intent intent = new Intent(getApplication(), ItemDetailBrowserActivity.class);
+        Intent intent = new Intent(getApplication(), ItemDetailBrowserActivity.class);
 //        intent.putExtra(ItemDetailBrowserActivity.KEY_TARGET_ITEM_ID, itemId.id());
-//        startActivity(intent);
+        startActivity(intent);
     }
 
     @Override

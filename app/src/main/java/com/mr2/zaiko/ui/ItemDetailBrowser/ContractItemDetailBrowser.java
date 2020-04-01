@@ -5,13 +5,14 @@ import com.mr2.zaiko.domain.inhouse.equipment.Keyword;
 import com.mr2.zaiko.domain.outside.commodity.CommodityId;
 import com.mr2.zaiko.domain.outside.company.CompanyId;
 import com.mr2.zaiko.domain.outside.product.ProductId;
+import com.mr2.zaiko.ui.ImageViewer.ImageViewerResource;
 
 public interface ContractItemDetailBrowser {
     interface View{
         void setResource(ItemDetailBrowserResource resource);
         void openImageCapture(); //カメラ起動
         void transitionToItemDetailEditor(ProductId productId); //編集
-//        void showImageViewer(); //ImageViewerFragmentに実装済み
+        void showImageViewer(ImageViewerResource resource, int position); //
 //        void hydeImageViewer();
         void transitionToListOfItemByKeyword(Keyword keyword); //キーワード検索
         void transitionToListOfItemByMaker(CompanyId makerId); //メーカー検索

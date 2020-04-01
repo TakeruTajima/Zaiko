@@ -25,6 +25,8 @@ public class ImageViewerFragment extends Fragment {
     public static final String TAG = ImageViewerFragment.class.getSimpleName() + "(4156)";
     private static final String KEY_CROP_OPTION = "cropOption";
     private static final String KEY_POSITION = "position";
+    private OnImageClickListener listener;
+
     public enum Crop { FULL_SIZE, THUMBNAIL}
 
     private Context context;
@@ -195,7 +197,7 @@ public class ImageViewerFragment extends Fragment {
         ImageViewerResource resource = ImageViewerResource.compileFromArgs(getArguments());
         RecyclerAdapterImageViewerH adapter = new RecyclerAdapterImageViewerH(this.context, resource, Crop.valueOf(getArguments().getString(KEY_CROP_OPTION)));
         // To full screen
-        adapter.setOnClickListener((view, position) -> toFullSize(position) );
+        adapter.setOnClickListener((view, position) -> { if (null != listener) listener.onClick(resource, position);} );
         pager.setAdapter(adapter);
         pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -227,10 +229,19 @@ public class ImageViewerFragment extends Fragment {
     private void toFullSize(int position){
         assert getFragmentManager() != null;
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        assert getArguments() != null;
+        assert getArguments() != null; //TODO: 実装ココじゃないでしょ
         ft.replace(R.id.main_frame_layout, ImageViewerFragment.getFullSize(ImageViewerResource.compileFromArgs(getArguments()), position));
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.addToBackStack(null);
-        ft.commit();}
+        ft.commit();
+    }
+
+    public void setOnImageClickListener(OnImageClickListener listener){
+        this.listener = listener;
+    }
+
+    public interface OnImageClickListener{
+        void onClick(ImageViewerResource resource, int position);
+    }
 }
 
