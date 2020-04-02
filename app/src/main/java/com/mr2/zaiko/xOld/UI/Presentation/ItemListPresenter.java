@@ -28,7 +28,7 @@ public class ItemListPresenter implements ItemListAdapter.Listener {
     public void onCreate(){
         Log.d(TAG, "onCreate()");
         fragment.hideEmpty();
-        fragment.showProgress();
+//        fragment.showProgress();
         ItemUseCase useCase = new ItemUseCase(RepositoryService.getItemRepository(fragment.getContext()));
         List<Item> itemList = useCase.getList(selection, selectedMaker);
         if (null == itemList || 0 >= itemList.size()){
@@ -36,7 +36,7 @@ public class ItemListPresenter implements ItemListAdapter.Listener {
             fragment.showToast("アイテムが見つかりません。");
             Log.d(TAG, "item lost");
         }else fragment.setItemList(itemList);
-        fragment.hideProgress();
+//        fragment.hideProgress();
     }
 
     public void onClickFAB(){

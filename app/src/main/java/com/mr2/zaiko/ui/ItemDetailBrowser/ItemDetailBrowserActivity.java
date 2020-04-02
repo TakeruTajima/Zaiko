@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.mr2.zaiko.R;
 
-public class ItemDetailBrowserActivity extends AppCompatActivity {
+public class ItemDetailBrowserActivity extends AppCompatActivity implements ItemDetailBrowserFragment.ItemDetailBrowserFragmentListener {
     public static final String TAG = ItemDetailBrowserActivity.class.getSimpleName() + "(4156)";
     /* ---------------------------------------------------------------------- */
     /* Field                                                                  */
@@ -80,5 +80,10 @@ public class ItemDetailBrowserActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frameLayoutContainer, fragment);
         ft.commit();
+    }
+
+    @Override
+    public void onHogeEvent() {
+
     }
 }

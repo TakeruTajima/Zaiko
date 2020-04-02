@@ -34,16 +34,20 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
 
     private View view = null;
     private Context context;
+    private ContractItemDetailBrowser.Presenter presenter;
     /* Example */
-//    private ItemDetailBrowserFragmentListener listener = null;
+    private ItemDetailBrowserFragmentListener listener = null;
+
+    private int quantityWantToPutCart = 1;
+    private ItemDetailBrowserResource resource;
 
     /* ---------------------------------------------------------------------- */
     /* Listener                                                               */
     /* ---------------------------------------------------------------------- */
     /* Example */
-//    public interface ItemDetailBrowserFragmentListener {
-//        void onHogeEvent();
-//    }
+    public interface ItemDetailBrowserFragmentListener {
+        void onHogeEvent();
+    }
 
     /* ---------------------------------------------------------------------- */
     /* Lifecycle                                                              */
@@ -53,16 +57,14 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
         super.onAttach(context);
         Log.d(TAG, "onAttach");
         this.context = context;
-
+        presenter = ItemDetailBrowserPresenter.getInstance(this);
         /* Example */
-//        if (!(context instanceof ItemDataActivityFragmentListener)) {
-//            throw new UnsupportedOperationException(
-//                    TAG + ":" + "Listener is not Implementation.");
-//        } else {
-//            listener = (ItemDataActivityFragmentListener) context;
-//        }
-//        this.activity = (Activity) context;
-
+        if (!(context instanceof ItemDetailBrowserFragmentListener)) {
+            throw new UnsupportedOperationException(
+                    TAG + ":" + "Listener is not Implementation.");
+        } else {
+            listener = (ItemDetailBrowserFragmentListener) context;
+        }
     }
 
     @Override
@@ -70,6 +72,7 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
         if (null == savedInstanceState) setThumbnail();
+        presenter.onCreate(null);
     }
 
     @Override
@@ -79,13 +82,17 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
         view = inflater.inflate(R.layout.fragment_item_detail_browser, container, false);
 //        SpinnerAdapter adapter =
 //        Spinner spinner = view.findViewById(R.id.itemDetailBrowserSpinner);
-//        spinner.setAdapter(adapter); //TODO: 数量選択spinner実装途中
-        view.findViewById(R.id.button5).setOnClickListener(v -> showDialog("カートに入りませい"));
+//        spinner.setAdapter(adapter); //TODO: 数量選択spinner実装途中 選択した数量はquantityWantToPutCartに入れる
 
-        //TODO　たくさんあるリンクのリスナー実装やっとけYO
-        view.findViewById(R.id.itemDetailBrowserMakerName).setOnClickListener(v -> transitionToListOfItemByMaker(null));
-        view.findViewById(R.id.itemDetailBrowserInventoryMore).setOnClickListener(v -> showDialog("在庫がどことどこにあるのか、それぞれいくつあるのかを見ることができます。"));
-        view.findViewById(R.id.itemDetailBrowserKeywords).setOnClickListener(v -> showDialog("キーワードに関連する部品を一覧で表示します。"));
+        view.findViewById(R.id.itemDetailBrowserPrimaryName).setOnClickListener(v -> presenter.onClickPrimaryName());
+        view.findViewById(R.id.itemDetailBrowserMakerName).setOnClickListener(v -> presenter.onClickMakerName());
+        view.findViewById(R.id.itemDetailBrowserInventoryMore).setOnClickListener(v -> presenter.onClickInventoryMore());
+        view.findViewById(R.id.itemDetailBrowserKeywords).setOnClickListener(v -> presenter.onClickKeyword("キーワードに関連する部品の一覧を表示する予定です"));
+        view.findViewById(R.id.itemDetailBrowserSellerName).setOnClickListener(v -> presenter.onCLickSellerName());
+        view.findViewById(R.id.itemDetailBrowserCommodityMore).setOnClickListener(v -> presenter.onClickCommodityMore());
+        view.findViewById(R.id.itemDetailBrowserButtonPutCart).setOnClickListener(v -> presenter.onClickPutShoppingCart(quantityWantToPutCart));
+        view.findViewById(R.id.itemDetailBrowserStoringHistoryMore).setOnClickListener(v -> presenter.onClickStoringMore());
+        view.findViewById(R.id.itemDetailBrowserBuyHistoryMore).setOnClickListener(v -> presenter.onClickBuyHistoryMore());
         return view;
     }
 
@@ -175,7 +182,17 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
 
     @Override
     public void setResource(ItemDetailBrowserResource resource) {
+        this.resource = resource;
+    }
 
+    @Override
+    public void transitionToInventoryList(EquipmentId equipmentId) {
+        showDialog("この部品の在庫が(複数箇所の)どこに、いくつ(ずつ)あるのかをリストで表示します。");
+    }
+
+    @Override
+    public void transitionToListOfSeller(ProductId productId) {
+        showDialog("この製品が登録されている他の商社を表示します");
     }
 
     @Override
@@ -199,7 +216,7 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
     }
 
     @Override
-    public void transitionToCommodityDetail(CommodityId commodityId) {
+    public void transitionToListOfCommodity(CommodityId commodityId) {
         showDialog("この商社から購入できる商品の一覧を開きます");
     }
 
@@ -214,18 +231,19 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
     }
 
     @Override
-    public void transitionToListOfInventoryHistory(EquipmentId equipmentId) {
+    public void transitionToListOfStoringHistory(EquipmentId equipmentId) {
         showDialog("入出庫の履歴を開きます");
     }
 
     @Override
-    public void transitionToListOfPurchaseHistory(EquipmentId equipmentId) {
+    public void transitionToListOfBuyHistory(EquipmentId equipmentId) {
         showDialog("購入履歴の一覧を開きます");
     }
 
     @Override
     public void showDialog(String message) {
         DialogFragment dialog = DialogFragment.newInstance(message, "cancel", "OK");
+
         assert getFragmentManager() != null;
         dialog.show(getFragmentManager(), "");
     }

@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,7 +19,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mr2.zaiko.R;
 import com.mr2.zaiko.TestApplication;
 import com.mr2.zaiko.domain.common.Identity;
-import com.mr2.zaiko.ui.ImageViewer.ImageViewerFragment;
 import com.mr2.zaiko.ui.ImageViewer.ImageViewerResource;
 
 import java.util.UUID;
@@ -54,6 +52,10 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
         void transitionItemDetailBrowser(Identity itemId);
         void transitionItemDetailEditor(Identity itemId);
         void transitionItemRegister();
+        void showProgress();
+        void hydeProgress();
+
+        void showImageViewer(ImageViewerResource resource);
     }
 
     /* ---------------------------------------------------------------------- */
@@ -93,8 +95,8 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
         Log.d(TAG + fragmentId, "onCreateView");
 //        view = inflater.inflate(R.layout./*このフラグメントで使用するレイアウトのID*/, container, false);
         view = inflater.inflate(R.layout.fragment_list_viewer, container, false);
-        fab = view.findViewById(R.id.listViewerFAB);
-        progressBar = view.findViewById(R.id.listViewerProgress);
+//        fab = view.findViewById(R.id.listViewerFAB);
+//        progressBar = view.findViewById(R.id.listViewerProgress);
         emptyImage = view.findViewById(R.id.listViewerItemNotFound);
         itemList = view.findViewById(R.id.listViewerRecyclerView);
         return view;
@@ -173,18 +175,20 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
 
     @Override
     public void setAddItemFAB() {
-        fab.setVisibility(View.VISIBLE);
-        fab.setOnClickListener(view -> presenter.onClickAddItem());
+//        fab.setVisibility(View.VISIBLE);
+//        fab.setOnClickListener(view -> presenter.onClickAddItem());
     }
 
     @Override
     public void showProgress() {
-        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.VISIBLE);
+        listener.showProgress();
     }
 
     @Override
     public void hydeProgress() {
-        progressBar.setVisibility(View.INVISIBLE);
+//        progressBar.setVisibility(View.INVISIBLE);
+        listener.hydeProgress();
     }
 
     @Override
@@ -199,13 +203,14 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
 
     @Override
     public void showImageViewer(@NonNull ImageViewerResource resource) {
-        ImageViewerFragment fragment = ImageViewerFragment.getFullSize(resource, 0);
-        assert getFragmentManager() != null;
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.listViewerMainContainer, fragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.addToBackStack(null);
-        ft.commit();
+//        ImageViewerFragment fragment = ImageViewerFragment.getFullSize(resource, 0);
+//        assert getFragmentManager() != null;
+//        FragmentTransaction ft = getFragmentManager().beginTransaction();
+//        ft.replace(R.id.listViewerMainContainer, fragment);
+//        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//        ft.addToBackStack(null);
+//        ft.commit();
+        listener.showImageViewer(resource);
     }
 
     @Override

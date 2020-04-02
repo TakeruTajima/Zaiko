@@ -17,8 +17,8 @@ public class EquipmentListViewerResource {
         for (int i = 0; 30 > i; i++){
             items.add(new Item(new EquipmentId(),
                     "/data/user/0/com.mr2.zaiko/files/20200309033935.jpg",
-                    (i + 1) + "th HeadlineHeadlineHeadlineHeadlineHeadlineHeadlineHeadline",
-                    (i + 1) + "th OutlineOutlineOutlineOutlineOutlineOutlineOutlineOutlineOutline"));
+                    "エアシリンダー標準型 No." + (i + 1) + "",
+                    "SMC、品番: KATASHIKI-0" + (i + 1) + "、" + i + "/15個、" + i + "00円/個"));
         }
     }
 

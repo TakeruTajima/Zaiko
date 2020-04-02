@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,7 +27,7 @@ import java.util.List;
 
 public class ItemListFragment extends Fragment {
     public static final String TAG = ItemListFragment.class.getSimpleName();
-    private ProgressBar mProgressBar;
+//    private ProgressBar mProgressBar;
     private ImageView mImageView;
     private View mView;
     private ItemUseCase.ItemSelection selection;
@@ -58,8 +57,8 @@ public class ItemListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (null == mView) mView = inflater.inflate(R.layout.fragment_item_list, container, false);
         if (null == mImageView) mImageView = mView.findViewById(R.id.imageItemListNoItem);
-        mView.findViewById(R.id.fabItemListAdd).setOnClickListener(l -> presenter.onClickFAB());
-        if (null == mProgressBar) mProgressBar = mView.findViewById(R.id.progressItemList);
+//        mView.findViewById(R.id.fabItemListAdd).setOnClickListener(l -> presenter.onClickFAB());
+//        if (null == mProgressBar) mProgressBar = mView.findViewById(R.id.progressItemList);
 
         presenter.onCreate();
         return mView;
@@ -131,9 +130,9 @@ public class ItemListFragment extends Fragment {
         }
     }
 
-    public void showProgress(){mProgressBar.setVisibility(View.VISIBLE);}
-
-    public void hideProgress(){mProgressBar.setVisibility(View.INVISIBLE);}
+//    public void showProgress(){mProgressBar.setVisibility(View.VISIBLE);}
+//
+//    public void hideProgress(){mProgressBar.setVisibility(View.INVISIBLE);}
 
     public void showEmpty(){mImageView.setVisibility(View.VISIBLE);}
 

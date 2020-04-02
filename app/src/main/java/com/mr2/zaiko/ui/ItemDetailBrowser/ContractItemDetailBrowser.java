@@ -16,19 +16,29 @@ public interface ContractItemDetailBrowser {
 //        void hydeImageViewer();
         void transitionToListOfItemByKeyword(Keyword keyword); //キーワード検索
         void transitionToListOfItemByMaker(CompanyId makerId); //メーカー検索
-        void transitionToCommodityDetail(CommodityId commodityId); //商品詳細
+        void transitionToListOfCommodity(CommodityId commodityId); //商品詳細
         void transitionToListOfBackorder(EquipmentId equipmentId); //入荷待ち一覧
         void transitionToListOfExternalBarcode(EquipmentId equipmentId); //社外バーコード一覧
-        void transitionToListOfInventoryHistory(EquipmentId equipmentId); //入出庫履歴
-        void transitionToListOfPurchaseHistory(EquipmentId equipmentId); //購入履歴
+        void transitionToListOfStoringHistory(EquipmentId equipmentId); //入出庫履歴
+        void transitionToListOfBuyHistory(EquipmentId equipmentId); //購入履歴
         void showDialog(String message); //Result、Cation等
+
+        void transitionToInventoryList(EquipmentId equipmentId);
+
+        void transitionToListOfSeller(ProductId productId);
     }
 
     interface Presenter{
         void onCreate(ProductId productId); // -> setResource(ItemDetailBrowserResource resource)
-        void onResultImageCapture(); // -> showDialog(String message)
-        void onClickEdit(); // -> transitionToItemDetailEditor(ProductId productId)
-//        void onClickImage(); //ImageViewer
-        void onClickAddImage(); // -> openImageCapture(String fileName)
+
+        void onClickPrimaryName();
+        void onClickMakerName();
+        void onClickInventoryMore();
+        void onClickPutShoppingCart(int quantityWantToPutCart);
+        void onClickKeyword(String keyword);
+        void onCLickSellerName();
+        void onClickCommodityMore();
+        void onClickStoringMore();
+        void onClickBuyHistoryMore();
     }
 }

@@ -207,24 +207,13 @@
                             android:text="購入先情報"
                             android:textColor="@android:color/primary_text_light" />
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/itemDetailBrowserSellerName"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <Button
-                                android:id="@+id/button5"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="カートに入れる" />
-
-                            <Spinner
-                                android:id="@+id/itemDetailBrowserSpinner"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"></Spinner>
-                        </LinearLayout>
+                            android:layout_margin="2dp"
+                            android:text="サンエム"
+                            android:textColor="@android:color/holo_blue_dark" />
 
                         <TextView
                             android:id="@+id/itemDetailBrowserCommodityName"
@@ -240,13 +229,25 @@
                             android:layout_margin="2dp"
                             android:text="単価: 1200円/箱" />
 
-                        <TextView
-                            android:id="@+id/itemDetailBrowserSellerName"
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="2dp"
-                            android:text="サンエム"
-                            android:textColor="@android:color/holo_blue_dark" />
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/itemDetailBrowserButtonPutCart"
+                                style="@style/TextAppearance.AppCompat.Widget.Button"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="カートに入れる" />
+
+                            <Spinner
+                                android:id="@+id/itemDetailBrowserSpinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"></Spinner>
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/itemDetailBrowserCommodityMore"
@@ -288,7 +289,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/itemDetailBrowserWarehousingHistoryMore"
+                            android:id="@+id/itemDetailBrowserStoringHistoryMore"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
@@ -296,7 +297,7 @@
                             android:textColor="@android:color/holo_blue_dark" />
 
                         <TextView
-                            android:id="@+id/itemDetailBrowserPurchaseHistoryMore"
+                            android:id="@+id/itemDetailBrowserBuyHistoryMore"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"

@@ -29,11 +29,8 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         assert getArguments() != null;
         builder.setMessage(getArguments().getString(KEY_MESSAGE))
-                .setPositiveButton(getArguments().getString(KEY_POSITIVE), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .setPositiveButton(getArguments().getString(KEY_POSITIVE), (dialog, which) -> {
 
-                    }
                 })
                 .setNegativeButton(getArguments().getString(KEY_NEGATIVE), new DialogInterface.OnClickListener() {
                     @Override
