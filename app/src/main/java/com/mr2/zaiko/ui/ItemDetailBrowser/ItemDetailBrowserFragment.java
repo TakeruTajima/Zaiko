@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -71,7 +72,6 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
-        if (null == savedInstanceState) setThumbnail();
         presenter.onCreate(null);
     }
 
@@ -84,15 +84,6 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
 //        Spinner spinner = view.findViewById(R.id.itemDetailBrowserSpinner);
 //        spinner.setAdapter(adapter); //TODO: 数量選択spinner実装途中 選択した数量はquantityWantToPutCartに入れる
 
-        view.findViewById(R.id.itemDetailBrowserPrimaryName).setOnClickListener(v -> presenter.onClickPrimaryName());
-        view.findViewById(R.id.itemDetailBrowserMakerName).setOnClickListener(v -> presenter.onClickMakerName());
-        view.findViewById(R.id.itemDetailBrowserInventoryMore).setOnClickListener(v -> presenter.onClickInventoryMore());
-        view.findViewById(R.id.itemDetailBrowserKeywords).setOnClickListener(v -> presenter.onClickKeyword("キーワードに関連する部品の一覧を表示する予定です"));
-        view.findViewById(R.id.itemDetailBrowserSellerName).setOnClickListener(v -> presenter.onCLickSellerName());
-        view.findViewById(R.id.itemDetailBrowserCommodityMore).setOnClickListener(v -> presenter.onClickCommodityMore());
-        view.findViewById(R.id.itemDetailBrowserButtonPutCart).setOnClickListener(v -> presenter.onClickPutShoppingCart(quantityWantToPutCart));
-        view.findViewById(R.id.itemDetailBrowserStoringHistoryMore).setOnClickListener(v -> presenter.onClickStoringMore());
-        view.findViewById(R.id.itemDetailBrowserBuyHistoryMore).setOnClickListener(v -> presenter.onClickBuyHistoryMore());
         return view;
     }
 
@@ -154,7 +145,7 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
     /* other method                                                           */
     /* ---------------------------------------------------------------------- */
 
-    public ImageViewerResource getResource(){
+    private ImageViewerResource getImageResource(){
         List<Photo> photos = new ArrayList<>();
         for (int i = 0; 10 >= i; i++){
             photos.add(new Photo("20200309033935.jpg"));
@@ -162,8 +153,8 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
         return new ImageViewerResource(photos, context.getFilesDir().getAbsolutePath());
     }
 
-    public void setThumbnail(){
-        ImageViewerFragment fragment = ImageViewerFragment.getThumbnail(getResource());
+    private void setThumbnail(){
+        ImageViewerFragment fragment = ImageViewerFragment.getThumbnail(resource.getImageResource());
         fragment.setOnImageClickListener(this::showImageViewer);
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
         ft.replace(R.id.itemDetailBrowserImageContainer, fragment);
@@ -182,7 +173,27 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
 
     @Override
     public void setResource(ItemDetailBrowserResource resource) {
+        if (null != this.resource) return;
         this.resource = resource;
+        setThumbnail();
+        setListener();
+    }
+
+    private void setListener(){
+        view.findViewById(R.id.itemDetailBrowserPrimaryName).setOnClickListener(v -> presenter.onClickPrimaryName());
+        view.findViewById(R.id.itemDetailBrowserMakerName).setOnClickListener(v -> presenter.onClickMakerName());
+        view.findViewById(R.id.itemDetailBrowserInventoryMore).setOnClickListener(v -> presenter.onClickInventoryMore());
+        view.findViewById(R.id.itemDetailBrowserKeywords).setOnClickListener(v -> presenter.onClickKeyword("キーワードに関連する部品の一覧を表示する予定です"));
+        view.findViewById(R.id.itemDetailBrowserSellerName).setOnClickListener(v -> presenter.onCLickSellerName());
+        view.findViewById(R.id.itemDetailBrowserCommodityMore).setOnClickListener(v -> presenter.onClickCommodityMore());
+        view.findViewById(R.id.itemDetailBrowserButtonPutCart).setOnClickListener(v -> presenter.onClickPutShoppingCart(quantityWantToPutCart));
+        view.findViewById(R.id.itemDetailBrowserStoringHistoryMore).setOnClickListener(v -> presenter.onClickStoringMore());
+        view.findViewById(R.id.itemDetailBrowserBuyHistoryMore).setOnClickListener(v -> presenter.onClickBuyHistoryMore());
+    }
+
+    private void setViews(){
+        ((TextView)view.findViewById(R.id.itemDetailBrowserSellerName)).setText(resource.getSeller().name());
+        ((TextView)view.findViewById(R.id.itemDetailBrowserMakerName)).setText(resource.getMaker().name());
     }
 
     @Override

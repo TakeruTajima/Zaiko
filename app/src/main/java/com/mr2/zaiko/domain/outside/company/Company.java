@@ -3,7 +3,7 @@ package com.mr2.zaiko.domain.outside.company;
 import androidx.annotation.NonNull;
 
 import com.mr2.zaiko.domain.common.Entity;
-import com.mr2.zaiko.domain.inhouse.equipment.Equipment;
+import com.mr2.zaiko.domain.outside.commodity.Commodity;
 import com.mr2.zaiko.domain.outside.product.Model;
 import com.mr2.zaiko.domain.outside.product.Name;
 import com.mr2.zaiko.domain.outside.product.Price;
@@ -43,8 +43,9 @@ public class Company extends Entity {
         return new Product(id, model, name, unit, price);
     }
 
-    public Equipment registerEquipment(@NonNull Product product, @NonNull Name name, @NonNull Unit unit, @NonNull Price price){
-        return new Equipment(product, this.id, name, unit, price);
+    public Commodity registerCommodity(@NonNull Product product, @NonNull Name name, @NonNull Unit unit, @NonNull Price price){
+//        return new Equipment(product, this.id, name, unit, price);
+        return new Commodity(product, this.id, name, unit, price);
     }
 
     public CompanyId id() {

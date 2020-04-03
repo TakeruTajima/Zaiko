@@ -1,14 +1,7 @@
 package com.mr2.zaiko.domain.inhouse.storageLocation;
 
 import com.mr2.zaiko.domain.inhouse.equipment.Equipment;
-import com.mr2.zaiko.domain.inhouse.user.Authority;
 import com.mr2.zaiko.domain.inhouse.user.User;
-import com.mr2.zaiko.domain.outside.company.CompanyId;
-import com.mr2.zaiko.domain.outside.product.Model;
-import com.mr2.zaiko.domain.outside.product.Name;
-import com.mr2.zaiko.domain.outside.product.Price;
-import com.mr2.zaiko.domain.outside.product.Product;
-import com.mr2.zaiko.domain.outside.product.Unit;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,26 +21,26 @@ public class WarehousingServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        user = new User("1281", new com.mr2.zaiko.domain.inhouse.user.Name("建", null, "但馬"), Authority.NORMAL);
-        equipment1 = new Equipment(
-                new Product(
-                        new CompanyId(),
-                        new Model("katashiki1"),
-                        new Name("名前1"),
-                        new Unit("単位1"),
-                        new Price(100, "円")),
-                new CompanyId(),
-                new Name("名前1"),
-                new Unit("単位1"),
-                new Price(100, "円"));
-        storageLocation1 = new StorageLocation(equipment1.equipmentId(), "AA010101", StorageLocation.Condition.BrandNew);
-        storageLocation1.warehousing(user, equipment1, 10, "初期");
-        storageLocation2 = new StorageLocation(equipment1.equipmentId(), "AB010101", StorageLocation.Condition.BrandNew);
-        storageLocation2.warehousing(user, equipment1, 10, "初期");
-        storageLocation3 = new StorageLocation(equipment1.equipmentId(), "AA010101", StorageLocation.Condition.Used);
-        storageLocation3.warehousing(user, equipment1, 10, "初期");
-        storageLocation4 = new StorageLocation(equipment1.equipmentId(), "AB010101", StorageLocation.Condition.Used);
-        storageLocation4.warehousing(user, equipment1, 10, "初期");
+//        user = new User("1281", new com.mr2.zaiko.domain.inhouse.user.Name("建", null, "但馬"), Authority.NORMAL);
+//        equipment1 = new Equipment(
+//                new Product(
+//                        new CompanyId(),
+//                        new Model("katashiki1"),
+//                        new Name("名前1"),
+//                        new Unit("単位1"),
+//                        new Price(100, "円")),
+//                new CompanyId(),
+//                new Name("名前1"),
+//                new Unit("単位1"),
+//                new Price(100, "円"));
+//        storageLocation1 = new StorageLocation(equipment1.equipmentId(), "AA010101", StorageLocation.Condition.BrandNew);
+//        storageLocation1.warehousing(user, equipment1, 10, "初期");
+//        storageLocation2 = new StorageLocation(equipment1.equipmentId(), "AB010101", StorageLocation.Condition.BrandNew);
+//        storageLocation2.warehousing(user, equipment1, 10, "初期");
+//        storageLocation3 = new StorageLocation(equipment1.equipmentId(), "AA010101", StorageLocation.Condition.Used);
+//        storageLocation3.warehousing(user, equipment1, 10, "初期");
+//        storageLocation4 = new StorageLocation(equipment1.equipmentId(), "AB010101", StorageLocation.Condition.Used);
+//        storageLocation4.warehousing(user, equipment1, 10, "初期");
     }
 
     @Test

@@ -22,7 +22,7 @@ class ItemDetailBrowserPresenter implements ContractItemDetailBrowser.Presenter 
 
     @Override
     public void onCreate(ProductId productId) {
-        view.setResource(null);
+        view.setResource(ItemDetailBrowserResource.getTestResource());
     }
 
     @Override

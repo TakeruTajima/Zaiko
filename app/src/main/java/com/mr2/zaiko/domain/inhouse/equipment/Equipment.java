@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class Equipment extends Product {
     @NonNull private final EquipmentId id;
-    @NonNull private final CompanyId sellingCompanyId;
+//    @NonNull private final CompanyId sellingCompanyId;
     @NonNull private Name name;
     @NonNull private Unit unit;
     @NonNull private Price price;
@@ -26,7 +26,7 @@ public class Equipment extends Product {
     private Set<ExternalBarcode> externalBarcodeSet; //get, addBarcode, removeBarcode
     private Set<Keyword> keywordSet; //get, addKeyword, removeKeyword
 
-    public Equipment(@NonNull Product product, @NonNull CompanyId sellingCompanyId, @NonNull Name name, @NonNull Unit unit, @NonNull Price price){
+    public Equipment(@NonNull Product product, @NonNull Name name, @NonNull Unit unit, @NonNull Price price){
         super(INITIAL_UNMUTATED_VERSION,
                 product.companyId(),
                 product.productId(),
@@ -35,7 +35,7 @@ public class Equipment extends Product {
                 product.unit(),
                 product.price());
         this.id = new EquipmentId();
-        this.sellingCompanyId = sellingCompanyId;
+//        this.sellingCompanyId = sellingCompanyId;
         this.name = name;
         this.unit = unit;
         this.price = price;
@@ -44,7 +44,7 @@ public class Equipment extends Product {
         this.keywordSet = new HashSet<>();
     }
 
-    Equipment(int version, @NonNull CompanyId creationCompany, @NonNull ProductId productId, @NonNull Model model, @NonNull Name productName, @NonNull Unit productUnit, @NonNull Price productPrice, @NonNull EquipmentId equipmentId, @NonNull CompanyId sellingCompanyId, @NonNull Name equipmentName, @NonNull Unit equipmentUnit, @NonNull Price equipmentPrice, @NonNull List<Photo> photos, @NonNull Set<ExternalBarcode> externalBarcodeSet, @NonNull Set<Keyword> keywordSet) {
+    Equipment(int version, @NonNull CompanyId creationCompany, @NonNull ProductId productId, @NonNull Model model, @NonNull Name productName, @NonNull Unit productUnit, @NonNull Price productPrice, @NonNull EquipmentId equipmentId, @NonNull Name equipmentName, @NonNull Unit equipmentUnit, @NonNull Price equipmentPrice, @NonNull List<Photo> photos, @NonNull Set<ExternalBarcode> externalBarcodeSet, @NonNull Set<Keyword> keywordSet) {
         super(version,
                 creationCompany,
                 productId,
@@ -53,7 +53,7 @@ public class Equipment extends Product {
                 productUnit,
                 productPrice);
         this.id = equipmentId;
-        this.sellingCompanyId = sellingCompanyId;
+//        this.sellingCompanyId = sellingCompanyId;
         this.name = equipmentName;
         this.unit = equipmentUnit;
         this.price = equipmentPrice;
@@ -67,10 +67,10 @@ public class Equipment extends Product {
         return this.id;
     }
 
-    @NonNull
-    public CompanyId sellingCompanyId() {
-        return sellingCompanyId;
-    }
+//    @NonNull
+//    public CompanyId sellingCompanyId() {
+//        return sellingCompanyId;
+//    }
 
     //get,
     public List<Photo> photos(){ return photos; }
