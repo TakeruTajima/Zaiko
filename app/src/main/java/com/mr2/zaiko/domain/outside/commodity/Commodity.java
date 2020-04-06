@@ -18,7 +18,7 @@ public class Commodity extends Product {
     @NonNull private Unit unit;
     @NonNull private Price price;
 
-    Commodity(@NonNull Product product, @NonNull CompanyId sellingCompanyId, @NonNull Name name, @NonNull Unit unit, @NonNull Price price){
+    public Commodity(@NonNull Product product, @NonNull CompanyId sellingCompanyId, @NonNull Name name, @NonNull Unit unit, @NonNull Price price){
         super(INITIAL_UNMUTATED_VERSION,
                 product.companyId(),
                 product.productId(),

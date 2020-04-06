@@ -78,7 +78,7 @@ public class Equipment extends Product {
     // addPhoto(Photo),
     public void addPhoto(Photo photo){
         assertArgumentTrue(10 >= photos.size(), "写真は最大10枚まで登録できます。");
-        assertArgumentTrue(-1 != photos.indexOf(photo), "写真が重複しています。");
+//        assertArgumentTrue(-1 != photos.indexOf(photo), "写真が重複しています。");
         photos.add(photo);
     }
 

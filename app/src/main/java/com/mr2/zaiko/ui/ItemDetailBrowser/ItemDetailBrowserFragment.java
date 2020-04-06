@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.helper.widget.Flow;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -84,6 +87,9 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
 //        Spinner spinner = view.findViewById(R.id.itemDetailBrowserSpinner);
 //        spinner.setAdapter(adapter); //TODO: 数量選択spinner実装途中 選択した数量はquantityWantToPutCartに入れる
 
+        setThumbnail();
+        setListener();
+        setViews();
         return view;
     }
 
@@ -175,15 +181,13 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
     public void setResource(ItemDetailBrowserResource resource) {
         if (null != this.resource) return;
         this.resource = resource;
-        setThumbnail();
-        setListener();
     }
 
     private void setListener(){
         view.findViewById(R.id.itemDetailBrowserPrimaryName).setOnClickListener(v -> presenter.onClickPrimaryName());
         view.findViewById(R.id.itemDetailBrowserMakerName).setOnClickListener(v -> presenter.onClickMakerName());
         view.findViewById(R.id.itemDetailBrowserInventoryMore).setOnClickListener(v -> presenter.onClickInventoryMore());
-        view.findViewById(R.id.itemDetailBrowserKeywords).setOnClickListener(v -> presenter.onClickKeyword("キーワードに関連する部品の一覧を表示する予定です"));
+//        view.findViewById(R.id.itemDetailBrowserKeywords).setOnClickListener(v -> presenter.onClickKeyword("キーワードに関連する部品の一覧を表示する予定です"));
         view.findViewById(R.id.itemDetailBrowserSellerName).setOnClickListener(v -> presenter.onCLickSellerName());
         view.findViewById(R.id.itemDetailBrowserCommodityMore).setOnClickListener(v -> presenter.onClickCommodityMore());
         view.findViewById(R.id.itemDetailBrowserButtonPutCart).setOnClickListener(v -> presenter.onClickPutShoppingCart(quantityWantToPutCart));
@@ -192,8 +196,42 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
     }
 
     private void setViews(){
-        ((TextView)view.findViewById(R.id.itemDetailBrowserSellerName)).setText(resource.getSeller().name());
+//        String primaryName = resource.getEquipment().name().name().equals("") ?
+//                resource.getProduct().name().name() : resource.getEquipment().name().name();
+//        ((TextView)view.findViewById(R.id.itemDetailBrowserPrimaryName)).setText(primaryName);
         ((TextView)view.findViewById(R.id.itemDetailBrowserMakerName)).setText(resource.getMaker().name());
+        ((TextView)view.findViewById(R.id.itemDetailBrowserProductModel)).setText(resource.getProduct().model().model());
+        ((TextView)view.findViewById(R.id.itemDetailBrowserProductName)).setText(resource.getProduct().name().name());
+        String productPrice = resource.getProduct().price().price() + "/" + resource.getProduct().unit().unit();
+        ((TextView)view.findViewById(R.id.itemDetailBrowserProductPrice)).setText(productPrice);
+        String inventoryPrice = resource.getEquipment().price().price() + "/" + resource.getEquipment().unit().unit();
+        ((TextView)view.findViewById(R.id.itemDetailBrowserEquipmentPrice)).setText(inventoryPrice);
+//        String stock = resource.getStorageLocationList().
+//        ((TextView)view.findViewById(R.id.itemDetailBrowserStock))
+        ConstraintLayout cl = view.findViewById(R.id.itemDetailBrowserConstraint);
+        Flow flow = view.findViewById(R.id.itemDetailBrowserFlow);
+
+        for (int i = 0; 10 >= i; i++){
+            TextView t = getKeywordTextView("#keyword" + i);
+            t.setId(View.generateViewId());
+            cl.addView(t, i);
+            flow.addView(t);
+        }
+        ((TextView)view.findViewById(R.id.itemDetailBrowserSellerName)).setText(resource.getSeller().name());
+    }
+
+    private TextView getKeywordTextView(String keyword){
+//            for (Keyword k: resource.getEquipment().keywordSet()){
+        TextView t = new TextView(context);
+        t.setText(keyword);
+//            t.setText(k.word());
+//        ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) t.getLayoutParams();
+//        if (null == mlp) return t;
+//        mlp.setMargins(2,2,2,2);
+//        t.setLayoutParams(mlp);
+            t.setTextColor(ContextCompat.getColor(context, R.color.colorLink));
+        t.setOnClickListener(v -> showDialog("キーワード " + keyword + " と関連する部品を表示します。"));
+        return t;
     }
 
     @Override

@@ -51,9 +51,9 @@ public class ItemDetailBrowserResource {
 //                                     @NonNull List<OrderSlip> orderSlipList,
                                      @NonNull List<StorageLocation> storageLocationList,
                                      @NonNull String filesAbstractPath) {
-        if(!product.equals(equipment)) throw new IllegalArgumentException("製品と備品のIDが一致しません。");
-        if (!product.companyId().equals(maker.id())) throw new IllegalArgumentException("製品と製造会社のIDが一致しません");
-        if (!commodity.companyId().equals(seller.id())) throw new IllegalArgumentException("商品と販売会社のIDが一致しません");
+//        if(!product.equals(equipment)) throw new IllegalArgumentException("製品と備品のIDが一致しません。");
+//        if (!product.companyId().equals(maker.id())) throw new IllegalArgumentException("製品と製造会社のIDが一致しません");
+//        if (!commodity.companyId().equals(seller.id())) throw new IllegalArgumentException("商品と販売会社のIDが一致しません");
 
         this.product = product;
         this.maker = maker;
@@ -108,7 +108,7 @@ public class ItemDetailBrowserResource {
     public static ItemDetailBrowserResource getTestResource(){
         Company testMaker = new Company("テストメーカー");
         Company testSeller = new Company("テスト商社");
-        Product testProduct = testMaker.createProduct(new Model("test-model"), new Name("テスト製品名"), new Unit("製造単位"), new Price(100, "円"));
+        Product testProduct = testMaker.createProduct(new Model("testModel"), new Name("テスト製品名"), new Unit("製造単位"), new Price(100, "円"));
         Equipment testEquipment = new Equipment(testProduct, new Name("テスト備品名"), new Unit("管理単位"), new Price(110, "円"));
         testEquipment.addPhoto(new Photo("20200309033935.jpg"));
         testEquipment.addPhoto(new Photo("20200309033935.jpg"));

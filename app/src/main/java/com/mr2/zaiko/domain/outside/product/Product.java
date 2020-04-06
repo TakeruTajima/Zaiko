@@ -21,7 +21,7 @@ public class Product extends Entity {
      * @param unit　メーカーが扱う単位
      * @param price　メーカー希望小売価格
      */
-    Product(@NonNull CompanyId companyId, @NonNull Model model, @NonNull Name name, @NonNull Unit unit, @NonNull Price price){
+    public Product(@NonNull CompanyId companyId, @NonNull Model model, @NonNull Name name, @NonNull Unit unit, @NonNull Price price){
         super(INITIAL_UNMUTATED_VERSION);
         this.companyId = companyId;
         this.id = new ProductId();

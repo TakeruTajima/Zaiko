@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@android:dimen/thumbnail_height"
                 android:layout_margin="2dp"
-                app:cardCornerRadius="16dp">
+                app:cardCornerRadius="8dp">
 
                 <FrameLayout
                     android:id="@+id/itemDetailBrowserImageContainer"
@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
-                app:cardCornerRadius="16dp">
+                app:cardCornerRadius="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -58,32 +58,68 @@
 
                         <TextView
                             android:id="@+id/itemDetailBrowserMakerName"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
                             android:text="SMC"
-                            android:textColor="@android:color/holo_blue_dark" />
+                            android:textColor="@color/colorLink" />
 
-                        <TextView
-                            android:id="@+id/itemDetailBrowserProductModel"
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
-                            android:text="品番: KATASIKI-01" />
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/itemDetailBrowserProductName"
-                            android:layout_width="match_parent"
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="品番: " />
+
+                            <TextView
+                                android:id="@+id/itemDetailBrowserProductModel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="KATASIKI-01" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
-                            android:text="品名: エアシリンダー標準型" />
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/itemDetailBrowserProductPrice"
-                            android:layout_width="match_parent"
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="品名: " />
+
+                            <TextView
+                                android:id="@+id/itemDetailBrowserProductName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="エアシリンダー標準型" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
-                            android:text="希望小売価格: 123,456円/箱" />
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="希望小売価格: " />
+
+                            <TextView
+                                android:id="@+id/itemDetailBrowserProductPrice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="123,456円/箱" />
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -94,7 +130,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
-                app:cardCornerRadius="16dp">
+                app:cardCornerRadius="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -104,7 +140,7 @@
 
                     <TextView
                         android:id="@+id/textView10"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
                         android:text="在庫情報"
@@ -116,27 +152,46 @@
                         android:layout_margin="2dp"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/itemDetailBrowserEquipmentPrice"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_margin="2dp"
-                            android:text="単価：100円/個" />
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="単価： " />
+                            <TextView
+                                android:id="@+id/itemDetailBrowserEquipmentPrice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="100円/個" />
+                        </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/itemDetailBrowserStock"
+
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_margin="2dp"
-                            android:text="数量：10/15個" />
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="数量： " />
+                            <TextView
+                                android:id="@+id/itemDetailBrowserStock"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="10/15個" />
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/itemDetailBrowserInventoryMore"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
                             android:text="詳しく見る"
-                            android:textColor="@android:color/holo_blue_dark" />
+                            android:textColor="@color/colorLink" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -146,7 +201,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
-                app:cardCornerRadius="16dp">
+                app:cardCornerRadius="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -156,27 +211,34 @@
 
                     <TextView
                         android:id="@+id/textView11"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
                         android:text="キーワード"
                         android:textColor="@android:color/primary_text_light" />
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="2dp"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/itemDetailBrowserConstraint"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="4dp"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/itemDetailBrowserKeywords"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="2dp"
-                            android:text="#エアー機器　#エアシリンダー　#超高性能　#精密　#万能　#高級　#低価格　#天才　#最高"
-                            android:textColor="@android:color/holo_blue_dark" />
+                        <androidx.constraintlayout.helper.widget.Flow
+                            android:id="@+id/itemDetailBrowserFlow"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            app:flow_horizontalBias="0"
+                            app:flow_horizontalGap="8dp"
+                            app:flow_horizontalStyle="packed"
+                            app:flow_verticalGap="2dp"
+                            app:flow_wrapMode="chain"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -185,7 +247,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
-                app:cardCornerRadius="16dp">
+                app:cardCornerRadius="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -213,21 +275,41 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
                             android:text="サンエム"
-                            android:textColor="@android:color/holo_blue_dark" />
+                            android:textColor="@color/colorLink" />
 
-                        <TextView
-                            android:id="@+id/itemDetailBrowserCommodityName"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_margin="2dp"
-                            android:text="品名: エアシリンダー標準型" />
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="品名: " />
+                            <TextView
+                                android:id="@+id/itemDetailBrowserCommodityName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="エアシリンダー標準型" />
+                        </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/itemDetailBrowserCommodityPrice"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_margin="2dp"
-                            android:text="単価: 1200円/箱" />
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="単価: " />
+                            <TextView
+                                android:id="@+id/itemDetailBrowserCommodityPrice"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="1200円/箱" />
+
+                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -244,9 +326,10 @@
 
                             <Spinner
                                 android:id="@+id/itemDetailBrowserSpinner"
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"></Spinner>
+                                android:layout_weight="1"/>
+
                         </LinearLayout>
 
                         <TextView
@@ -255,7 +338,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
                             android:text="もっと見る"
-                            android:textColor="@android:color/holo_blue_dark" />
+                            android:textColor="@color/colorLink" />
 
                     </LinearLayout>
 
@@ -266,7 +349,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
-                app:cardCornerRadius="16dp">
+                app:cardCornerRadius="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -294,7 +377,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
                             android:text="入出庫履歴を見る"
-                            android:textColor="@android:color/holo_blue_dark" />
+                            android:textColor="@color/colorLink" />
 
                         <TextView
                             android:id="@+id/itemDetailBrowserBuyHistoryMore"
@@ -302,7 +385,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
                             android:text="購入履歴を見る"
-                            android:textColor="@android:color/holo_blue_dark" />
+                            android:textColor="@color/colorLink" />
 
                     </LinearLayout>
 
