@@ -196,42 +196,87 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
     }
 
     private void setViews(){
-//        String primaryName = resource.getEquipment().name().name().equals("") ?
-//                resource.getProduct().name().name() : resource.getEquipment().name().name();
-//        ((TextView)view.findViewById(R.id.itemDetailBrowserPrimaryName)).setText(primaryName);
-        ((TextView)view.findViewById(R.id.itemDetailBrowserMakerName)).setText(resource.getMaker().name());
-        ((TextView)view.findViewById(R.id.itemDetailBrowserProductModel)).setText(resource.getProduct().model().model());
-        ((TextView)view.findViewById(R.id.itemDetailBrowserProductName)).setText(resource.getProduct().name().name());
+        String primaryName = resource.getEquipment().name().name().equals("") ?
+                resource.getProduct().name().name() : resource.getEquipment().name().name();
+        setPrimaryName(primaryName);
+        setMakerName(resource.getMaker().name());
+        setModel(resource.getProduct().model().model());
+        setProductName(resource.getProduct().name().name());
         String productPrice = resource.getProduct().price().price() + "/" + resource.getProduct().unit().unit();
-        ((TextView)view.findViewById(R.id.itemDetailBrowserProductPrice)).setText(productPrice);
+        setProductPrice(productPrice);
         String inventoryPrice = resource.getEquipment().price().price() + "/" + resource.getEquipment().unit().unit();
-        ((TextView)view.findViewById(R.id.itemDetailBrowserEquipmentPrice)).setText(inventoryPrice);
+        setInventoryPrice(inventoryPrice);
 //        String stock = resource.getStorageLocationList().
 //        ((TextView)view.findViewById(R.id.itemDetailBrowserStock))
+        String[] array = new String[resource.getEquipment().keywordSet().size()];
+        int i = 0;
+        for (Keyword k: resource.getEquipment().keywordSet()){
+            array[i] = k.word();
+            i++;
+        }
+        setKeyword(array);
+        setSellerName(resource.getSeller().name());
+        setPrimaryCommodityName(resource.getCommodity().name().name());
+        String primaryCommodityPrice = resource.getCommodity().price().price() + "/" + resource.getCommodity().unit().unit();
+        setPrimaryCommodityPrice(primaryCommodityPrice);
+    }
+
+    public void setPrimaryCommodityPrice(String primaryCommodityPrice) {
+        ((TextView)view.findViewById(R.id.itemDetailBrowserCommodityPrice)).setText(primaryCommodityPrice);
+    }
+
+    public void setPrimaryCommodityName(String name) {
+        ((TextView)view.findViewById(R.id.itemDetailBrowserCommodityName)).setText(name);
+    }
+
+
+    public void setPrimaryName(String primaryName){
+        ((TextView)view.findViewById(R.id.itemDetailBrowserPrimaryName)).setText(primaryName);
+    }
+
+    public void setMakerName(String makerName){
+        ((TextView)view.findViewById(R.id.itemDetailBrowserMakerName)).setText(makerName);
+    }
+
+    public void setModel(String model){
+        ((TextView)view.findViewById(R.id.itemDetailBrowserProductModel)).setText(model);
+    }
+
+    public void setProductName(String productName){
+        ((TextView)view.findViewById(R.id.itemDetailBrowserProductName)).setText(productName);
+    }
+
+    public void setProductPrice(String productPrice){
+        ((TextView)view.findViewById(R.id.itemDetailBrowserProductPrice)).setText(productPrice);
+    }
+
+    public void setInventoryPrice(String inventoryPrice){
+        ((TextView)view.findViewById(R.id.itemDetailBrowserEquipmentPrice)).setText(inventoryPrice);
+    }
+
+    public void setKeyword(String[] keyword){
         ConstraintLayout cl = view.findViewById(R.id.itemDetailBrowserConstraint);
         Flow flow = view.findViewById(R.id.itemDetailBrowserFlow);
-
-        for (int i = 0; 10 >= i; i++){
-            TextView t = getKeywordTextView("#keyword" + i);
+        for (int i = 0; keyword.length > i; i++){
+            TextView t = getKeywordTextView(keyword[i]);
             t.setId(View.generateViewId());
             cl.addView(t, i);
             flow.addView(t);
         }
-        ((TextView)view.findViewById(R.id.itemDetailBrowserSellerName)).setText(resource.getSeller().name());
     }
 
     private TextView getKeywordTextView(String keyword){
-//            for (Keyword k: resource.getEquipment().keywordSet()){
-        TextView t = new TextView(context);
-        t.setText(keyword);
-//            t.setText(k.word());
-//        ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) t.getLayoutParams();
-//        if (null == mlp) return t;
-//        mlp.setMargins(2,2,2,2);
-//        t.setLayoutParams(mlp);
-            t.setTextColor(ContextCompat.getColor(context, R.color.colorLink));
-        t.setOnClickListener(v -> showDialog("キーワード " + keyword + " と関連する部品を表示します。"));
-        return t;
+//        TextView tv = new TextView(context);
+        KeywordTextView ktv = new KeywordTextView(context, keyword);
+        String s = "#" + keyword;
+        ktv.setText(s);
+        ktv.setTextColor(ContextCompat.getColor(context, R.color.colorTextLink));
+        ktv.setOnClickListener(v -> transitionToListOfItemByKeyword(((KeywordTextView)v).getKeyword()));
+        return ktv;
+    }
+
+    public void setSellerName(String sellerName){
+        ((TextView)view.findViewById(R.id.itemDetailBrowserSellerName)).setText(sellerName);
     }
 
     @Override
@@ -255,8 +300,8 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
     }
 
     @Override
-    public void transitionToListOfItemByKeyword(Keyword keyword) {
-        showDialog("キーワードに関連する部品の一覧に移動します");
+    public void transitionToListOfItemByKeyword(String keyword) {
+        showDialog("キーワード [" + keyword + "] に関連する部品の一覧に移動します");
     }
 
     @Override
@@ -295,6 +340,19 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
 
         assert getFragmentManager() != null;
         dialog.show(getFragmentManager(), "");
+    }
+
+    private static class KeywordTextView extends androidx.appcompat.widget.AppCompatTextView{
+        private final String keyword;
+
+        public KeywordTextView(Context context, String keyword) {
+            super(context);
+            this.keyword = keyword;
+        }
+
+        public String getKeyword() {
+            return keyword;
+        }
     }
 }
 

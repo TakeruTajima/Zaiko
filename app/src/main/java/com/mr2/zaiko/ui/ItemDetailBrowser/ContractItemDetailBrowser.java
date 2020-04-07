@@ -1,7 +1,6 @@
 package com.mr2.zaiko.ui.ItemDetailBrowser;
 
 import com.mr2.zaiko.domain.inhouse.equipment.EquipmentId;
-import com.mr2.zaiko.domain.inhouse.equipment.Keyword;
 import com.mr2.zaiko.domain.outside.commodity.CommodityId;
 import com.mr2.zaiko.domain.outside.company.CompanyId;
 import com.mr2.zaiko.domain.outside.product.ProductId;
@@ -14,7 +13,7 @@ public interface ContractItemDetailBrowser {
         void transitionToItemDetailEditor(ProductId productId); //編集
         void showImageViewer(ImageViewerResource resource, int position); //
 //        void hydeImageViewer();
-        void transitionToListOfItemByKeyword(Keyword keyword); //キーワード検索
+        void transitionToListOfItemByKeyword(String keyword); //キーワード検索
         void transitionToListOfItemByMaker(CompanyId makerId); //メーカー検索
         void transitionToListOfCommodity(CommodityId commodityId); //商品詳細
         void transitionToListOfBackorder(EquipmentId equipmentId); //入荷待ち一覧

@@ -112,8 +112,23 @@ public class ItemDetailBrowserResource {
         Equipment testEquipment = new Equipment(testProduct, new Name("テスト備品名"), new Unit("管理単位"), new Price(110, "円"));
         testEquipment.addPhoto(new Photo("20200309033935.jpg"));
         testEquipment.addPhoto(new Photo("20200309033935.jpg"));
-        testEquipment.addKeyword(new Keyword("ジャンル1"));
-        testEquipment.addKeyword(new Keyword("タグ"));
+        testEquipment.addPhoto(new Photo("20200309033935.jpg"));
+        testEquipment.addPhoto(new Photo("20200309033935.jpg"));
+        testEquipment.addPhoto(new Photo("20200309033935.jpg"));
+        testEquipment.addPhoto(new Photo("20200309033935.jpg"));
+        testEquipment.addPhoto(new Photo("20200309033935.jpg"));
+        testEquipment.addPhoto(new Photo("20200309033935.jpg"));
+        testEquipment.addKeyword(new Keyword("エアシリンダー"));
+        testEquipment.addKeyword(new Keyword("エアー機器"));
+        testEquipment.addKeyword(new Keyword("4ライン検査台用"));
+        testEquipment.addKeyword(new Keyword("5ライン検査台用"));
+        testEquipment.addKeyword(new Keyword("SMC"));
+        testEquipment.addKeyword(new Keyword("廃番"));
+        testEquipment.addKeyword(new Keyword("代替品なし"));
+        testEquipment.addKeyword(new Keyword("高価"));
+        testEquipment.addKeyword(new Keyword("低品質"));
+        testEquipment.addKeyword(new Keyword("テストデータ"));
+
         Commodity testCommodity = testSeller.registerCommodity(testProduct, new Name("テスト商品名"), new Unit("販売単位"), new Price(111, "円"));
 //        OrderSlip testOrderSlip = new OrderSlip(new UserId());
 //        testOrderSlip
