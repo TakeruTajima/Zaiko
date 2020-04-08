@@ -1,4 +1,4 @@
-package com.mr2.zaiko.ui.ImageCapture;
+package com.mr2.zaiko.ui.imageCapture;
 
 import android.os.Bundle;
 import android.util.Log;

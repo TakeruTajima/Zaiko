@@ -22,12 +22,12 @@ import com.mr2.zaiko.TestApplication;
 import com.mr2.zaiko.domain.inhouse.equipment.Photo;
 import com.mr2.zaiko.loader.TestLoaderProgressEvent;
 import com.mr2.zaiko.loader.TestTaskLoader;
-import com.mr2.zaiko.ui.ImageCapture.ImageCaptureActivity;
-import com.mr2.zaiko.ui.ImageViewer.ImageViewerFragment;
-import com.mr2.zaiko.ui.ImageViewer.ImageViewerResource;
-import com.mr2.zaiko.ui.ItemDetailBrowser.ItemDetailBrowserActivity;
-import com.mr2.zaiko.ui.ItemListViewer.ItemListViewerActivity;
 import com.mr2.zaiko.ui.adapter.EventBusService;
+import com.mr2.zaiko.ui.imageCapture.ImageCaptureActivity;
+import com.mr2.zaiko.ui.imageViewer.ImageViewerFragment;
+import com.mr2.zaiko.ui.imageViewer.ImageViewerResource;
+import com.mr2.zaiko.ui.itemDetailBrowser.ItemDetailBrowserActivity;
+import com.mr2.zaiko.ui.itemListViewer.ItemListViewerActivity;
 import com.otaliastudios.cameraview.BitmapCallback;
 import com.otaliastudios.cameraview.PictureResult;
 

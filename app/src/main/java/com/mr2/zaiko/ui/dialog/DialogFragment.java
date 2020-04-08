@@ -1,4 +1,4 @@
-package com.mr2.zaiko.ui.Dialog;
+package com.mr2.zaiko.ui.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

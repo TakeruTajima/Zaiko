@@ -14,21 +14,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
+
         <activity
             android:name=".ui.test.TestActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LANCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.ImageCapture.ImageCaptureActivity"
+        <activity android:name=".ui.imageCapture.ImageCaptureActivity"
             android:theme="@style/AppTheme.NoActionBar"  />
-        <activity android:name=".ui.ItemListViewer.ItemListViewerActivity"
+        <activity android:name=".ui.itemListViewer.ItemListViewerActivity"
             android:theme="@style/AppTheme.NoActionBar"  />
-        <activity android:name=".ui.ItemDetailBrowser.ItemDetailBrowserActivity"
+        <activity android:name=".ui.itemDetailBrowser.ItemDetailBrowserActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+
     </application>
 </manifest>

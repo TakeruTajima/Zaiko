@@ -1,4 +1,4 @@
-package com.mr2.zaiko.ui.ImageViewer;
+package com.mr2.zaiko.ui.imageViewer;
 
 import android.os.Bundle;
 

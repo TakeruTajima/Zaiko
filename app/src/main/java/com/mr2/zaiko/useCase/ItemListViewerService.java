@@ -3,7 +3,7 @@ package com.mr2.zaiko.useCase;
 import com.mr2.zaiko.domain.inhouse.equipment.Equipment;
 import com.mr2.zaiko.domain.inhouse.equipment.EquipmentId;
 import com.mr2.zaiko.domain.inhouse.equipment.EquipmentRepository;
-import com.mr2.zaiko.ui.ItemListViewer.EquipmentListViewerResource;
+import com.mr2.zaiko.ui.itemListViewer.EquipmentListViewerResource;
 
 import java.util.ArrayList;
 import java.util.List;

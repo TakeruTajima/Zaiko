@@ -1,4 +1,4 @@
-package com.mr2.zaiko.ui.ItemDetailBrowser;
+package com.mr2.zaiko.ui.itemDetailBrowser;
 
 import com.mr2.zaiko.domain.outside.product.ProductId;
 

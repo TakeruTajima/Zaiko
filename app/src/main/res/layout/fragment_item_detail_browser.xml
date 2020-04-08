@@ -43,12 +43,12 @@
 
                     <TextView
                         android:id="@+id/itemDetailBrowserPrimaryName"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
                         android:text="【超高性能】精密万能高級低価格天才最高エアシリンダー【投げ売り】"
-                        android:textColor="@color/colorTextPrimary"
-                        android:textSize="18sp" />
+                        android:textColor="?attr/textColorPrimary"
+                        android:textSize="?attr/textSizeHeadline" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -62,7 +62,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
                             android:text="SMC"
-                            android:textColor="@color/colorTextLink"/>
+                            android:textColor="?attr/textColorLink"/>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -75,14 +75,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="品番: "
-                                android:textColor="@color/colorTextSecondary" />
+                                android:textColor="?attr/textColorSecondary" />
 
                             <TextView
                                 android:id="@+id/itemDetailBrowserProductModel"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="KATASIKI-01"
-                                android:textColor="@color/colorTextSecondary" />
+                                android:textColor="?attr/textColorSecondary" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -96,14 +96,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="品名: "
-                                android:textColor="@color/colorTextSecondary" />
+                                android:textColor="?attr/textColorSecondary" />
 
                             <TextView
                                 android:id="@+id/itemDetailBrowserProductName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="エアシリンダー標準型"
-                                android:textColor="@color/colorTextSecondary" />
+                                android:textColor="?attr/textColorSecondary" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -117,14 +117,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="希望小売価格: "
-                                android:textColor="@color/colorTextSecondary" />
+                                android:textColor="?attr/textColorSecondary" />
 
                             <TextView
                                 android:id="@+id/itemDetailBrowserProductPrice"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="123,456円/箱"
-                                android:textColor="@color/colorTextSecondary" />
+                                android:textColor="?attr/textColorSecondary" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -150,7 +150,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
                         android:text="在庫情報"
-                        android:textColor="@color/colorTextPrimary" />
+                        android:textColor="?attr/textColorPrimary" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -166,14 +166,14 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="単価： "
-                                android:textColor="@color/colorTextSecondary" />
+                                android:text="単価: "
+                                android:textColor="?attr/textColorSecondary" />
                             <TextView
                                 android:id="@+id/itemDetailBrowserEquipmentPrice"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="100円/個"
-                                android:textColor="@color/colorTextSecondary" />
+                                android:textColor="?attr/textColorSecondary" />
                         </LinearLayout>
 
 
@@ -185,14 +185,14 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="数量： "
-                                android:textColor="@color/colorTextSecondary" />
+                                android:text="数量: "
+                                android:textColor="?attr/textColorSecondary" />
                             <TextView
                                 android:id="@+id/itemDetailBrowserStock"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="10/15個"
-                                android:textColor="@color/colorTextSecondary" />
+                                android:textColor="?attr/textColorSecondary" />
                         </LinearLayout>
 
                         <TextView
@@ -201,7 +201,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
                             android:text="詳しく見る"
-                            android:textColor="@color/colorTextLink" />
+                            android:textColor="?attr/textColorLink" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -225,7 +225,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
                         android:text="キーワード"
-                        android:textColor="@color/colorTextPrimary" />
+                        android:textColor="?attr/textColorPrimary" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/itemDetailBrowserConstraint"
@@ -277,7 +277,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
                             android:text="購入先情報"
-                            android:textColor="@color/colorTextPrimary"/>
+                            android:textColor="?attr/textColorPrimary"/>
 
                         <TextView
                             android:id="@+id/itemDetailBrowserSellerName"
@@ -285,7 +285,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
                             android:text="サンエム"
-                            android:textColor="@color/colorTextLink" />
+                            android:textColor="?attr/textColorLink" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -296,13 +296,13 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="品名: "
-                                android:textColor="@color/colorTextSecondary" />
+                                android:textColor="?attr/textColorSecondary" />
                             <TextView
                                 android:id="@+id/itemDetailBrowserCommodityName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="エアシリンダー標準型"
-                                android:textColor="@color/colorTextSecondary" />
+                                android:textColor="?attr/textColorSecondary" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -315,13 +315,13 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="単価: "
-                                android:textColor="@color/colorTextSecondary" />
+                                android:textColor="?attr/textColorSecondary" />
                             <TextView
                                 android:id="@+id/itemDetailBrowserCommodityPrice"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="1200円/箱"
-                                android:textColor="@color/colorTextSecondary" />
+                                android:textColor="?attr/textColorSecondary" />
 
                         </LinearLayout>
 
@@ -352,7 +352,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
                             android:text="もっと見る"
-                            android:textColor="@color/colorTextLink" />
+                            android:textColor="?attr/textColorLink" />
 
                     </LinearLayout>
 
@@ -377,7 +377,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
                         android:text="取扱い履歴"
-                        android:textColor="@color/colorTextPrimary" />
+                        android:textColor="?attr/textColorPrimary" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -391,7 +391,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
                             android:text="入出庫履歴を見る"
-                            android:textColor="@color/colorTextLink" />
+                            android:textColor="?attr/textColorLink" />
 
                         <TextView
                             android:id="@+id/itemDetailBrowserBuyHistoryMore"
@@ -399,7 +399,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
                             android:text="購入履歴を見る"
-                            android:textColor="@color/colorTextLink" />
+                            android:textColor="?attr/textColorLink" />
 
                     </LinearLayout>
 

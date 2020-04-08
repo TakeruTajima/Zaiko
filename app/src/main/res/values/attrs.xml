@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="textColorPrimary" format="reference"/>
+    <attr name="textColorSecondary" format="reference"/>
+    <attr name="textColorLink" format="reference"/>
+    <attr name="textSizeHeadline" format="reference"/>
+    <attr name="textSizeBody" format="reference"/>
+    <attr name="textSizeMinimum" format="reference"/>
+</resources>

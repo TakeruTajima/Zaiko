@@ -1,7 +1,7 @@
-package com.mr2.zaiko.ui.ItemListViewer;
+package com.mr2.zaiko.ui.itemListViewer;
 
 import com.mr2.zaiko.domain.common.Identity;
-import com.mr2.zaiko.ui.ImageViewer.ImageViewerResource;
+import com.mr2.zaiko.ui.imageViewer.ImageViewerResource;
 
 public interface ContractItemListViewer {
     enum SortCondition{
@@ -42,5 +42,7 @@ public interface ContractItemListViewer {
         void onClickAddItem(); // Call InformationEditor(newItem)
         void onChangedSortConditions(SortCondition sortCondition); // ソート
         void onChangedSearchWords(String searchWord); // 絞り込み
+
+        void onResume();
     }
 }

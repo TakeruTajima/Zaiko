@@ -1,4 +1,4 @@
-package com.mr2.zaiko.ui.ItemDetailEditor;
+package com.mr2.zaiko.ui.itemDetailEditor;
 
 public interface ContractItemDetailEditor {
     //Instructions from the presenter

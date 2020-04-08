@@ -1,4 +1,4 @@
-package com.mr2.zaiko.ui.ItemDetailEditor;
+package com.mr2.zaiko.ui.itemDetailEditor;
 
 import com.mr2.zaiko.domain.inhouse.equipment.Equipment;
 import com.mr2.zaiko.domain.inhouse.equipment.Keyword;

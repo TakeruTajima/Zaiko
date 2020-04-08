@@ -1,4 +1,4 @@
-package com.mr2.zaiko.ui.ItemListViewer;
+package com.mr2.zaiko.ui.itemListViewer;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,7 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mr2.zaiko.R;
 import com.mr2.zaiko.TestApplication;
 import com.mr2.zaiko.domain.common.Identity;
-import com.mr2.zaiko.ui.ImageViewer.ImageViewerResource;
+import com.mr2.zaiko.ui.imageViewer.ImageViewerResource;
 
 import java.util.UUID;
 
@@ -125,6 +125,7 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
     public void onResume() {
         super.onResume();
         Log.d(TAG + fragmentId, "onResume");
+        presenter.onResume();
     }
 
     @Override

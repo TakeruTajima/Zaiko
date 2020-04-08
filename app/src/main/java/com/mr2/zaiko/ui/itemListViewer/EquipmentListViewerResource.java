@@ -1,4 +1,4 @@
-package com.mr2.zaiko.ui.ItemListViewer;
+package com.mr2.zaiko.ui.itemListViewer;
 
 import com.mr2.zaiko.domain.inhouse.equipment.EquipmentId;
 

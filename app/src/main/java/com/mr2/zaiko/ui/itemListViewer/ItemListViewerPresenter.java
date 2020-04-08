@@ -1,8 +1,8 @@
-package com.mr2.zaiko.ui.ItemListViewer;
+package com.mr2.zaiko.ui.itemListViewer;
 
 import com.mr2.zaiko.domain.common.Identity;
 import com.mr2.zaiko.domain.inhouse.equipment.Photo;
-import com.mr2.zaiko.ui.ImageViewer.ImageViewerResource;
+import com.mr2.zaiko.ui.imageViewer.ImageViewerResource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,5 +79,10 @@ class ItemListViewerPresenter implements ContractItemListViewer.Presenter {
     @Override
     public void onChangedSearchWords(String searchWord) {
         //未実装
+    }
+
+    @Override
+    public void onResume() {
+        view.hydeProgress();
     }
 }

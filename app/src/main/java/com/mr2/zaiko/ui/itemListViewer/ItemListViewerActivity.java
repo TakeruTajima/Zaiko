@@ -1,4 +1,4 @@
-package com.mr2.zaiko.ui.ItemListViewer;
+package com.mr2.zaiko.ui.itemListViewer;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,10 +17,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mr2.zaiko.R;
 import com.mr2.zaiko.domain.common.Identity;
-import com.mr2.zaiko.ui.Dialog.DialogFragment;
-import com.mr2.zaiko.ui.ImageViewer.ImageViewerFragment;
-import com.mr2.zaiko.ui.ImageViewer.ImageViewerResource;
-import com.mr2.zaiko.ui.ItemDetailBrowser.ItemDetailBrowserActivity;
+import com.mr2.zaiko.ui.dialog.DialogFragment;
+import com.mr2.zaiko.ui.imageViewer.ImageViewerFragment;
+import com.mr2.zaiko.ui.imageViewer.ImageViewerResource;
+import com.mr2.zaiko.ui.itemDetailBrowser.ItemDetailBrowserActivity;
 
 public class ItemListViewerActivity extends AppCompatActivity implements ItemListViewerFragment.Listener{
     public static final String TAG = ItemListViewerActivity.class.getSimpleName() + "(4156)";
@@ -105,6 +105,7 @@ public class ItemListViewerActivity extends AppCompatActivity implements ItemLis
     private void setupActivity(){
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Hello, title!");
+//        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorTextPrimaryLight));
         ImageView imageView = findViewById(R.id.imageView4);
         RequestOptions ro = new RequestOptions().centerCrop();
         Glide.with(this).asBitmap()

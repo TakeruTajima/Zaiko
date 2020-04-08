@@ -1,4 +1,4 @@
-package com.mr2.zaiko.ui.ItemDetailBrowser;
+package com.mr2.zaiko.ui.itemDetailBrowser;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -22,9 +22,9 @@ import com.mr2.zaiko.domain.inhouse.equipment.Photo;
 import com.mr2.zaiko.domain.outside.commodity.CommodityId;
 import com.mr2.zaiko.domain.outside.company.CompanyId;
 import com.mr2.zaiko.domain.outside.product.ProductId;
-import com.mr2.zaiko.ui.Dialog.DialogFragment;
-import com.mr2.zaiko.ui.ImageViewer.ImageViewerFragment;
-import com.mr2.zaiko.ui.ImageViewer.ImageViewerResource;
+import com.mr2.zaiko.ui.dialog.DialogFragment;
+import com.mr2.zaiko.ui.imageViewer.ImageViewerFragment;
+import com.mr2.zaiko.ui.imageViewer.ImageViewerResource;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,13 +1,16 @@
-package com.mr2.zaiko.ui.ItemDetailEditor;
+package com.mr2.zaiko.ui.itemDetailBrowser;
 
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
-public class ItemDetailEditorActivity extends AppCompatActivity {
-    public static final String TAG = ItemDetailEditorActivity.class.getSimpleName() + "(4156)";
+import com.mr2.zaiko.R;
+
+public class ItemDetailBrowserActivity extends AppCompatActivity implements ItemDetailBrowserFragment.ItemDetailBrowserFragmentListener {
+    public static final String TAG = ItemDetailBrowserActivity.class.getSimpleName() + "(4156)";
     /* ---------------------------------------------------------------------- */
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */
@@ -26,6 +29,8 @@ public class ItemDetailEditorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout./*このActivityで使用するレイアウトのID*/);
+        setContentView(R.layout.activity_frame_base);
+        setFragment();
         Log.d(TAG, "onCreate");
     }
 
@@ -70,4 +75,15 @@ public class ItemDetailEditorActivity extends AppCompatActivity {
     /* other method                                                           */
     /* ---------------------------------------------------------------------- */
 
+    private void setFragment(){
+        ItemDetailBrowserFragment fragment = new ItemDetailBrowserFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frameLayoutContainer, fragment);
+        ft.commit();
+    }
+
+    @Override
+    public void onHogeEvent() {
+
+    }
 }

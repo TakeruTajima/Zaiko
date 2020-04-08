@@ -1,4 +1,4 @@
-package com.mr2.zaiko.ui.ItemDetailBrowser;
+package com.mr2.zaiko.ui.itemDetailBrowser;
 
 import androidx.annotation.NonNull;
 
@@ -13,7 +13,7 @@ import com.mr2.zaiko.domain.outside.product.Name;
 import com.mr2.zaiko.domain.outside.product.Price;
 import com.mr2.zaiko.domain.outside.product.Product;
 import com.mr2.zaiko.domain.outside.product.Unit;
-import com.mr2.zaiko.ui.ImageViewer.ImageViewerResource;
+import com.mr2.zaiko.ui.imageViewer.ImageViewerResource;
 
 import java.util.ArrayList;
 import java.util.List;

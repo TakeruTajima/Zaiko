@@ -1,10 +1,10 @@
-package com.mr2.zaiko.ui.ItemDetailBrowser;
+package com.mr2.zaiko.ui.itemDetailBrowser;
 
 import com.mr2.zaiko.domain.inhouse.equipment.EquipmentId;
 import com.mr2.zaiko.domain.outside.commodity.CommodityId;
 import com.mr2.zaiko.domain.outside.company.CompanyId;
 import com.mr2.zaiko.domain.outside.product.ProductId;
-import com.mr2.zaiko.ui.ImageViewer.ImageViewerResource;
+import com.mr2.zaiko.ui.imageViewer.ImageViewerResource;
 
 public interface ContractItemDetailBrowser {
     interface View{

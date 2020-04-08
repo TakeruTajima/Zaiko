@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.mr2.zaiko.domain.inhouse.equipment.EquipmentId;
 import com.mr2.zaiko.infrastructure.TestRepositoryImpl;
-import com.mr2.zaiko.ui.ImageCapture.ContractImageCapture;
+import com.mr2.zaiko.ui.imageCapture.ContractImageCapture;
 import com.mr2.zaiko.ui.test.ContractTest;
 import com.mr2.zaiko.ui.test.TestPresenter;
 import com.mr2.zaiko.useCase.TestApplicationService;
