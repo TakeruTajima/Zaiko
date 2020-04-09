@@ -1,5 +1,6 @@
 package com.mr2.zaiko.ui.imageViewer;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,15 @@ public class ImageViewerResource {
     public ImageViewerResource(@NonNull List<Photo> photos, @NonNull String abstractPath) {
         this.photos = photos;
         this.abstractPath = abstractPath;
+    }
+
+    @SuppressLint("SdCardPath")
+    public static ImageViewerResource getTestResource() {
+        List<Photo> photos = new ArrayList<>();
+        for (int i = 0; 8 > i; i++){
+            photos.add(new Photo("20200309033935.jpg"));
+        }
+        return new ImageViewerResource(photos, "/data/user/0/com.mr2.zaiko/files");
     }
 
     public int size(){

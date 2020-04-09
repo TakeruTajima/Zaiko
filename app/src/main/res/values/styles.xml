@@ -12,7 +12,7 @@
         <item name="textColorLink">@color/colorTextLink</item>
         <item name="textSizeHeadline">@dimen/sizeTextPrimary</item>
         <item name="textSizeBody">@dimen/sizeTextSecondary</item>
-        <item name="textSizeMinimum">@dimen/sizeTextMinimum</item> <!-- 4の倍数な -->
+        <item name="textSizeMinimum">@dimen/sizeTextMinimum</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

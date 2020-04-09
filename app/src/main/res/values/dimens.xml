@@ -3,5 +3,5 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="sizeTextPrimary">24dp</dimen>
     <dimen name="sizeTextSecondary">16dp</dimen>
-    <dimen name="sizeTextMinimum">12dp</dimen>
+    <dimen name="sizeTextMinimum">12dp</dimen> <!-- dipは4の倍数で指定 -->
 </resources>

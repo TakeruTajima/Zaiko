@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -159,6 +161,22 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
         Log.d(TAG + fragmentId, "onDetach");
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        //tips: FragmentでsetHasOptionsMenu(true)を呼ぶとonCreateOptionMenu(Menu menu, MenuInflater inflater)が呼ばれる。
+        //　したら下記でinflater.inflate(R.id.メニューのレイアウトId, menu)でinflateしてOK。
+        //　SearchViewとかのViewクラスを入れたいならMenuリソースのitemの<app:actionViewClass>で指定。
+        // UPナビゲーションを有効化したいときはActivityのほう？でgetSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //いまのところここのToolbarでやりたいのは　SearchViewで絞り込み、右上でソート、
+        //全体としてはNavigationか下タブで画面遷移のショートカット…？
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+    }
     /* ---------------------------------------------------------------------- */
     /* other method                                                           */
     /* ---------------------------------------------------------------------- */

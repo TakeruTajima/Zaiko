@@ -12,7 +12,6 @@ import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.mr2.zaiko.R;
@@ -226,15 +225,15 @@ public class ImageViewerFragment extends Fragment {
         position = currentItemIndex;
     }
 
-    private void toFullSize(int position){
-        assert getFragmentManager() != null;
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        assert getArguments() != null; //TODO: 実装ココじゃないでしょ
-        ft.replace(R.id.main_frame_layout, ImageViewerFragment.getFullSize(ImageViewerResource.compileFromArgs(getArguments()), position));
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.addToBackStack(null);
-        ft.commit();
-    }
+//    private void toFullSize(int position){
+//        assert getFragmentManager() != null;
+//        FragmentTransaction ft = getFragmentManager().beginTransaction();
+//        assert getArguments() != null; //TODO: 実装ココじゃないでしょ
+//        ft.replace(R.id.main_frame_layout, ImageViewerFragment.getFullSize(ImageViewerResource.compileFromArgs(getArguments()), position));
+//        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//        ft.addToBackStack(null);
+//        ft.commit();
+//    }
 
     public void setOnImageClickListener(OnImageClickListener listener){
         this.listener = listener;

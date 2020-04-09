@@ -4,15 +4,15 @@
       <list>
         <UrlAndUserName>
           <option name="url" value="https://github.com/igamasayuki/stock-management-bugfix-springboot2-answer.git" />
-          <option name="userName" value="" />
+          <option name="name" value="" />
         </UrlAndUserName>
         <UrlAndUserName>
           <option name="url" value="https://github.com/VaughnVernon/IDDD_Samples.git" />
-          <option name="userName" value="" />
+          <option name="name" value="" />
         </UrlAndUserName>
         <UrlAndUserName>
           <option name="url" value="https://github.com/RNm-dove/DaggerSample.git" />
-          <option name="userName" value="" />
+          <option name="name" value="" />
         </UrlAndUserName>
       </list>
     </option>

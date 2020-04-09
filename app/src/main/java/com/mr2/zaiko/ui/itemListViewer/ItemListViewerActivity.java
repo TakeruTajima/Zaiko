@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -12,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mr2.zaiko.R;
 import com.mr2.zaiko.domain.common.Identity;
@@ -105,20 +102,36 @@ public class ItemListViewerActivity extends AppCompatActivity implements ItemLis
     private void setupActivity(){
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Hello, title!");
-//        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorTextPrimaryLight));
-        ImageView imageView = findViewById(R.id.imageView4);
-        RequestOptions ro = new RequestOptions().centerCrop();
-        Glide.with(this).asBitmap()
-                .load("/data/user/0/com.mr2.zaiko/files/20200309033935.jpg")
-                .apply(ro)
-                .into(imageView);
+
+//        ImageView imageView = findViewById(R.id.imageView4);
+//        RequestOptions ro = new RequestOptions().centerCrop();
+//        Glide.with(this).asBitmap()
+//                .load("/data/user/0/com.mr2.zaiko/files/20200309033935.jpg")
+//                .apply(ro)
+//                .into(imageView);
+
+        ImageViewerFragment fragment = ImageViewerFragment.getThumbnail(ImageViewerResource.getTestResource());
+        fragment.setOnImageClickListener(this::showFullSizeImage);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.coordinatorFrameLayout, fragment);
+        ft.commit();
+
         setSupportActionBar(toolbar);
+    }
+
+    private void showFullSizeImage(ImageViewerResource resource, int position) {
+        ImageViewerFragment fragment = ImageViewerFragment.getFullSize(resource, position);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.coordinatorMain, fragment);
+        ft.addToBackStack(null);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.commit();
     }
 
     private void setFragment(){
         ItemListViewerFragment fragment = ItemListViewerFragment.newInstance();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.coodinatorNestedScrollView, fragment);
+        ft.replace(R.id.coordinatorNestedScrollView, fragment);
         ft.commit();
     }
 

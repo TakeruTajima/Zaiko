@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.mr2.zaiko.R;
+import com.mr2.zaiko.ui.imageViewer.ImageViewerFragment;
+import com.mr2.zaiko.ui.imageViewer.ImageViewerResource;
 
 public class ItemDetailBrowserActivity extends AppCompatActivity implements ItemDetailBrowserFragment.ItemDetailBrowserFragmentListener {
     public static final String TAG = ItemDetailBrowserActivity.class.getSimpleName() + "(4156)";
@@ -29,8 +31,10 @@ public class ItemDetailBrowserActivity extends AppCompatActivity implements Item
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout./*このActivityで使用するレイアウトのID*/);
-        setContentView(R.layout.activity_frame_base);
-        setFragment();
+//        setContentView(R.layout.activity_frame_base);
+        setContentView(R.layout.activity_coordinator);
+        setDetailFragment();
+        setImageFragment();
         Log.d(TAG, "onCreate");
     }
 
@@ -75,10 +79,27 @@ public class ItemDetailBrowserActivity extends AppCompatActivity implements Item
     /* other method                                                           */
     /* ---------------------------------------------------------------------- */
 
-    private void setFragment(){
+    private void setDetailFragment(){
         ItemDetailBrowserFragment fragment = new ItemDetailBrowserFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frameLayoutContainer, fragment);
+        ft.replace(R.id.coordinatorNestedScrollView, fragment);
+        ft.commit();
+    }
+
+    private void setImageFragment(){
+        ImageViewerFragment fragment = ImageViewerFragment.getThumbnail(ImageViewerResource.getTestResource());
+        fragment.setOnImageClickListener(this::setFullSizeImage);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.coordinatorFrameLayout, fragment);
+        ft.commit();
+    }
+
+    private void setFullSizeImage(ImageViewerResource imageViewerResource, int position) {
+        ImageViewerFragment fragment = ImageViewerFragment.getFullSize(imageViewerResource, position);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.coordinatorMain, fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.addToBackStack(null);
         ft.commit();
     }
 

@@ -6,10 +6,12 @@ import com.mr2.zaiko.domain.inhouse.equipment.Equipment;
 import com.mr2.zaiko.domain.inhouse.equipment.Keyword;
 import com.mr2.zaiko.domain.inhouse.equipment.Photo;
 import com.mr2.zaiko.domain.inhouse.storageLocation.StorageLocation;
+import com.mr2.zaiko.domain.inhouse.user.Authority;
+import com.mr2.zaiko.domain.inhouse.user.Name;
+import com.mr2.zaiko.domain.inhouse.user.User;
 import com.mr2.zaiko.domain.outside.commodity.Commodity;
 import com.mr2.zaiko.domain.outside.company.Company;
 import com.mr2.zaiko.domain.outside.product.Model;
-import com.mr2.zaiko.domain.outside.product.Name;
 import com.mr2.zaiko.domain.outside.product.Price;
 import com.mr2.zaiko.domain.outside.product.Product;
 import com.mr2.zaiko.domain.outside.product.Unit;
@@ -105,11 +107,20 @@ public class ItemDetailBrowserResource {
     }
 
 
-    public static ItemDetailBrowserResource getTestResource(){
-        Company testMaker = new Company("テストメーカー");
-        Company testSeller = new Company("テスト商社");
-        Product testProduct = testMaker.createProduct(new Model("testModel"), new Name("テスト製品名"), new Unit("製造単位"), new Price(100, "円"));
-        Equipment testEquipment = new Equipment(testProduct, new Name("テスト備品名"), new Unit("管理単位"), new Price(110, "円"));
+    public static ItemDetailBrowserResource getTestResource(int i){
+        User testUser = new User("1281", new Name("建", null, "但馬"), Authority.NORMAL);
+        Company testMaker = new Company("テストメーカー" + i);
+        Company testSeller = new Company("テスト商社" + i);
+        Product testProduct = testMaker.createProduct(
+                new Model("testModel" + i),
+                new com.mr2.zaiko.domain.outside.product.Name("テスト製品名" + i),
+                new Unit("個"),
+                new Price(100, "円"));
+        Equipment testEquipment = new Equipment(
+                testProduct,
+                new com.mr2.zaiko.domain.outside.product.Name("テスト備品名"),
+                new Unit("管理単位"),
+                new Price(110, "円"));
         testEquipment.addPhoto(new Photo("20200309033935.jpg"));
         testEquipment.addPhoto(new Photo("20200309033935.jpg"));
         testEquipment.addPhoto(new Photo("20200309033935.jpg"));
@@ -129,11 +140,22 @@ public class ItemDetailBrowserResource {
         testEquipment.addKeyword(new Keyword("低品質"));
         testEquipment.addKeyword(new Keyword("テストデータ"));
 
-        Commodity testCommodity = testSeller.registerCommodity(testProduct, new Name("テスト商品名"), new Unit("販売単位"), new Price(111, "円"));
-//        OrderSlip testOrderSlip = new OrderSlip(new UserId());
-//        testOrderSlip
+        Commodity testCommodity = testSeller.registerCommodity(
+                testProduct,
+                new com.mr2.zaiko.domain.outside.product.Name("テスト商品名" + i),
+                new Unit("箱"),
+                new Price(1110, "円"));
         List<StorageLocation> testStorageLocationList = new ArrayList<>();
-        StorageLocation testStorageLocation = new StorageLocation(testEquipment.equipmentId(), "AA010101", StorageLocation.Condition.BrandNew);
+        StorageLocation testStorageLocation = new StorageLocation(
+                testEquipment.equipmentId(),
+                "AA010101",
+                StorageLocation.Condition.BrandNew);
+        testStorageLocation.warehousing(
+                testUser,
+                testEquipment.equipmentId(),
+                10,
+                "テスト"
+        );
         testStorageLocationList.add(testStorageLocation);
         return new ItemDetailBrowserResource(
                 testProduct,

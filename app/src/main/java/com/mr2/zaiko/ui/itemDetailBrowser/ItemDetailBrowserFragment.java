@@ -6,6 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,21 +16,13 @@ import androidx.constraintlayout.helper.widget.Flow;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.mr2.zaiko.R;
 import com.mr2.zaiko.domain.inhouse.equipment.EquipmentId;
-import com.mr2.zaiko.domain.inhouse.equipment.Keyword;
-import com.mr2.zaiko.domain.inhouse.equipment.Photo;
 import com.mr2.zaiko.domain.outside.commodity.CommodityId;
 import com.mr2.zaiko.domain.outside.company.CompanyId;
 import com.mr2.zaiko.domain.outside.product.ProductId;
 import com.mr2.zaiko.ui.dialog.DialogFragment;
-import com.mr2.zaiko.ui.imageViewer.ImageViewerFragment;
-import com.mr2.zaiko.ui.imageViewer.ImageViewerResource;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class ItemDetailBrowserFragment extends Fragment implements ContractItemDetailBrowser.View{
@@ -43,7 +38,7 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
     private ItemDetailBrowserFragmentListener listener = null;
 
     private int quantityWantToPutCart = 1;
-    private ItemDetailBrowserResource resource;
+//    private ItemDetailBrowserResource resource;
 
     /* ---------------------------------------------------------------------- */
     /* Listener                                                               */
@@ -87,7 +82,8 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
 //        Spinner spinner = view.findViewById(R.id.itemDetailBrowserSpinner);
 //        spinner.setAdapter(adapter); //TODO: 数量選択spinner実装途中 選択した数量はquantityWantToPutCartに入れる
 
-        setThumbnail();
+//        setThumbnail();
+        presenter.onCreateView();
         setListener();
         setViews();
         return view;
@@ -151,39 +147,13 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
     /* other method                                                           */
     /* ---------------------------------------------------------------------- */
 
-    private ImageViewerResource getImageResource(){
-        List<Photo> photos = new ArrayList<>();
-        for (int i = 0; 10 >= i; i++){
-            photos.add(new Photo("20200309033935.jpg"));
-        }
-        return new ImageViewerResource(photos, context.getFilesDir().getAbsolutePath());
-    }
-
-    private void setThumbnail(){
-        ImageViewerFragment fragment = ImageViewerFragment.getThumbnail(resource.getImageResource());
-        fragment.setOnImageClickListener(this::showImageViewer);
-        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        ft.replace(R.id.itemDetailBrowserImageContainer, fragment);
-        ft.commit();
-    }
-
-    @Override
-    public void showImageViewer(ImageViewerResource resource, int position) {
-        ImageViewerFragment fragment = ImageViewerFragment.getFullSize(resource, position);
-        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        ft.replace(R.id.itemDetailBrowserMainContainer, fragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.addToBackStack(null);
-        ft.commit();
-    }
-
     @Override
     public void setResource(ItemDetailBrowserResource resource) {
-        if (null != this.resource) return;
-        this.resource = resource;
+//        if (null != this.resource) return;
+//        this.resource = resource;
     }
 
-    private void setListener(){
+    public void setListener(){
         view.findViewById(R.id.itemDetailBrowserPrimaryName).setOnClickListener(v -> presenter.onClickPrimaryName());
         view.findViewById(R.id.itemDetailBrowserMakerName).setOnClickListener(v -> presenter.onClickMakerName());
         view.findViewById(R.id.itemDetailBrowserInventoryMore).setOnClickListener(v -> presenter.onClickInventoryMore());
@@ -195,65 +165,78 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
         view.findViewById(R.id.itemDetailBrowserBuyHistoryMore).setOnClickListener(v -> presenter.onClickBuyHistoryMore());
     }
 
-    private void setViews(){
-        String primaryName = resource.getEquipment().name().name().equals("") ?
-                resource.getProduct().name().name() : resource.getEquipment().name().name();
-        setPrimaryName(primaryName);
-        setMakerName(resource.getMaker().name());
-        setModel(resource.getProduct().model().model());
-        setProductName(resource.getProduct().name().name());
-        String productPrice = resource.getProduct().price().price() + "/" + resource.getProduct().unit().unit();
-        setProductPrice(productPrice);
-        String inventoryPrice = resource.getEquipment().price().price() + "/" + resource.getEquipment().unit().unit();
-        setInventoryPrice(inventoryPrice);
-//        String stock = resource.getStorageLocationList().
-//        ((TextView)view.findViewById(R.id.itemDetailBrowserStock))
-        String[] array = new String[resource.getEquipment().keywordSet().size()];
-        int i = 0;
-        for (Keyword k: resource.getEquipment().keywordSet()){
-            array[i] = k.word();
-            i++;
-        }
-        setKeyword(array);
-        setSellerName(resource.getSeller().name());
-        setPrimaryCommodityName(resource.getCommodity().name().name());
-        String primaryCommodityPrice = resource.getCommodity().price().price() + "/" + resource.getCommodity().unit().unit();
-        setPrimaryCommodityPrice(primaryCommodityPrice);
+    public void setViews(){
+//        String primaryName = resource.getEquipment().name().name().equals("") ?
+//                resource.getProduct().name().name() : resource.getEquipment().name().name();
+//        setPrimaryName(primaryName);
+//        setMakerName(resource.getMaker().name());
+//        setModel(resource.getProduct().model().model());
+//        setProductName(resource.getProduct().name().name());
+//        String productPrice = resource.getProduct().price().price() + "/" + resource.getProduct().unit().name();
+//        setProductPrice(productPrice);
+//        String inventoryPrice = resource.getEquipment().price().price() + "/" + resource.getEquipment().unit().name();
+//        setInventoryPrice(inventoryPrice);
+////        String stock = resource.getStorageLocationList().
+////        ((TextView)view.findViewById(R.id.itemDetailBrowserStock))
+//        String[] array = new String[resource.getEquipment().keywordSet().size()];
+//        int i = 0;
+//        for (Keyword k: resource.getEquipment().keywordSet()){
+//            array[i] = k.word();
+//            i++;
+//        }
+//        setKeyword(array);
+//        setSellerName(resource.getSeller().name());
+//        setPrimaryCommodityName(resource.getCommodity().name().name());
+//        String primaryCommodityPrice = resource.getCommodity().price().price() + "/" + resource.getCommodity().unit().name();
+//        setPrimaryCommodityPrice(primaryCommodityPrice);
+//        //spinner
+//        int[] spinnerItem = {1,2,3,4,5,6,7,8,9,10};
+//        setUnitSpinner(spinnerItem);
+//        setPrimaryCommodityUnit(resource.getCommodity().unit().unit());
     }
 
+    @Override
     public void setPrimaryCommodityPrice(String primaryCommodityPrice) {
         ((TextView)view.findViewById(R.id.itemDetailBrowserCommodityPrice)).setText(primaryCommodityPrice);
     }
 
+    @Override
     public void setPrimaryCommodityName(String name) {
         ((TextView)view.findViewById(R.id.itemDetailBrowserCommodityName)).setText(name);
     }
 
 
+    @Override
     public void setPrimaryName(String primaryName){
         ((TextView)view.findViewById(R.id.itemDetailBrowserPrimaryName)).setText(primaryName);
     }
 
+    @Override
     public void setMakerName(String makerName){
         ((TextView)view.findViewById(R.id.itemDetailBrowserMakerName)).setText(makerName);
     }
 
+    @Override
     public void setModel(String model){
         ((TextView)view.findViewById(R.id.itemDetailBrowserProductModel)).setText(model);
     }
 
+    @Override
     public void setProductName(String productName){
         ((TextView)view.findViewById(R.id.itemDetailBrowserProductName)).setText(productName);
     }
 
+    @Override
     public void setProductPrice(String productPrice){
         ((TextView)view.findViewById(R.id.itemDetailBrowserProductPrice)).setText(productPrice);
     }
 
+    @Override
     public void setInventoryPrice(String inventoryPrice){
         ((TextView)view.findViewById(R.id.itemDetailBrowserEquipmentPrice)).setText(inventoryPrice);
     }
 
+    @Override
     public void setKeyword(String[] keyword){
         ConstraintLayout cl = view.findViewById(R.id.itemDetailBrowserConstraint);
         Flow flow = view.findViewById(R.id.itemDetailBrowserFlow);
@@ -270,13 +253,55 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
         KeywordTextView ktv = new KeywordTextView(context, keyword);
         String s = "#" + keyword;
         ktv.setText(s);
-        ktv.setTextColor(ContextCompat.getColor(context, R.color.colorTextLink));
-        ktv.setOnClickListener(v -> transitionToListOfItemByKeyword(((KeywordTextView)v).getKeyword()));
+        ktv.setTextColor(ContextCompat.getColor(context, R.color.material_on_surface_emphasis_medium));
+//        ktv.setOnClickListener(v -> transitionToListOfItemByKeyword(((KeywordTextView)v).getKeyword()));
+        ktv.setOnClickListener(v -> presenter.onClickKeyword(((KeywordTextView)v).getKeyword()));
         return ktv;
     }
 
+    @Override
     public void setSellerName(String sellerName){
         ((TextView)view.findViewById(R.id.itemDetailBrowserSellerName)).setText(sellerName);
+    }
+
+    @Override
+    public void setUnitSpinner(int[] quantity){
+        if (0 == quantity.length) return;
+//        String[] units = new String[quantity.length];
+        UnitSpinnerItem[] unitSpinnerItem = new UnitSpinnerItem[quantity.length];
+        for (int i = 0; quantity.length > i; i++){
+//            units[i] = "数量: " + quantity[i];
+            unitSpinnerItem[i] = new UnitSpinnerItem("数量: ", quantity[i]);
+        }
+        ArrayAdapter<UnitSpinnerItem> adapter = new ArrayAdapter<>(
+                context,
+                android.R.layout.simple_spinner_item,
+//                units
+                unitSpinnerItem
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner spinner = view.findViewById(R.id.itemDetailBrowserSpinner);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                showDialog("onItemSelected: position=" + position + " id=" + id);
+                Spinner spinner1 = (Spinner) parent;
+//                String s = (String) spinner1.getAdapter().getItem(position);
+                UnitSpinnerItem u = (UnitSpinnerItem) spinner1.getAdapter().getItem(position);
+                quantityWantToPutCart = u.quantity;
+                showDialog("onItemSelected " + u);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //なんもなし
+            }
+        });
+    }
+
+    public void setPrimaryCommodityUnit(String unit){
+        ((TextView)view.findViewById(R.id.itemDetailBrowserCommodityUnit)).setText(unit);
     }
 
     @Override
@@ -352,6 +377,22 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
 
         public String getKeyword() {
             return keyword;
+        }
+    }
+
+    private static class UnitSpinnerItem{
+        private final String headline;
+        private final int quantity;
+
+        public UnitSpinnerItem(String headline, int quantity) {
+            this.quantity = quantity;
+            this.headline = headline;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return headline + quantity;
         }
     }
 }
