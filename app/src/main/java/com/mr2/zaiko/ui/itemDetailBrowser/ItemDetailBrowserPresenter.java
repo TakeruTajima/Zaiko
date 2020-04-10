@@ -7,6 +7,7 @@ class ItemDetailBrowserPresenter implements ContractItemDetailBrowser.Presenter 
     private static ItemDetailBrowserPresenter instance;
     private ContractItemDetailBrowser.View view;
     private ItemDetailBrowserResource resource;
+    //private ItemDetailBrowsingApplication useCase; //?
 
     public ItemDetailBrowserPresenter(ContractItemDetailBrowser.View view) {
         this.view = view;
@@ -24,11 +25,14 @@ class ItemDetailBrowserPresenter implements ContractItemDetailBrowser.Presenter 
 
     @Override
     public void onCreate(ProductId productId) {
+        //resource = useCase.loadItemDerailBrowserResource(productId);
         resource = ItemDetailBrowserResource.getTestResource(1);
     }
 
     @Override
     public void onCreateView() {
+        view.setNoticeMessage("*納入待ちが １件 あります。");
+
         String primaryName = resource.getEquipment().name().name().equals("") ?
                 resource.getProduct().name().name() : resource.getEquipment().name().name();
         view.setPrimaryName(primaryName);
@@ -56,52 +60,67 @@ class ItemDetailBrowserPresenter implements ContractItemDetailBrowser.Presenter 
         int[] spinnerItem = {1,2,3,4,5,6,7,8,9,10};
         view.setUnitSpinner(spinnerItem);
         view.setPrimaryCommodityUnit(resource.getCommodity().unit().unit());
+
+        view.setListener();
     }
 
     @Override
     public void onClickPrimaryName() {
-        //テキスト入力ダイアログ
         view.showDialog("・通常、ここに表示されるのはメーカーが命名したこの製品の品名ですが、備品として違う名前をつけることができます。\n \n　例>　メーカー品名：エアシリンダー\n　備品名：0ライン検査台用シリンダー");
+        //view.showInputDialog(); //?? 備品名を入力　デフォルト(製品名)に戻す操作もいる？？
     }
+//    public void onInputDialogResult(@NonNull String inputEquipmentName){
+//        if (inputEquipmentName.equals("")) useCase.changeEquipmentName(inputEquipmentName);
+//        else useCase.deleteEquipmentName();
+//    } // で備品名の永続化
+
 
     @Override
     public void onClickMakerName() {
-        view.transitionToListOfItemByMaker(null);
+        view.transitionToListOfItemByMaker(resource.getMaker().id());
     }
 
     @Override
-    public void onClickInventoryMore() {
-        view.transitionToInventoryList(null);
+    public void onClickMoreInventory() {
+        view.transitionToInventoryList(resource.getEquipment().equipmentId());
     }
 
     @Override
     public void onClickPutShoppingCart(int quantityWantToPutCart) {
-        view.showDialog("商品をカートに追加します。\n　数量: " + quantityWantToPutCart);
         //カートに追加する永続化処理
+        //useCase.putItemToShoppingCart(resource.getCommodity().commodityId(), quantityWantToPutCart);
+        view.showDialog("商品をカートに追加しました。\n　数量: " + quantityWantToPutCart);
+        // useCaseは成功・失敗を表現するのにBoolean？　LoaderならVoidじゃないと
     }
 
     @Override
     public void onClickKeyword(String keyword) {
-        view.transitionToListOfItemByKeyword(null);
+        view.transitionToListOfItemByKeyword(keyword);
     }
 
     @Override
     public void onCLickSellerName() {
-        view.transitionToListOfCommodity(null);
+        view.transitionToListOfCommodity(resource.getCommodity().commodityId());
     }
 
     @Override
-    public void onClickCommodityMore() {
-        view.transitionToListOfSeller(null);
+    public void onClickMoreSeller() {
+        //if (useCase.existsCommodity(productId))
+        view.transitionToListOfSeller(resource.getProduct().productId());
+        //else view.dialog("購入先が登録されていません。"); //item not found.
     }
 
     @Override
-    public void onClickStoringMore() {
-        view.transitionToListOfStoringHistory(null);
+    public void onClickMoreStoring() {
+        //if (useCase.existsStoring(equipmentId))
+        view.transitionToListOfStoringHistory(resource.getEquipment().equipmentId());
+        //else view.showDialog("入出庫履歴はありません。"); //Listに遷移はしたあとにitem not found？
     }
 
     @Override
-    public void onClickBuyHistoryMore() {
-        view.transitionToListOfBuyHistory(null);
+    public void onClickMoreBuyHistory() {
+        //if (useCase.existsBuyHistory(equipmentId))
+        view.transitionToListOfBuyHistory(resource.getEquipment().equipmentId());
+        //else view.showDialog("購入履歴はありません。"); //item not found.
     }
 }

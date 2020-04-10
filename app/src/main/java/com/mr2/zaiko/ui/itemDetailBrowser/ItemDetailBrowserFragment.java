@@ -70,7 +70,7 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
-        presenter.onCreate(null);
+        if (null == savedInstanceState) presenter.onCreate(null);
     }
 
     @Override
@@ -78,14 +78,8 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
         Log.d(TAG, "onCreateView");
 //        view = inflater.inflate(R.layout./*このフラグメントで使用するレイアウトのID*/, container, false);
         view = inflater.inflate(R.layout.fragment_item_detail_browser, container, false);
-//        SpinnerAdapter adapter =
-//        Spinner spinner = view.findViewById(R.id.itemDetailBrowserSpinner);
-//        spinner.setAdapter(adapter); //TODO: 数量選択spinner実装途中 選択した数量はquantityWantToPutCartに入れる
 
-//        setThumbnail();
         presenter.onCreateView();
-        setListener();
-        setViews();
         return view;
     }
 
@@ -148,51 +142,25 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
     /* ---------------------------------------------------------------------- */
 
     @Override
-    public void setResource(ItemDetailBrowserResource resource) {
-//        if (null != this.resource) return;
-//        this.resource = resource;
+    public void setNoticeMessage(String message) {
+        TextView textView = new TextView(context);
+        textView.setText(message);
+        textView.setTextColor(ContextCompat.getColor(context, R.color.colorTextNotice));
+        ViewGroup layout = view.findViewById(R.id.itemDetailBrowserNoticeMessageContainer);
+        layout.addView(textView);
     }
 
+    @Override
     public void setListener(){
         view.findViewById(R.id.itemDetailBrowserPrimaryName).setOnClickListener(v -> presenter.onClickPrimaryName());
         view.findViewById(R.id.itemDetailBrowserMakerName).setOnClickListener(v -> presenter.onClickMakerName());
-        view.findViewById(R.id.itemDetailBrowserInventoryMore).setOnClickListener(v -> presenter.onClickInventoryMore());
+        view.findViewById(R.id.itemDetailBrowserInventoryMore).setOnClickListener(v -> presenter.onClickMoreInventory());
 //        view.findViewById(R.id.itemDetailBrowserKeywords).setOnClickListener(v -> presenter.onClickKeyword("キーワードに関連する部品の一覧を表示する予定です"));
         view.findViewById(R.id.itemDetailBrowserSellerName).setOnClickListener(v -> presenter.onCLickSellerName());
-        view.findViewById(R.id.itemDetailBrowserCommodityMore).setOnClickListener(v -> presenter.onClickCommodityMore());
+        view.findViewById(R.id.itemDetailBrowserCommodityMore).setOnClickListener(v -> presenter.onClickMoreSeller());
         view.findViewById(R.id.itemDetailBrowserButtonPutCart).setOnClickListener(v -> presenter.onClickPutShoppingCart(quantityWantToPutCart));
-        view.findViewById(R.id.itemDetailBrowserStoringHistoryMore).setOnClickListener(v -> presenter.onClickStoringMore());
-        view.findViewById(R.id.itemDetailBrowserBuyHistoryMore).setOnClickListener(v -> presenter.onClickBuyHistoryMore());
-    }
-
-    public void setViews(){
-//        String primaryName = resource.getEquipment().name().name().equals("") ?
-//                resource.getProduct().name().name() : resource.getEquipment().name().name();
-//        setPrimaryName(primaryName);
-//        setMakerName(resource.getMaker().name());
-//        setModel(resource.getProduct().model().model());
-//        setProductName(resource.getProduct().name().name());
-//        String productPrice = resource.getProduct().price().price() + "/" + resource.getProduct().unit().name();
-//        setProductPrice(productPrice);
-//        String inventoryPrice = resource.getEquipment().price().price() + "/" + resource.getEquipment().unit().name();
-//        setInventoryPrice(inventoryPrice);
-////        String stock = resource.getStorageLocationList().
-////        ((TextView)view.findViewById(R.id.itemDetailBrowserStock))
-//        String[] array = new String[resource.getEquipment().keywordSet().size()];
-//        int i = 0;
-//        for (Keyword k: resource.getEquipment().keywordSet()){
-//            array[i] = k.word();
-//            i++;
-//        }
-//        setKeyword(array);
-//        setSellerName(resource.getSeller().name());
-//        setPrimaryCommodityName(resource.getCommodity().name().name());
-//        String primaryCommodityPrice = resource.getCommodity().price().price() + "/" + resource.getCommodity().unit().name();
-//        setPrimaryCommodityPrice(primaryCommodityPrice);
-//        //spinner
-//        int[] spinnerItem = {1,2,3,4,5,6,7,8,9,10};
-//        setUnitSpinner(spinnerItem);
-//        setPrimaryCommodityUnit(resource.getCommodity().unit().unit());
+        view.findViewById(R.id.itemDetailBrowserStoringHistoryMore).setOnClickListener(v -> presenter.onClickMoreStoring());
+        view.findViewById(R.id.itemDetailBrowserBuyHistoryMore).setOnClickListener(v -> presenter.onClickMoreBuyHistory());
     }
 
     @Override
@@ -249,12 +217,10 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
     }
 
     private TextView getKeywordTextView(String keyword){
-//        TextView tv = new TextView(context);
         KeywordTextView ktv = new KeywordTextView(context, keyword);
         String s = "#" + keyword;
         ktv.setText(s);
-        ktv.setTextColor(ContextCompat.getColor(context, R.color.material_on_surface_emphasis_medium));
-//        ktv.setOnClickListener(v -> transitionToListOfItemByKeyword(((KeywordTextView)v).getKeyword()));
+        ktv.setTextColor(ContextCompat.getColor(context, R.color.colorTextLink));
         ktv.setOnClickListener(v -> presenter.onClickKeyword(((KeywordTextView)v).getKeyword()));
         return ktv;
     }
@@ -267,16 +233,13 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
     @Override
     public void setUnitSpinner(int[] quantity){
         if (0 == quantity.length) return;
-//        String[] units = new String[quantity.length];
         UnitSpinnerItem[] unitSpinnerItem = new UnitSpinnerItem[quantity.length];
         for (int i = 0; quantity.length > i; i++){
-//            units[i] = "数量: " + quantity[i];
             unitSpinnerItem[i] = new UnitSpinnerItem("数量: ", quantity[i]);
         }
         ArrayAdapter<UnitSpinnerItem> adapter = new ArrayAdapter<>(
                 context,
                 android.R.layout.simple_spinner_item,
-//                units
                 unitSpinnerItem
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -285,12 +248,10 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                showDialog("onItemSelected: position=" + position + " id=" + id);
                 Spinner spinner1 = (Spinner) parent;
-//                String s = (String) spinner1.getAdapter().getItem(position);
                 UnitSpinnerItem u = (UnitSpinnerItem) spinner1.getAdapter().getItem(position);
                 quantityWantToPutCart = u.quantity;
-                showDialog("onItemSelected " + u);
+//                showDialog("onItemSelected " + u);
             }
 
             @Override
@@ -300,18 +261,19 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
         });
     }
 
+    @Override
     public void setPrimaryCommodityUnit(String unit){
         ((TextView)view.findViewById(R.id.itemDetailBrowserCommodityUnit)).setText(unit);
     }
 
     @Override
     public void transitionToInventoryList(EquipmentId equipmentId) {
-        showDialog("この部品の在庫が(複数箇所の)どこに、いくつ(ずつ)あるのかをリストで表示します。");
+        showDialog("この部品の在庫が(複数箇所の)どこに、いくつ(ずつ)あるのかをリストで表示します。\n Equipment id:" + equipmentId.id());
     }
 
     @Override
     public void transitionToListOfSeller(ProductId productId) {
-        showDialog("この製品が登録されている他の商社を表示します");
+        showDialog("この製品が登録されている他の商社を表示します。\n Product id:" + productId.id());
     }
 
     @Override
@@ -321,42 +283,42 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
 
     @Override
     public void transitionToItemDetailEditor(ProductId productId) {
-        showDialog("部品詳細を編集する画面に移動します");
+        showDialog("部品詳細を編集する画面に移動します。\n Product id:" + productId.id());
     }
 
     @Override
     public void transitionToListOfItemByKeyword(String keyword) {
-        showDialog("キーワード [" + keyword + "] に関連する部品の一覧に移動します");
+        showDialog("キーワード [" + keyword + "] に関連する部品の一覧に移動します。");
     }
 
     @Override
     public void transitionToListOfItemByMaker(CompanyId makerId) {
-        showDialog("メーカーの製品一覧に移動します");
+        showDialog("メーカーの製品一覧に移動します。\n Company id:" + makerId.id());
     }
 
     @Override
     public void transitionToListOfCommodity(CommodityId commodityId) {
-        showDialog("この商社から購入できる商品の一覧を開きます");
+        showDialog("この商社から購入できる商品の一覧を開きます。\n Commodity id:" + commodityId.id());
     }
 
     @Override
     public void transitionToListOfBackorder(EquipmentId equipmentId) {
-        showDialog("納入待ち一覧を開きます");
+        showDialog("納入待ち一覧を開きます。\n Equipment id:" + equipmentId.id());
     }
 
     @Override
     public void transitionToListOfExternalBarcode(EquipmentId equipmentId) {
-        showDialog("登録済み社外バーコードの一覧を開きます　開きません");
+        showDialog("登録済み社外バーコードの一覧を開きます。　開きません.\n Equipment id:" + equipmentId.id());
     }
 
     @Override
     public void transitionToListOfStoringHistory(EquipmentId equipmentId) {
-        showDialog("入出庫の履歴を開きます");
+        showDialog("入出庫の履歴を開きます。\n Equipment id:" + equipmentId.id());
     }
 
     @Override
     public void transitionToListOfBuyHistory(EquipmentId equipmentId) {
-        showDialog("購入履歴の一覧を開きます");
+        showDialog("購入履歴の一覧を開きます。\n Equipment id:" + equipmentId.id());
     }
 
     @Override
@@ -384,7 +346,7 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
         private final String headline;
         private final int quantity;
 
-        public UnitSpinnerItem(String headline, int quantity) {
+        UnitSpinnerItem(String headline, int quantity) {
             this.quantity = quantity;
             this.headline = headline;
         }

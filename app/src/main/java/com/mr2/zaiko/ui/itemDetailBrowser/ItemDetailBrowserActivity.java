@@ -30,12 +30,13 @@ public class ItemDetailBrowserActivity extends AppCompatActivity implements Item
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
 //        setContentView(R.layout./*このActivityで使用するレイアウトのID*/);
 //        setContentView(R.layout.activity_frame_base);
         setContentView(R.layout.activity_coordinator);
+        if (null != savedInstanceState) return;
         setDetailFragment();
         setImageFragment();
-        Log.d(TAG, "onCreate");
     }
 
     @Override

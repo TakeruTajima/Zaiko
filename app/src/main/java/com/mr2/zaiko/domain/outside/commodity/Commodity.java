@@ -41,4 +41,6 @@ public class Commodity extends Product {
         this.unit = unit;
         this.price = price;
     }
+
+    public CommodityId commodityId(){ return id; }
 }
