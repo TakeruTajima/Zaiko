@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,12 +15,13 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mr2.zaiko.R;
 import com.mr2.zaiko.domain.common.Identity;
-import com.mr2.zaiko.ui.dialog.DialogFragment;
+import com.mr2.zaiko.ui.dialog.TextInputDialog;
 import com.mr2.zaiko.ui.imageViewer.ImageViewerFragment;
 import com.mr2.zaiko.ui.imageViewer.ImageViewerResource;
 import com.mr2.zaiko.ui.itemDetailBrowser.ItemDetailBrowserActivity;
 
-public class ItemListViewerActivity extends AppCompatActivity implements ItemListViewerFragment.Listener{
+public class ItemListViewerActivity extends AppCompatActivity
+        implements ItemListViewerFragment.Listener, TextInputDialog.OnDialogResultListener{
     public static final String TAG = ItemListViewerActivity.class.getSimpleName() + "(4156)";
     private ProgressBar progress;
     private FloatingActionButton fab;
@@ -39,7 +41,6 @@ public class ItemListViewerActivity extends AppCompatActivity implements ItemLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout./*このActivityで使用するレイアウトのID*/);
-//        setContentView(R.layout.activity_frame_base);
         setContentView(R.layout.activity_coordinator);
         progress = findViewById(R.id.progressBar2);
         fab = findViewById(R.id.floatingActionButton);
@@ -56,12 +57,14 @@ public class ItemListViewerActivity extends AppCompatActivity implements ItemLis
     }
 
     private void onClickAddButton() {
-        DialogFragment dialogFragment = DialogFragment.newInstance("新しい部品を登録します。", "cancel",  "OK");
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        ft.add(R.id.coordinatorMain, dialogFragment);
-//        ft.addToBackStack(null);
-//        ft.commit();
-        dialogFragment.show(getSupportFragmentManager(), "");
+        TextInputDialog dialog = TextInputDialog.newInstance(0, "新しい部品を登録します。\n型式・品番を入力してください。","cancel", "OK", "");
+        dialog.show(getSupportFragmentManager(), "");
+    }
+
+    @Override
+    public void onDialogResult(int requestCode, int resultCode, Intent date) {
+        String s = date.getStringExtra(TextInputDialog.KEY_INPUT_TEXT);
+        Toast.makeText(this, "requestCode: " + requestCode + ", resultCode: " + resultCode + "inputText: " + s, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -127,7 +130,8 @@ public class ItemListViewerActivity extends AppCompatActivity implements ItemLis
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
     }
-
+    //TODO: なんのリストを読み込むのかの分岐
+    // リストのヘッダーどうする？
     private void setFragment(){
         ItemListViewerFragment fragment = ItemListViewerFragment.newInstance();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

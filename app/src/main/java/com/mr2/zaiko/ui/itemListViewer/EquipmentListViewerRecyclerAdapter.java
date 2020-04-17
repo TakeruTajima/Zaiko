@@ -83,5 +83,5 @@ class EquipmentListViewerRecyclerAdapter extends RecyclerView.Adapter<EquipmentL
             headline = itemView.findViewById(R.id.itemListViewerTextHeadline);
             outline = itemView.findViewById(R.id.itemListViewerTextOutline);
         }
-    }
+    }//TODO: ページングが必要
 }

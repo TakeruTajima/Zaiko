@@ -169,8 +169,8 @@ public class ItemListViewerFragment extends Fragment implements ContractItemList
         //　SearchViewとかのViewクラスを入れたいならMenuリソースのitemの<app:actionViewClass>で指定。
         // UPナビゲーションを有効化したいときはActivityのほう？でgetSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //いまのところここのToolbarでやりたいのは　SearchViewで絞り込み、右上でソート、
-        //全体としてはNavigationか下タブで画面遷移のショートカット…？
+        //TODO: いまのところここのToolbarでやりたいのは　SearchViewで絞り込み、右上でソート、
+        // 全体としてはNavigationか下タブで画面遷移のショートカット…？
     }
 
     @Override

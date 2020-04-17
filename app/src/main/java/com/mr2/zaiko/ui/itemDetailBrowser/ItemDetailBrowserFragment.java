@@ -1,6 +1,7 @@
 package com.mr2.zaiko.ui.itemDetailBrowser;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.helper.widget.Flow;
@@ -22,10 +24,10 @@ import com.mr2.zaiko.domain.inhouse.equipment.EquipmentId;
 import com.mr2.zaiko.domain.outside.commodity.CommodityId;
 import com.mr2.zaiko.domain.outside.company.CompanyId;
 import com.mr2.zaiko.domain.outside.product.ProductId;
-import com.mr2.zaiko.ui.dialog.DialogFragment;
+import com.mr2.zaiko.ui.dialog.AlertDialogFragment;
 
 
-public class ItemDetailBrowserFragment extends Fragment implements ContractItemDetailBrowser.View{
+public class ItemDetailBrowserFragment extends Fragment implements ContractItemDetailBrowser.View, AlertDialogFragment.OnDialogResultListener{
     /* ---------------------------------------------------------------------- */
     /* Field                                                                  */
     /* ---------------------------------------------------------------------- */
@@ -323,10 +325,14 @@ public class ItemDetailBrowserFragment extends Fragment implements ContractItemD
 
     @Override
     public void showDialog(String message) {
-        DialogFragment dialog = DialogFragment.newInstance(message, "cancel", "OK");
+        AlertDialogFragment dialog = AlertDialogFragment.newInstance(0, message, "cancel", "OK");
+        dialog.show(getChildFragmentManager(), "");
+    }
 
-        assert getFragmentManager() != null;
-        dialog.show(getFragmentManager(), "");
+    @Override
+    public void onDialogResult(int requestCode, int resultCode, Intent date) {
+
+        Toast.makeText(context, "resultCode: " + resultCode, Toast.LENGTH_LONG).show();
     }
 
     private static class KeywordTextView extends androidx.appcompat.widget.AppCompatTextView{

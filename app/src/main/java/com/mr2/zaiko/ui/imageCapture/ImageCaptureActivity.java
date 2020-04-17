@@ -3,12 +3,17 @@ package com.mr2.zaiko.ui.imageCapture;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mr2.zaiko.R;
+import com.mr2.zaiko.infrastructure.roomTest.TestDao;
+import com.mr2.zaiko.infrastructure.roomTest.TestDatabase;
+import com.mr2.zaiko.infrastructure.roomTest.TestDatabaseSingleton;
+import com.mr2.zaiko.infrastructure.roomTest.TestEntity;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.FileCallback;
@@ -44,6 +49,7 @@ public class ImageCaptureActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_image_capture);
 
+
 //        TestApplication application = (TestApplication) getApplication();
 //        if (null == presenter){
 //            presenter = application.imageCapturePresenter();
@@ -55,17 +61,12 @@ public class ImageCaptureActivity extends AppCompatActivity {
             @Override
             public void onPictureTaken(@NonNull PictureResult result) {
                 super.onPictureTaken(result);
-                System.out.println("///ImageCaptureActivity::onPictureTaken()");
-                System.out.println("///pictureResult\n///getSize() = " + result.getSize());
-                System.out.println("///getFormat() = " + result.getFormat());
-                //outputFile(result.getData());
 
                 //Repositoryで?UUIDから新規ファイル名を作って
                 String fileName = ZonedDateTime.now().format(formatter) + ".jpg";
-                //非同期でjpgに圧縮？して
                 //ファイル名と一緒にFOSに渡してinternalStorageに保存
-                outputFileUseFOS(result, fileName);
                 //ファイル名をRepositoryまで渡して永続化
+                outputFileUseFOS(result, fileName);
                 System.out.println("///onPictureTaken is end.");
             }
         });
@@ -75,6 +76,27 @@ public class ImageCaptureActivity extends AppCompatActivity {
             cameraView.takePicture();
         });
 
+    }
+
+    private void saveFileName(String fileName) {
+        TestDatabase db = TestDatabaseSingleton.getInstance(this);
+        TestDao dao = db.testDao();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("onClick", "in Thread button1 thread id = " + Thread.currentThread().getId());
+//                List<TestEntity> data = dao.getAll();
+//                if (null == data || data.size() < 1) return;
+                dao.insert(new TestEntity(fileName));
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Log.d("onClick", "runOnUiThread thread id = " + Thread.currentThread().getId());
+//                        Toast.makeText(getApplicationContext(), "load complete. file name: " + data.get(0).getFileName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "load complete. file name: " + fileName, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
     }
 
     @Override
@@ -128,6 +150,7 @@ public class ImageCaptureActivity extends AppCompatActivity {
             e.printStackTrace();
             throw new IllegalStateException("Fileの書き込みに失敗しました。");
         }
+        saveFileName(fileName);
         System.out.println("outputFileName: " + fileName);
     }
 

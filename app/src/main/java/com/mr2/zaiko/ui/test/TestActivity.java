@@ -126,7 +126,7 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
 
     private void setViews(){
         setContentView(R.layout.activity_main);
-        findViewById(R.id.button1).setOnClickListener(view -> presenter.event_1());
+        findViewById(R.id.button1).setOnClickListener(view -> startTestThread());
         findViewById(R.id.button2).setOnClickListener(view -> startImageCapture());
         findViewById(R.id.button3).setOnClickListener(view -> startItemDetailBrowser());
         findViewById(R.id.button4).setOnClickListener(view -> transitionItemListViewer());
@@ -346,5 +346,31 @@ public class TestActivity extends AppCompatActivity implements ContractTest.View
     private void transitionItemListViewer(){
         Intent intent = new Intent(getApplication(), ItemListViewerActivity.class);
         startActivity(intent);
+    }
+
+    private void startTestThread(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("onClick", "in Thread button1 thread id = " + Thread.currentThread().getId());
+                try {
+                    Thread.sleep(5000); // 5秒待つ
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Log.d("onClick", "runOnUiThread thread id = " + Thread.currentThread().getId());
+//                        Toast.makeText(getApplicationContext(), "Click button1", Toast.LENGTH_SHORT).show();
+//                        callback();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private void callback(){
+        showToast("OK!");
     }
 }
