@@ -31,7 +31,7 @@ public class Product extends Entity {
         this.price = price;
     }
 
-    protected Product(int version, @NonNull CompanyId companyId, @NonNull ProductId id, @NonNull Model model, @NonNull Name name, @NonNull Unit unit, @NonNull Price price) {
+    public Product(int version, @NonNull CompanyId companyId, @NonNull ProductId id, @NonNull Model model, @NonNull Name name, @NonNull Unit unit, @NonNull Price price) {
         super(version);
         this.companyId = companyId;
         this.id = id;

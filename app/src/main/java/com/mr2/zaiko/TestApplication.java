@@ -6,7 +6,9 @@ import android.content.res.Configuration;
 import androidx.annotation.NonNull;
 
 import com.mr2.zaiko.domain.inhouse.equipment.EquipmentId;
+import com.mr2.zaiko.infrastructure.DBAdapter;
 import com.mr2.zaiko.infrastructure.TestRepositoryImpl;
+import com.mr2.zaiko.infrastructure.room.MyDatabase;
 import com.mr2.zaiko.ui.imageCapture.ContractImageCapture;
 import com.mr2.zaiko.ui.test.ContractTest;
 import com.mr2.zaiko.ui.test.TestPresenter;
@@ -16,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TestApplication extends Application {
+    MyDatabase db;
 
     /* ---------------------------------------------------------------------- */
     /* Lifecycle                                                              */
@@ -25,6 +28,10 @@ public class TestApplication extends Application {
         super.onCreate();
         System.out.println("////////////////TestTestApplication onCreate()");
         presenters = new HashMap<>();
+        db = MyDatabase.getInstance(this);
+        DBAdapter dba = new DBAdapter(this);
+        dba.getAllRecords("m_unit_types");
+        dba.close();
     }
 
     @Override

@@ -5,10 +5,10 @@ import com.mr2.zaiko.domain.common.ValueObject;
 import java.util.Objects;
 
 public class Price extends ValueObject {
-    private final int price;
+    private final float price;
     private final String currencyUnit;
 
-    public Price(int price, String currencyUnit) {
+    public Price(float price, String currencyUnit) {
         assertArgumentRange(price, 0, 9999999, "金額が不正です。");
         assertArgumentLength(currencyUnit, 1, 150, "単位を入力してください。");
         this.price = price;
@@ -22,6 +22,10 @@ public class Price extends ValueObject {
     public String price(){
         return price + currencyUnit;
     }
+
+    public float value(){ return price; }
+
+    public String currencyUnit(){ return currencyUnit; }
 
     @Override
     public boolean equals(Object o) {
