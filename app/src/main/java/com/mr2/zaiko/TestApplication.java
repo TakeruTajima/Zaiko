@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import androidx.annotation.NonNull;
 
 import com.mr2.zaiko.domain.inhouse.equipment.EquipmentId;
-import com.mr2.zaiko.infrastructure.DBAdapter;
 import com.mr2.zaiko.infrastructure.TestRepositoryImpl;
 import com.mr2.zaiko.infrastructure.room.MyDatabase;
 import com.mr2.zaiko.ui.imageCapture.ContractImageCapture;
@@ -29,9 +28,6 @@ public class TestApplication extends Application {
         System.out.println("////////////////TestTestApplication onCreate()");
         presenters = new HashMap<>();
         db = MyDatabase.getInstance(this);
-        DBAdapter dba = new DBAdapter(this);
-        dba.getAllRecords("m_unit_types");
-        dba.close();
     }
 
     @Override
