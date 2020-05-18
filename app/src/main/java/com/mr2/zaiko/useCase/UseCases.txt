@@ -36,6 +36,26 @@
         4.数量を選択し、「カートに入れる」を押す
 
 －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+
+View→ViewModel→Model
+画面遷移やダイアログの呼び出し等はViewModel内のLiveDataをObserveしているFragmentの責務。
+UseCaseはViewModelで立てた別スレッド内で呼ばれる。
+副作用のあるcommandはvoid。質問であるqueryには副作用を持たせない。原則。
+→
+
+registUser(
+	String userCode,
+	String firstName, String middleName, String lastName,
+	int authority,
+	String password, String morePassword): void
+loginUser(String userCode, String password):void
+browsUserDetail(String userId): LiveData<UserDetail>
+browsUserHeadlines(): LiveData<List<UserHeadline>>
+
+
+
+－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+
 前提、用語
     【ドメイン候補】
     製品：　本アプリで管理する、製造元が製造するモノを指す。
