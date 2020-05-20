@@ -37,20 +37,61 @@
 
 －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
 
-View→ViewModel→Model
+View→ViewModel→Model(UseCase→Repository→DomainObject)
 画面遷移やダイアログの呼び出し等はViewModel内のLiveDataをObserveしているFragmentの責務。
+プログレスならViewModelのisLoadingフラグ、ダイアログならisNotifyingフラグをObserveして表示/非表示を管理する。
 UseCaseはViewModelで立てた別スレッド内で呼ばれる。
 副作用のあるcommandはvoid。質問であるqueryには副作用を持たせない。原則。
 →
 
-registUser(
-	String userCode,
+registerUser(
+    String userCode,
 	String firstName, String middleName, String lastName,
 	int authority,
-	String password, String morePassword): void
-loginUser(String userCode, String password):void
+	String password, String morePassword): void throws IllegalStateException
+loginUser(String userCode, String password): void
 browsUserDetail(String userId): LiveData<UserDetail>
 browsUserHeadlines(): LiveData<List<UserHeadline>>
+
+registerUser(String userCode):void 重複不可
+(「コマンドは返事をしない」原則から、booleanではなくvoid)
+処理失敗の要因→　重複　文字数超過・不足　Null　DB応答なし　
+文字数等ドメインの不変条件は？
+    →　データバインディング的に入力している最中にOK、NGを表示させる。
+    ViewModel内のMutableLiveDataにEditTextの内容を持たせ、
+    そのObserverでDomainObjectのStaticな不変条件チェック(assertion)メソッドを使い、
+    正誤をisCollectとかで持ってView側に表示させる。　処理開始の直前にもチェック。
+DomainObjectで確認できない重複チェック等は？
+    →　DomainServiceで確認。　DomainObjectやDomainServiceはDDDの集約関連を参照。
+    (DDDに従うなら不変条件やらのドメインに関わる情報は「domain層だけ見ればわかる」ようにしておくこと。)
+確認した直後に別の処理から重複するデータが登録されたり、確認自体を忘れた場合は？
+    →　Repository(RoomEntityによる定義?)が例外を投げる。　直前に確認しているのでレアケース。
+
+DDDの集約
+一つのオブジェクトの整合性はクラス不変表明で担保する
+オブジェクトのグループの整合性は集約でカプセル化して担保する
+複数の集約の間ではドメインイベントを使って結果整合性を担保する
+集約の複数のオブジェクトに跨る不変条件(重複チェック等)はドメインサービスに記述する
+
+UserRegisterService.registerUser(xxx)使用時の処理の流れ　->
+    Fragmentは、ViewModelを取得し、
+        データバインディングを開始する
+    ViewModelは、初期化処理としてisLoadingをTrueにし、
+        Repositoryからデータロードを開始する
+        異常(通信できない等)があったなら、isNotifyingをTrueにし、処理を中断する
+        finallyとして、isLoadingをFalseにする
+    Fragmentは、ViewModelのisLoadingをobserveし、
+        isLoadingがTrueの間、プログレスバーを表示する
+        ViewModelのisNotifyingをobserveし、
+        isNotifyingがTrueの間、ダイアログを表示し、
+        ダイアログの「OK」ボタンが押されたら、
+        ViewModelのagreeNotices()をコールする
+    ViewModelは、agreeNotices()がコールされたら、
+        isNotifyingをFalseにする
+    Fragmentは、「register」ボタンが押されたら、
+        ViewModelのonClickRegisterButton(…)とかをコール
+    ViewModelは、onClickRegisterButton(…)がコールされたら、
+        別スレッドを立ち上げ、
 
 
 
