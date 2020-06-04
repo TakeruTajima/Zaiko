@@ -19,6 +19,10 @@
           <option name="url" value="https://github.com/TakeruTajima/myApplication.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/googlecodelabs/android-paging" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="C:\AndroidStudioProjects" />
