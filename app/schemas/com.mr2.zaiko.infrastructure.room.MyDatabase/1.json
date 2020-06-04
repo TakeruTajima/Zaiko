@@ -1,0 +1,359 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "ca6f9626e7ec63d6eb283da69930a8ca",
+    "entities": [
+      {
+        "tableName": "external_barcode",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`equipment_id` TEXT NOT NULL, `code` TEXT NOT NULL, PRIMARY KEY(`equipment_id`, `code`))",
+        "fields": [
+          {
+            "fieldPath": "equipment_id",
+            "columnName": "equipment_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "code",
+            "columnName": "code",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "equipment_id",
+            "code"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "commodities",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` TEXT NOT NULL, `product_id` TEXT, `company_id` TEXT, `name` TEXT, `price_value` REAL NOT NULL, `price_name` TEXT, `unit` TEXT, PRIMARY KEY(`_id`))",
+        "fields": [
+          {
+            "fieldPath": "_id",
+            "columnName": "_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "product_id",
+            "columnName": "product_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "company_id",
+            "columnName": "company_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "price_value",
+            "columnName": "price_value",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "price_name",
+            "columnName": "price_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "companies",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` TEXT NOT NULL, `name` TEXT, PRIMARY KEY(`_id`))",
+        "fields": [
+          {
+            "fieldPath": "_id",
+            "columnName": "_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "equipments",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` TEXT NOT NULL, `product_id` TEXT, `name` TEXT, `price_value` REAL NOT NULL, `price_name` TEXT, `unit` TEXT, PRIMARY KEY(`_id`))",
+        "fields": [
+          {
+            "fieldPath": "_id",
+            "columnName": "_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "product_id",
+            "columnName": "product_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "price_value",
+            "columnName": "price_value",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "price_name",
+            "columnName": "price_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "keywords",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`equipment_id` TEXT NOT NULL, `word` TEXT NOT NULL, PRIMARY KEY(`equipment_id`, `word`))",
+        "fields": [
+          {
+            "fieldPath": "equipment_id",
+            "columnName": "equipment_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "word",
+            "columnName": "word",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "equipment_id",
+            "word"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "photos",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`equipment_id` TEXT NOT NULL, `file_name` TEXT NOT NULL, PRIMARY KEY(`equipment_id`, `file_name`))",
+        "fields": [
+          {
+            "fieldPath": "equipment_id",
+            "columnName": "equipment_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "file_name",
+            "columnName": "file_name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "equipment_id",
+            "file_name"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "products",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` TEXT NOT NULL, `company_id` TEXT, `model` TEXT, `name` TEXT, `price_value` REAL NOT NULL, `price_name` TEXT, `unit` TEXT, `unmutated_version` INTEGER NOT NULL, PRIMARY KEY(`_id`))",
+        "fields": [
+          {
+            "fieldPath": "_id",
+            "columnName": "_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "company_id",
+            "columnName": "company_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "model",
+            "columnName": "model",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "price_value",
+            "columnName": "price_value",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "price_name",
+            "columnName": "price_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "unmutated_version",
+            "columnName": "unmutated_version",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_products_company_id_model",
+            "unique": true,
+            "columnNames": [
+              "company_id",
+              "model"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_products_company_id_model` ON `${TABLE_NAME}` (`company_id`, `model`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "storage_locations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` TEXT NOT NULL, `equipment_id` TEXT, `name` TEXT, `quantity` INTEGER NOT NULL, `max_quantity` INTEGER NOT NULL, `condition` TEXT, PRIMARY KEY(`_id`))",
+        "fields": [
+          {
+            "fieldPath": "_id",
+            "columnName": "_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "equipment_id",
+            "columnName": "equipment_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "quantity",
+            "columnName": "quantity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "max_quantity",
+            "columnName": "max_quantity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "condition",
+            "columnName": "condition",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_storage_locations_equipment_id_name",
+            "unique": true,
+            "columnNames": [
+              "equipment_id",
+              "name"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_storage_locations_equipment_id_name` ON `${TABLE_NAME}` (`equipment_id`, `name`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ca6f9626e7ec63d6eb283da69930a8ca')"
+    ]
+  }
+}
